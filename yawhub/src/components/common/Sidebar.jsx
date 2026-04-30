@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import '../../styles/components/sidebar.css';
+import '../../styles/components/Sidebar.css';
 
 const Sidebar = () => {
   const { user } = useAuth();

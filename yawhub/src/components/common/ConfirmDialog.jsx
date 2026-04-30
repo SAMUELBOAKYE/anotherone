@@ -1,6 +1,6 @@
 // src/components/common/ConfirmDialog.jsx
 import React, { useEffect, useCallback } from 'react';
-import '../../styles/components/confirmDialog.css';
+import '../../styles/components/ConfirmDialog.css';
 
 const ConfirmDialog = ({ 
   isOpen, 

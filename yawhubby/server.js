@@ -405,10 +405,6 @@ app.use(
   }),
 );
 
-// ============================================================
-// REQUEST MIDDLEWARE
-// ============================================================
-
 app.use((req, res, next) => {
   req.requestId =
     req.headers["x-request-id"] || crypto.randomBytes(16).toString("hex");
@@ -484,13 +480,11 @@ const authLimiter = rateLimit({
   skip: skipRateLimit,
   handler: (req, res) => {
     logger.warn(`🔒 Rate limit exceeded for auth endpoint: ${req.ip}`);
-    res
-      .status(429)
-      .json({
-        success: false,
-        message: "Too many authentication attempts. Please try again later.",
-        retryAfter: 900,
-      });
+    res.status(429).json({
+      success: false,
+      message: "Too many authentication attempts. Please try again later.",
+      retryAfter: 900,
+    });
   },
 });
 
@@ -571,232 +565,6 @@ if (process.env.BACKUP_ENABLED === "true") {
     }),
   );
 }
-
-// ============================================================
-// DATABASE CONNECTION
-// ============================================================
-
-const connectToDatabase = async () => {
-  try {
-    await connectDB();
-    logger.info("✅ MongoDB connected");
-    const stats = await mongoose.connection.db.stats();
-    logger.info(
-      `📊 Database stats: ${stats.collections} collections, ${stats.objects} documents, ${(stats.dataSize / 1024 / 1024).toFixed(2)} MB`,
-    );
-    return true;
-  } catch (err) {
-    logger.error(`❌ Database connection error: ${err.message}`);
-    if (isSentryEnabled && Sentry)
-      Sentry.captureException(err, { tags: { feature: "database" } });
-    if (isProduction) process.exit(1);
-    return false;
-  }
-};
-
-// ============================================================
-// SOCKET.IO SETUP
-// ============================================================
-
-if (process.env.ENABLE_SOCKETIO !== "false") {
-  const { Server } = require("socket.io");
-
-  io = new Server(server, {
-    cors: corsOptions,
-    transports: ["websocket", "polling"],
-    allowEIO3: true,
-    pingTimeout: parseInt(process.env.WEBSOCKET_PING_TIMEOUT) || 60000,
-    pingInterval: parseInt(process.env.WEBSOCKET_PING_INTERVAL) || 25000,
-    connectTimeout: 45000,
-    maxHttpBufferSize: parseInt(process.env.WEBSOCKET_MAX_PAYLOAD) || 1e6,
-  });
-
-  // ── Create notification service with socket ──────────────
-  const notificationService = new NotificationService();
-  notificationService.initSocket(io);
-  setNotificationService(notificationService);
-  setSocketIO(io);
-
-  // ============================================================
-  // WIRE NOTIFICATION SERVICE INTO CONTROLLERS
-  // This is what makes users get notified when a notice/event
-  // is posted — real-time Socket.io + email + SMS
-  // ============================================================
-  noticeController.setNotificationService(notificationService);
-  eventController.setNotificationService(notificationService);
-  logger.info(
-    "✅ NotificationService wired into noticeController and eventController",
-  );
-
-  // ── Socket authentication middleware ─────────────────────
-  io.use((socket, next) => {
-    try {
-      const token =
-        socket.handshake.auth?.token ||
-        socket.handshake.headers?.authorization?.split(" ")[1];
-
-      if (!token) {
-        logger.debug("Socket connection attempt without token");
-        return next(new Error("Authentication required"));
-      }
-
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      socket.userId = decoded.id;
-      socket.userRole = decoded.role;
-      socket.userEmail = decoded.email;
-
-      logger.debug(
-        `Socket authenticated: ${socket.id} for user ${socket.userId}`,
-      );
-      next();
-    } catch (err) {
-      logger.error(`Socket auth error: ${err.message}`);
-      if (isSentryEnabled && Sentry)
-        Sentry.captureException(err, { tags: { feature: "socket-auth" } });
-      next(new Error("Invalid token"));
-    }
-  });
-
-  // ── Socket connection handler ────────────────────────────
-  io.on("connection", (socket) => {
-    logger.info(`🔌 Socket connected: ${socket.id} (user: ${socket.userId})`);
-
-    // Join personal room — this is how we target individual users
-    if (socket.userId) {
-      socket.join(`user-${socket.userId}`);
-      logger.debug(
-        `👤 User ${socket.userId} joined room user-${socket.userId}`,
-      );
-    }
-
-    // Admins and faculty get an extra room for broadcast
-    if (
-      socket.userRole === "admin" ||
-      socket.userRole === "super_admin" ||
-      socket.userRole === "faculty"
-    ) {
-      socket.join("admin-room");
-      logger.debug(`🔑 ${socket.userRole} ${socket.userId} joined admin-room`);
-    }
-
-    socket.on("ping", (callback) => {
-      if (typeof callback === "function")
-        callback({ pong: true, timestamp: Date.now() });
-    });
-
-    socket.on("subscribe:event", (eventId) => {
-      if (eventId) {
-        socket.join(`event-${eventId}`);
-        logger.debug(`User ${socket.userId} subscribed to event-${eventId}`);
-      }
-    });
-
-    socket.on("unsubscribe:event", (eventId) => {
-      if (eventId) socket.leave(`event-${eventId}`);
-    });
-
-    socket.on("subscribe:notice", (noticeId) => {
-      if (noticeId) {
-        socket.join(`notice-${noticeId}`);
-        logger.debug(`User ${socket.userId} subscribed to notice-${noticeId}`);
-      }
-    });
-
-    socket.on("disconnect", (reason) => {
-      logger.info(`🔌 Socket disconnected: ${socket.id}, reason: ${reason}`);
-    });
-
-    socket.on("error", (err) => {
-      logger.error(`Socket error for ${socket.id}: ${err.message}`);
-      if (isSentryEnabled && Sentry)
-        Sentry.captureException(err, {
-          tags: { feature: "socket-connection", socketId: socket.id },
-        });
-    });
-  });
-
-  logger.info("✅ Socket.io ready and listening");
-}
-
-// ============================================================
-// GROQ AI CLIENT
-// ============================================================
-
-try {
-  const groqConfig = require("./config/groq");
-  groqClient = groqConfig.client;
-  logger.info("✅ Groq AI client initialized");
-} catch (error) {
-  logger.warn("⚠️  Groq AI client not available:", error.message);
-}
-
-// ============================================================
-// SERVICES INITIALIZATION
-// ============================================================
-
-const initializeServices = async () => {
-  try {
-    cacheManager = await getCacheManager();
-    logger.info("✅ Cache manager initialized");
-  } catch (error) {
-    logger.error(`Failed to initialize Cache manager: ${error.message}`);
-  }
-
-  try {
-    auditLogger = await initializeAuditLogger();
-    logger.info("✅ Audit logger initialized");
-  } catch (error) {
-    logger.error(`Failed to initialize Audit logger: ${error.message}`);
-  }
-
-  try {
-    databaseUtils = await getDatabaseUtils();
-    logger.info("✅ Database utils initialized");
-  } catch (error) {
-    logger.error(`Failed to initialize Database utils: ${error.message}`);
-  }
-
-  try {
-    systemUtils = await getSystemUtils();
-    logger.info("✅ System utils initialized");
-  } catch (error) {
-    logger.error(`Failed to initialize System utils: ${error.message}`);
-  }
-
-  if (process.env.BACKUP_ENABLED === "true") {
-    try {
-      const { BackupService } = require("./services/backupService");
-      backupService = new BackupService();
-      await backupService.initialize();
-      logger.info("✅ Backup service initialized");
-    } catch (error) {
-      logger.error(`Failed to initialize Backup service: ${error.message}`);
-    }
-  }
-
-  if (process.env.PERFORMANCE_MONITORING_ENABLED === "true") {
-    try {
-      const { PerformanceMonitor } = require("./scripts/performanceMonitor");
-      performanceMonitor = new PerformanceMonitor();
-      await performanceMonitor.initialize();
-      logger.info("✅ Performance monitor initialized");
-    } catch (error) {
-      logger.error(
-        `Failed to initialize Performance monitor: ${error.message}`,
-      );
-    }
-  }
-
-  if (process.env.SMS_ENABLED === "true") {
-    try {
-      const { initializeSMSService } = require("./services/smsService");
-      smsService = await initializeSMSService();
-      logger.info("✅ SMS service initialized");
-    } catch (error) {
-      logger.error(`Failed to initialize SMS service: ${error.message}`);
-    }
-  }
-};
 
 // ============================================================
 // API ROUTES
@@ -1068,54 +836,199 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // ============================================================
-// START SERVER
+// START SERVER IMMEDIATELY - DON'T WAIT FOR DATABASE (RENDER FIX)
 // ============================================================
 
-const startServer = async () => {
-  try {
-    const directories = ["uploads", "logs", "backups", "temp", "public"];
-    for (const dir of directories) {
-      try {
-        await fs.mkdir(path.join(__dirname, dir), { recursive: true });
-      } catch {}
+// Create directories function
+const createDirectories = async () => {
+  const directories = ["uploads", "logs", "backups", "temp", "public"];
+  for (const dir of directories) {
+    try {
+      await fs.mkdir(path.join(__dirname, dir), { recursive: true });
+    } catch (error) {
+      // Ignore errors if directories already exist
     }
-
-    await connectToDatabase();
-    await initializeServices();
-
-    server.listen(PORT, () => {
-      logger.info("=".repeat(50));
-      logger.info(
-        `🚀 ${process.env.APP_NAME || "KAAF Noticeboard"} v${process.env.APP_VERSION || "2.2.0"}`,
-      );
-      logger.info(`🌍 Server running on http://localhost:${PORT}`);
-      logger.info(`📧 Email: ${transporter ? "CONFIGURED" : "NOT CONFIGURED"}`);
-      logger.info(
-        `🌐 Frontend: ${process.env.FRONTEND_URL || "http://localhost:5173"}`,
-      );
-      logger.info(`🔌 Socket.IO: ${io ? "ENABLED" : "DISABLED"}`);
-      logger.info(`💾 Cache: ${cacheManager ? "ENABLED" : "DISABLED"}`);
-      logger.info(`🤖 Groq AI: ${groqClient ? "ENABLED" : "DISABLED"}`);
-      logger.info(`🔧 Environment: ${process.env.NODE_ENV || "development"}`);
-      logger.info(
-        `⏱️  Rate Limiting: ${DISABLE_RATE_LIMIT ? "DISABLED" : "ENABLED"}`,
-      );
-      logger.info(`📊 Sentry: ${isSentryEnabled ? "ENABLED" : "DISABLED"}`);
-      logger.info(`💾 Backup: ${backupService ? "ENABLED" : "DISABLED"}`);
-      logger.info(`📈 Monitor: ${performanceMonitor ? "ENABLED" : "DISABLED"}`);
-      logger.info(`📱 SMS: ${smsService ? "ENABLED" : "DISABLED"}`);
-      logger.info(`🖥️  Host: ${os.hostname()} (PID: ${process.pid})`);
-      logger.info("=".repeat(50));
-    });
-  } catch (err) {
-    logger.error(`❌ Failed to start server: ${err.message}`);
-    if (isSentryEnabled && Sentry)
-      Sentry.captureException(err, { tags: { feature: "server-startup" } });
-    process.exit(1);
   }
 };
 
-startServer();
+// Initialize services function
+const initializeAllServices = async () => {
+  try {
+    cacheManager = await getCacheManager();
+    if (cacheManager) logger.info("✅ Cache manager initialized");
+
+    auditLogger = await initializeAuditLogger();
+    if (auditLogger) logger.info("✅ Audit logger initialized");
+
+    databaseUtils = await getDatabaseUtils();
+    if (databaseUtils) logger.info("✅ Database utils initialized");
+
+    systemUtils = await getSystemUtils();
+    if (systemUtils) logger.info("✅ System utils initialized");
+
+    // Initialize Socket.IO if enabled
+    if (process.env.ENABLE_SOCKETIO !== "false") {
+      const { Server } = require("socket.io");
+
+      io = new Server(server, {
+        cors: corsOptions,
+        transports: ["websocket", "polling"],
+        allowEIO3: true,
+        pingTimeout: parseInt(process.env.WEBSOCKET_PING_TIMEOUT) || 60000,
+        pingInterval: parseInt(process.env.WEBSOCKET_PING_INTERVAL) || 25000,
+        connectTimeout: 45000,
+        maxHttpBufferSize: parseInt(process.env.WEBSOCKET_MAX_PAYLOAD) || 1e6,
+      });
+
+      const notificationService = new NotificationService();
+      notificationService.initSocket(io);
+      setNotificationService(notificationService);
+      setSocketIO(io);
+
+      noticeController.setNotificationService(notificationService);
+      eventController.setNotificationService(notificationService);
+
+      logger.info("✅ Socket.io initialized and ready");
+      logger.info("✅ NotificationService wired into controllers");
+
+      io.use((socket, next) => {
+        try {
+          const token =
+            socket.handshake.auth?.token ||
+            socket.handshake.headers?.authorization?.split(" ")[1];
+
+          if (!token) {
+            return next(new Error("Authentication required"));
+          }
+
+          const decoded = jwt.verify(token, process.env.JWT_SECRET);
+          socket.userId = decoded.id;
+          socket.userRole = decoded.role;
+          socket.userEmail = decoded.email;
+          next();
+        } catch (err) {
+          logger.error(`Socket auth error: ${err.message}`);
+          next(new Error("Invalid token"));
+        }
+      });
+
+      io.on("connection", (socket) => {
+        logger.info(
+          `🔌 Socket connected: ${socket.id} (user: ${socket.userId})`,
+        );
+
+        if (socket.userId) {
+          socket.join(`user-${socket.userId}`);
+        }
+
+        if (
+          socket.userRole === "admin" ||
+          socket.userRole === "super_admin" ||
+          socket.userRole === "faculty"
+        ) {
+          socket.join("admin-room");
+        }
+
+        socket.on("ping", (callback) => {
+          if (typeof callback === "function")
+            callback({ pong: true, timestamp: Date.now() });
+        });
+
+        socket.on("subscribe:event", (eventId) => {
+          if (eventId) socket.join(`event-${eventId}`);
+        });
+
+        socket.on("unsubscribe:event", (eventId) => {
+          if (eventId) socket.leave(`event-${eventId}`);
+        });
+
+        socket.on("disconnect", (reason) => {
+          logger.info(
+            `🔌 Socket disconnected: ${socket.id}, reason: ${reason}`,
+          );
+        });
+      });
+    }
+
+    if (process.env.BACKUP_ENABLED === "true") {
+      try {
+        const { BackupService } = require("./services/backupService");
+        backupService = new BackupService();
+        await backupService.initialize();
+        logger.info("✅ Backup service initialized");
+      } catch (error) {
+        logger.error(`Failed to initialize Backup service: ${error.message}`);
+      }
+    }
+
+    if (process.env.SMS_ENABLED === "true") {
+      try {
+        const { initializeSMSService } = require("./services/smsService");
+        smsService = await initializeSMSService();
+        logger.info("✅ SMS service initialized");
+      } catch (error) {
+        logger.error(`Failed to initialize SMS service: ${error.message}`);
+      }
+    }
+
+    try {
+      const groqConfig = require("./config/groq");
+      groqClient = groqConfig.client;
+      logger.info("✅ Groq AI client initialized");
+    } catch (error) {
+      logger.warn("⚠️  Groq AI client not available:", error.message);
+    }
+  } catch (error) {
+    logger.error(`Failed to initialize services: ${error.message}`);
+  }
+};
+
+// START SERVER FIRST - This is the critical fix for Render
+(async () => {
+  await createDirectories();
+
+  // Start server immediately - before database connection
+  server.listen(PORT, "0.0.0.0", () => {
+    logger.info("=".repeat(50));
+    logger.info(
+      `🚀 ${process.env.APP_NAME || "KAAF Noticeboard"} v${process.env.APP_VERSION || "2.2.0"}`,
+    );
+    logger.info(`🌍 Server running on http://0.0.0.0:${PORT}`);
+    logger.info(`📧 Email: ${transporter ? "CONFIGURED" : "NOT CONFIGURED"}`);
+    logger.info(
+      `🌐 Frontend: ${process.env.FRONTEND_URL || "http://localhost:5173"}`,
+    );
+    logger.info(`🔌 Socket.IO: ${io ? "ENABLED" : "DISABLED"}`);
+    logger.info(`💾 Cache: ${cacheManager ? "ENABLED" : "DISABLED"}`);
+    logger.info(`🤖 Groq AI: ${groqClient ? "ENABLED" : "DISABLED"}`);
+    logger.info(`🔧 Environment: ${process.env.NODE_ENV || "development"}`);
+    logger.info(
+      `⏱️  Rate Limiting: ${DISABLE_RATE_LIMIT ? "DISABLED" : "ENABLED"}`,
+    );
+    logger.info(`📊 Sentry: ${isSentryEnabled ? "ENABLED" : "DISABLED"}`);
+    logger.info(`💾 Backup: ${backupService ? "ENABLED" : "DISABLED"}`);
+    logger.info(`📈 Monitor: ${performanceMonitor ? "ENABLED" : "DISABLED"}`);
+    logger.info(`📱 SMS: ${smsService ? "ENABLED" : "DISABLED"}`);
+    logger.info(`🖥️  Host: ${os.hostname()} (PID: ${process.pid})`);
+    logger.info("=".repeat(50));
+  });
+
+  // Connect to database in background - doesn't block server startup
+  connectDB()
+    .then(() => {
+      logger.info("✅ MongoDB connected successfully after server startup");
+      initializeAllServices();
+    })
+    .catch((err) => {
+      logger.error(`❌ MongoDB connection failed: ${err.message}`);
+      logger.error("⚠️  Server is running but database connection failed!");
+      if (isSentryEnabled && Sentry) {
+        Sentry.captureException(err, {
+          tags: { feature: "database-connection" },
+        });
+      }
+    });
+})();
 
 // ============================================================
 // EXPORTS

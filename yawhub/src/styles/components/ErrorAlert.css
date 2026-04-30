@@ -1,0 +1,655 @@
+/* src/components/common/ErrorAlert.css */
+
+/* ========================================
+   VARIABLES & THEME
+   ======================================== */
+:root {
+  /* Colors */
+  --error-bg: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  --error-border: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
+  --error-text: #991b1b;
+  --error-icon: #dc2626;
+  --error-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.15);
+  
+  --warning-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  --warning-border: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
+  --warning-text: #92400e;
+  --warning-icon: #f59e0b;
+  --warning-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15);
+  
+  --info-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  --info-border: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+  --info-text: #1e40af;
+  --info-icon: #3b82f6;
+  --info-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+  
+  --success-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  --success-border: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+  --success-text: #166534;
+  --success-icon: #22c55e;
+  --success-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.15);
+  
+  /* Common */
+  --alert-padding: 16px 20px;
+  --alert-radius: 16px;
+  --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ========================================
+   BASE ALERT STYLES
+   ======================================== */
+.error-alert {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: var(--alert-padding);
+  border-radius: var(--alert-radius);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  transform-origin: top right;
+  max-width: 450px;
+  min-width: 300px;
+  pointer-events: auto;
+  transition: var(--transition-default);
+}
+
+.error-alert.leaving {
+  animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Alert Types */
+.error-alert-error {
+  background: var(--error-bg);
+  border-left: 4px solid var(--error-icon);
+  box-shadow: var(--error-shadow);
+}
+
+.error-alert-warning {
+  background: var(--warning-bg);
+  border-left: 4px solid var(--warning-icon);
+  box-shadow: var(--warning-shadow);
+}
+
+.error-alert-info {
+  background: var(--info-bg);
+  border-left: 4px solid var(--info-icon);
+  box-shadow: var(--info-shadow);
+}
+
+.error-alert-success {
+  background: var(--success-bg);
+  border-left: 4px solid var(--success-icon);
+  box-shadow: var(--success-shadow);
+}
+
+/* Hover Effects */
+.error-alert:hover {
+  transform: translateX(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ========================================
+   ICON STYLES
+   ======================================== */
+.error-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: iconPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.error-icon svg {
+  width: 100%;
+  height: 100%;
+  transition: var(--transition-default);
+}
+
+.error-alert-error .error-icon svg {
+  color: var(--error-icon);
+  stroke: var(--error-icon);
+}
+
+.error-alert-warning .error-icon svg {
+  color: var(--warning-icon);
+  stroke: var(--warning-icon);
+}
+
+.error-alert-info .error-icon svg {
+  color: var(--info-icon);
+  stroke: var(--info-icon);
+}
+
+.error-alert-success .error-icon svg {
+  color: var(--success-icon);
+  stroke: var(--success-icon);
+}
+
+.error-alert:hover .error-icon svg {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* ========================================
+   CONTENT STYLES
+   ======================================== */
+.error-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.error-title {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  animation: slideInDown 0.3s ease-out;
+}
+
+.error-alert-error .error-title {
+  color: var(--error-text);
+}
+
+.error-alert-warning .error-title {
+  color: var(--warning-text);
+}
+
+.error-alert-info .error-title {
+  color: var(--info-text);
+}
+
+.error-alert-success .error-title {
+  color: var(--success-text);
+}
+
+.error-message {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  animation: slideInUp 0.3s ease-out;
+}
+
+.error-alert-error .error-message {
+  color: #7f1d1d;
+}
+
+.error-alert-warning .error-message {
+  color: #78350f;
+}
+
+.error-alert-info .error-message {
+  color: #1e3a8a;
+}
+
+.error-alert-success .error-message {
+  color: #14532d;
+}
+
+/* ========================================
+   CLOSE BUTTON
+   ======================================== */
+.error-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-default);
+  color: currentColor;
+  opacity: 0.6;
+}
+
+.error-close svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5;
+}
+
+.error-close:hover {
+  opacity: 1;
+  transform: rotate(90deg);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.error-close:active {
+  transform: rotate(90deg) scale(0.9);
+}
+
+/* ========================================
+   PROGRESS BAR
+   ======================================== */
+.error-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 var(--alert-radius) var(--alert-radius);
+  overflow: hidden;
+}
+
+.error-progress-fill {
+  height: 100%;
+  width: 0;
+  animation: progressShrink linear forwards;
+  transform-origin: left;
+}
+
+.error-alert-error .error-progress-fill {
+  background: linear-gradient(90deg, var(--error-icon), #b91c1c);
+}
+
+.error-alert-warning .error-progress-fill {
+  background: linear-gradient(90deg, var(--warning-icon), #d97706);
+}
+
+.error-alert-info .error-progress-fill {
+  background: linear-gradient(90deg, var(--info-icon), #2563eb);
+}
+
+.error-alert-success .error-progress-fill {
+  background: linear-gradient(90deg, var(--success-icon), #16a34a);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%) scale(0.9);
+  }
+}
+
+@keyframes slideInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iconPop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes progressShrink {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Shake animation for error type */
+.error-alert-error.error-alert {
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1), shake 0.5s ease-out 0.3s;
+}
+
+/* ========================================
+   POSITIONING VARIANTS
+   ======================================== */
+/* Top Right (default) */
+.error-alert-container-top-right {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.error-alert-container-top-right .error-alert {
+  pointer-events: auto;
+}
+
+/* Top Left */
+.error-alert-container-top-left {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.error-alert-container-top-left .error-alert {
+  pointer-events: auto;
+  animation: slideInLeft 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.error-alert-container-top-left .error-alert.leaving {
+  animation: slideOutLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.9);
+  }
+}
+
+/* Bottom Center */
+.error-alert-container-bottom-center {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.error-alert-container-bottom-center .error-alert {
+  pointer-events: auto;
+  animation: slideInUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 640px) {
+  .error-alert {
+    max-width: calc(100vw - 32px);
+    min-width: auto;
+    padding: 14px 16px;
+  }
+  
+  .error-alert-container-top-right,
+  .error-alert-container-top-left {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+  }
+  
+  .error-alert-container-top-left {
+    left: 12px;
+    right: auto;
+  }
+  
+  .error-alert-container-bottom-center {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    transform: none;
+  }
+  
+  .error-alert-container-bottom-center .error-alert {
+    width: 100%;
+  }
+  
+  .error-title {
+    font-size: 14px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+}
+
+/* ========================================
+   TOAST NOTIFICATION STYLES
+   ======================================== */
+.error-alert-toast {
+  position: relative;
+  overflow: hidden;
+}
+
+.error-alert-toast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.error-alert-toast:hover::before {
+  opacity: 1;
+}
+
+/* Stacked notifications */
+.error-alert + .error-alert {
+  margin-top: 12px;
+  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.error-close:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.error-alert:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-alert,
+  .error-alert.leaving,
+  .error-icon svg,
+  .error-close,
+  .error-progress-fill {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .error-alert-error.error-alert {
+    animation: none;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  .error-alert {
+    position: static;
+    break-inside: avoid;
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+  
+  .error-progress-bar,
+  .error-close {
+    display: none;
+  }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --error-bg: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    --error-text: #fecaca;
+    --error-message: #fca5a5;
+    
+    --warning-bg: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    --warning-text: #fef3c7;
+    --warning-message: #fde68a;
+    
+    --info-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    --info-text: #dbeafe;
+    --info-message: #bfdbfe;
+    
+    --success-bg: linear-gradient(135deg, #14532d 0%, #166534 100%);
+    --success-text: #dcfce7;
+    --success-message: #bbf7d0;
+  }
+  
+  .error-message {
+    opacity: 0.9;
+  }
+  
+  .error-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ========================================
+   ADDITIONAL ENHANCEMENTS
+   ======================================== */
+/* Glow effect on hover */
+.error-alert:hover {
+  filter: brightness(1.02);
+}
+
+/* Smooth text rendering */
+.error-title,
+.error-message {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for long messages */
+.error-content {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.error-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.error-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.error-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Loading state skeleton */
+.error-alert-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

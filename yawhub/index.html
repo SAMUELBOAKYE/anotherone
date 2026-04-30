@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="color-scheme" content="light dark" />
+    
+    <!-- ========================================== -->
+    <!-- Favicon - KAAF University Logo -->
+    <!-- ========================================== -->
+    <link rel="icon" type="image/jpeg" href="/kaaf.jpg" />
+    <link rel="shortcut icon" type="image/jpeg" href="/kaaf.jpg" />
+    <link rel="apple-touch-icon" href="/kaaf.jpg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/kaaf.jpg" />
+    
+    <!-- ========================================== -->
+    <!-- Primary Meta Tags -->
+    <!-- ========================================== -->
+    <title>KAAF University | Digital Noticeboard & Event Management System</title>
+    <meta name="title" content="KAAF University | Digital Noticeboard & Event Management System" />
+    <meta name="description" content="Official digital noticeboard and event management platform for KAAF University students, faculty, and staff. Stay updated with campus announcements, events, and academic notices in real-time." />
+    <meta name="keywords" content="KAAF University, noticeboard, events, campus announcements, university events, digital campus, Ghana university" />
+    <meta name="author" content="KAAF University" />
+    <meta name="copyright" content="KAAF University" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- ========================================== -->
+    <!-- Open Graph / Facebook -->
+    <!-- ========================================== -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kaaf.edu.gh/" />
+    <meta property="og:title" content="KAAF University | Digital Noticeboard & Event Management System" />
+    <meta property="og:description" content="Official digital noticeboard and event management platform for KAAF University" />
+    <meta property="og:image" content="/kaaf.jpg" />
+    <meta property="og:site_name" content="KAAF University Noticeboard" />
+    <meta property="og:locale" content="en_GH" />
+    
+    <!-- ========================================== -->
+    <!-- Twitter Card -->
+    <!-- ========================================== -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://kaaf.edu.gh/" />
+    <meta property="twitter:title" content="KAAF University | Digital Noticeboard & Event Management System" />
+    <meta property="twitter:description" content="Official digital noticeboard and event management platform for KAAF University" />
+    <meta property="twitter:image" content="/kaaf.jpg" />
+    
+    <!-- ========================================== -->
+    <!-- Apple iOS / PWA -->
+    <!-- ========================================== -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KAAF Noticeboard" />
+    
+    <!-- ========================================== -->
+    <!-- Microsoft Windows -->
+    <!-- ========================================== -->
+    <meta name="msapplication-TileColor" content="#4F46E5" />
+    <meta name="msapplication-TileImage" content="/kaaf.jpg" />
+    
+    <!-- ========================================== -->
+    <!-- PWA Manifest -->
+    <!-- ========================================== -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- ========================================== -->
+    <!-- Preconnect to External Resources -->
+    <!-- ========================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="http://localhost:5000" />
+    
+    <!-- ========================================== -->
+    <!-- Fonts (Inter - Modern Sans-serif) -->
+    <!-- ========================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- ========================================== -->
+    <!-- Security Headers -->
+    <!-- ========================================== -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- ========================================== -->
+    <!-- Canonical URL -->
+    <!-- ========================================== -->
+    <link rel="canonical" href="https://kaaf.edu.gh/" />
+    
+    <!-- ========================================== -->
+    <!-- Schema.org Markup for Google -->
+    <!-- ========================================== -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "KAAF University Noticeboard",
+        "description": "Official digital noticeboard and event management system for KAAF University",
+        "applicationCategory": "Education",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "GHS"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "KAAF University",
+          "url": "https://kaaf.edu.gh",
+          "logo": "/kaaf.jpg"
+        },
+        "creator": {
+          "@type": "Organization",
+          "name": "KAAF University"
+        }
+      }
+    </script>
+    
+    <!-- ========================================== -->
+    <!-- Additional SEO -->
+    <!-- ========================================== -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <style>
+      /* Loading Animation */
+      #root {
+        min-height: 100vh;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      /* Smooth Loading */
+      .app-loading {
+        animation: fadeIn 0.3s ease-in;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif; background: #f9fafb; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div>
+          <h1 style="color: #dc2626; margin-bottom: 16px;">JavaScript Required</h1>
+          <p style="color: #6b7280; margin-bottom: 24px;">Please enable JavaScript to use the KAAF University Noticeboard System.</p>
+          <p style="color: #6b7280;">You can still access important notices via our <a href="/api/notices" style="color: #4F46E5;">RSS feed</a>.</p>
+        </div>
+      </div>
+    </noscript>
+    
+    <div id="root"></div>
+    
+    <!-- Main Entry Point -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

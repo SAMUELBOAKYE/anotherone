@@ -1,0 +1,224 @@
+/* src/styles/components/ErrorFallback.css */
+
+.error-fallback {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--form-bg, #ffffff);
+  border-radius: 1rem;
+}
+
+.error-fallback__container {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.error-fallback__icon {
+  margin-bottom: 1.5rem;
+}
+
+.error-fallback__icon svg {
+  width: 64px;
+  height: 64px;
+  color: #ef4444;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.error-fallback__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--form-text, #1e293b);
+}
+
+.error-fallback__message {
+  font-size: 0.95rem;
+  color: var(--form-text-light, #64748b);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.error-fallback__actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.error-fallback__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.error-fallback__btn svg {
+  transition: transform 0.2s ease;
+}
+
+.error-fallback__btn:hover svg {
+  transform: scale(1.1);
+}
+
+.error-fallback__btn--primary {
+  background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+  color: white;
+}
+
+.error-fallback__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.3);
+}
+
+.error-fallback__btn--secondary {
+  background: var(--form-border, #e2e8f0);
+  color: var(--form-text, #1e293b);
+}
+
+.error-fallback__btn--secondary:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.error-fallback__btn--danger {
+  background: #ef4444;
+  color: white;
+}
+
+.error-fallback__btn--danger:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.error-fallback__btn:active {
+  transform: translateY(0);
+}
+
+.error-fallback__details {
+  text-align: left;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--form-border, #e2e8f0);
+}
+
+.error-fallback__details summary {
+  cursor: pointer;
+  color: var(--form-text-light, #64748b);
+  font-size: 0.875rem;
+  font-weight: 500;
+  user-select: none;
+}
+
+.error-fallback__details summary:hover {
+  color: var(--form-border-focus, #4361ee);
+}
+
+.error-details {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.error-detail {
+  margin-bottom: 0.75rem;
+}
+
+.error-detail:last-child {
+  margin-bottom: 0;
+}
+
+.error-detail strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--form-text, #1e293b);
+}
+
+.error-detail code,
+.error-detail pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.7rem;
+  overflow-x: auto;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-detail pre {
+  padding: 0.5rem;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .error-fallback {
+    padding: 1rem;
+  }
+
+  .error-fallback__title {
+    font-size: 1.25rem;
+  }
+
+  .error-fallback__message {
+    font-size: 0.875rem;
+  }
+
+  .error-fallback__actions {
+    flex-direction: column;
+  }
+
+  .error-fallback__btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .error-fallback__container,
+  .error-fallback__icon svg {
+    animation: none;
+  }
+}

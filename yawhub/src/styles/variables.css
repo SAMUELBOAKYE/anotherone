@@ -1,0 +1,537 @@
+/* ========================================
+   KAAF UNIVERSITY NOTICEBOARD
+   CSS Variables (Design System)
+   Version: 2.0.0
+   Author: Boakye Samuel Yiadom
+   ======================================== */
+
+/* ========================================
+   LIGHT THEME (Default)
+   ======================================== */
+
+:root {
+  /* ========================================
+     PRIMARY COLORS (Matches Backend Gradient)
+     ======================================== */
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+  --primary-200: #c7d2fe;
+  --primary-300: #a5b4fc;
+  --primary-400: #818cf8;
+  --primary-500: #4f46e5;
+  --primary-600: #4338ca;
+  --primary-700: #3730a3;
+  --primary-800: #312e81;
+  --primary-900: #1e1b4b;
+  
+  /* Primary (Legacy Support) */
+  --primary-color: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-light: #818cf8;
+  
+  /* ========================================
+     SECONDARY COLORS (Emerald/Success)
+     ======================================== */
+  --secondary-50: #ecfdf5;
+  --secondary-100: #d1fae5;
+  --secondary-200: #a7f3d0;
+  --secondary-300: #6ee7b7;
+  --secondary-400: #34d399;
+  --secondary-500: #10b981;
+  --secondary-600: #059669;
+  --secondary-700: #047857;
+  --secondary-800: #065f46;
+  --secondary-900: #064e3b;
+  
+  /* Secondary (Legacy Support) */
+  --secondary-color: #10b981;
+  --secondary-dark: #059669;
+  --secondary-light: #34d399;
+  
+  /* ========================================
+     ACCENT COLORS (Amber/Warning)
+     ======================================== */
+  --accent-50: #fffbeb;
+  --accent-100: #fef3c7;
+  --accent-200: #fde68a;
+  --accent-300: #fcd34d;
+  --accent-400: #fbbf24;
+  --accent-500: #f59e0b;
+  --accent-600: #d97706;
+  --accent-700: #b45309;
+  --accent-800: #92400e;
+  --accent-900: #78350f;
+  
+  /* Accent (Legacy Support) */
+  --accent-color: #f59e0b;
+  --accent-dark: #d97706;
+  --accent-light: #fbbf24;
+  
+  /* ========================================
+     DANGER/ERROR COLORS
+     ======================================== */
+  --danger-50: #fef2f2;
+  --danger-100: #fee2e2;
+  --danger-200: #fecaca;
+  --danger-300: #fca5a5;
+  --danger-400: #f87171;
+  --danger-500: #ef4444;
+  --danger-600: #dc2626;
+  --danger-700: #b91c1c;
+  --danger-800: #991b1b;
+  --danger-900: #7f1d1d;
+  
+  /* Danger (Legacy Support) */
+  --danger-color: #ef4444;
+  --danger-dark: #dc2626;
+  --danger-light: #f87171;
+  
+  /* ========================================
+     INFO COLORS
+     ======================================== */
+  --info-50: #eff6ff;
+  --info-100: #dbeafe;
+  --info-200: #bfdbfe;
+  --info-300: #93c5fd;
+  --info-400: #60a5fa;
+  --info-500: #3b82f6;
+  --info-600: #2563eb;
+  --info-700: #1d4ed8;
+  --info-800: #1e40af;
+  --info-900: #1e3a8a;
+  
+  /* Info (Legacy Support) */
+  --info-color: #3b82f6;
+  --info-dark: #2563eb;
+  --info-light: #60a5fa;
+  
+  /* ========================================
+     SUCCESS COLORS (Alias for Secondary)
+     ======================================== */
+  --success-50: var(--secondary-50);
+  --success-100: var(--secondary-100);
+  --success-200: var(--secondary-200);
+  --success-300: var(--secondary-300);
+  --success-400: var(--secondary-400);
+  --success-500: var(--secondary-500);
+  --success-600: var(--secondary-600);
+  --success-700: var(--secondary-700);
+  --success-800: var(--secondary-800);
+  --success-900: var(--secondary-900);
+  
+  --success-color: var(--secondary-color);
+  --success-dark: var(--secondary-dark);
+  --success-light: var(--secondary-light);
+  
+  /* ========================================
+     WARNING COLORS (Alias for Accent)
+     ======================================== */
+  --warning-50: var(--accent-50);
+  --warning-100: var(--accent-100);
+  --warning-200: var(--accent-200);
+  --warning-300: var(--accent-300);
+  --warning-400: var(--accent-400);
+  --warning-500: var(--accent-500);
+  --warning-600: var(--accent-600);
+  --warning-700: var(--accent-700);
+  --warning-800: var(--accent-800);
+  --warning-900: var(--accent-900);
+  
+  --warning-color: var(--accent-color);
+  --warning-dark: var(--accent-dark);
+  --warning-light: var(--accent-light);
+  
+  /* ========================================
+     GRAY SCALE COLORS
+     ======================================== */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* Text Colors */
+  --text-primary: var(--gray-900);
+  --text-secondary: var(--gray-600);
+  --text-tertiary: var(--gray-500);
+  --text-light: var(--gray-400);
+  --text-white: #ffffff;
+  --text-dark: #1f2937;
+  
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: var(--gray-50);
+  --bg-tertiary: var(--gray-100);
+  --bg-dark: var(--gray-900);
+  --bg-light: var(--gray-50);
+  
+  /* Border Colors */
+  --border-light: var(--gray-200);
+  --border-base: var(--gray-300);
+  --border-dark: var(--gray-400);
+  
+  /* Component Specific Backgrounds */
+  --header-bg: #ffffff;
+  --footer-bg: #1f2937;
+  --sidebar-bg: #1f2937;
+  --sidebar-text: #ffffff;
+  --card-bg: #ffffff;
+  --modal-bg: #ffffff;
+  --dropdown-bg: #ffffff;
+  
+  /* Component Specific Text */
+  --header-text: #1f2937;
+  --footer-text: #9ca3af;
+  --sidebar-text-primary: #ffffff;
+  --sidebar-text-secondary: #9ca3af;
+  
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  
+  /* Font Sizes */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+  --font-5xl: 3rem;
+  
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ========================================
+     SPACING
+     ======================================== */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0\.5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1\.5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-2\.5: 0.625rem;
+  --spacing-3: 0.75rem;
+  --spacing-3\.5: 0.875rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 1.75rem;
+  --spacing-8: 2rem;
+  --spacing-9: 2.25rem;
+  --spacing-10: 2.5rem;
+  --spacing-11: 2.75rem;
+  --spacing-12: 3rem;
+  --spacing-14: 3.5rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-28: 7rem;
+  --spacing-32: 8rem;
+  
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;
+  --radius-base: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* ========================================
+     SHADOWS
+     ======================================== */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --shadow-glow: 0 0 15px rgba(79, 70, 229, 0.3);
+  --shadow-glow-strong: 0 0 25px rgba(79, 70, 229, 0.5);
+  
+  /* Legacy Shadow Support */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  
+  /* ========================================
+     TRANSITIONS
+     ======================================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ========================================
+     Z-INDEX LAYERS
+     ======================================== */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+  
+  /* ========================================
+     CONTAINER WIDTHS
+     ======================================== */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* ========================================
+     HEADER & FOOTER
+     ======================================== */
+  --header-height: 70px;
+  --footer-height: 60px;
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+}
+
+/* ========================================
+   DARK THEME
+   ======================================== */
+
+[data-theme="dark"],
+.theme-dark {
+  /* Primary Colors */
+  --primary-50: #1e1b4b;
+  --primary-100: #312e81;
+  --primary-200: #3730a3;
+  --primary-300: #4338ca;
+  --primary-400: #4f46e5;
+  --primary-500: #6366f1;
+  --primary-600: #818cf8;
+  --primary-700: #a5b4fc;
+  --primary-800: #c7d2fe;
+  --primary-900: #e0e7ff;
+  
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  
+  /* Secondary Colors */
+  --secondary-50: #064e3b;
+  --secondary-100: #065f46;
+  --secondary-200: #047857;
+  --secondary-300: #059669;
+  --secondary-400: #10b981;
+  --secondary-500: #34d399;
+  --secondary-600: #6ee7b7;
+  --secondary-700: #a7f3d0;
+  --secondary-800: #d1fae5;
+  --secondary-900: #ecfdf5;
+  
+  --secondary-color: #34d399;
+  --secondary-dark: #10b981;
+  --secondary-light: #6ee7b7;
+  
+  /* Accent Colors */
+  --accent-50: #78350f;
+  --accent-100: #92400e;
+  --accent-200: #b45309;
+  --accent-300: #d97706;
+  --accent-400: #f59e0b;
+  --accent-500: #fbbf24;
+  --accent-600: #fcd34d;
+  --accent-700: #fde68a;
+  --accent-800: #fef3c7;
+  --accent-900: #fffbeb;
+  
+  --accent-color: #fbbf24;
+  --accent-dark: #f59e0b;
+  --accent-light: #fcd34d;
+  
+  /* Danger Colors */
+  --danger-50: #7f1d1d;
+  --danger-100: #991b1b;
+  --danger-200: #b91c1c;
+  --danger-300: #dc2626;
+  --danger-400: #ef4444;
+  --danger-500: #f87171;
+  --danger-600: #fca5a5;
+  --danger-700: #fecaca;
+  --danger-800: #fee2e2;
+  --danger-900: #fef2f2;
+  
+  --danger-color: #f87171;
+  --danger-dark: #ef4444;
+  --danger-light: #fca5a5;
+  
+  /* Info Colors */
+  --info-50: #1e3a8a;
+  --info-100: #1e40af;
+  --info-200: #1d4ed8;
+  --info-300: #2563eb;
+  --info-400: #3b82f6;
+  --info-500: #60a5fa;
+  --info-600: #93c5fd;
+  --info-700: #bfdbfe;
+  --info-800: #dbeafe;
+  --info-900: #eff6ff;
+  
+  --info-color: #60a5fa;
+  --info-dark: #3b82f6;
+  --info-light: #93c5fd;
+  
+  /* Gray Scale Colors (Dark Mode) */
+  --gray-50: #111827;
+  --gray-100: #1f2937;
+  --gray-200: #374151;
+  --gray-300: #4b5563;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #d1d5db;
+  --gray-700: #e5e7eb;
+  --gray-800: #f3f4f6;
+  --gray-900: #f9fafb;
+  
+  /* Text Colors (Dark Mode) */
+  --text-primary: var(--gray-800);
+  --text-secondary: var(--gray-600);
+  --text-tertiary: var(--gray-500);
+  --text-light: var(--gray-400);
+  
+  /* Background Colors (Dark Mode) */
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --bg-tertiary: #374151;
+  --bg-dark: #0f172a;
+  --bg-light: #1f2937;
+  
+  /* Border Colors (Dark Mode) */
+  --border-light: #374151;
+  --border-base: #4b5563;
+  --border-dark: #6b7280;
+  
+  /* Component Specific Backgrounds (Dark Mode) */
+  --header-bg: #1f2937;
+  --footer-bg: #111827;
+  --sidebar-bg: #111827;
+  --sidebar-text: #f3f4f6;
+  --card-bg: #1f2937;
+  --modal-bg: #1f2937;
+  --dropdown-bg: #1f2937;
+  
+  /* Component Specific Text (Dark Mode) */
+  --header-text: #f3f4f6;
+  --footer-text: #9ca3af;
+  --sidebar-text-primary: #f3f4f6;
+  --sidebar-text-secondary: #9ca3af;
+  
+  /* Shadows (Dark Mode) */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+}
+
+/* ========================================
+   SYSTEM DARK MODE PREFERENCE
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Copy dark theme variables here */
+    --primary-50: #1e1b4b;
+    --primary-100: #312e81;
+    --primary-200: #3730a3;
+    --primary-300: #4338ca;
+    --primary-400: #4f46e5;
+    --primary-500: #6366f1;
+    --primary-600: #818cf8;
+    --primary-700: #a5b4fc;
+    --primary-800: #c7d2fe;
+    --primary-900: #e0e7ff;
+    
+    --primary-color: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    
+    --text-primary: #f3f4f6;
+    --text-secondary: #d1d5db;
+    --bg-primary: #1f2937;
+    --bg-secondary: #111827;
+    --border-light: #374151;
+    
+    --header-bg: #1f2937;
+    --footer-bg: #111827;
+    --sidebar-bg: #111827;
+    --card-bg: #1f2937;
+  }
+}
+
+/* ========================================
+   THEME TRANSITION
+   ======================================== */
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              color var(--transition-base),
+              fill var(--transition-base),
+              stroke var(--transition-base) !important;
+}
+
+/* ========================================
+   SCROLLBAR THEME VARIABLES
+   ======================================== */
+
+:root {
+  --scrollbar-track: var(--gray-100);
+  --scrollbar-thumb: var(--primary-400);
+  --scrollbar-thumb-hover: var(--primary-500);
+}
+
+[data-theme="dark"] {
+  --scrollbar-track: var(--gray-800);
+  --scrollbar-thumb: var(--primary-600);
+  --scrollbar-thumb-hover: var(--primary-500);
+}
+
+/* ========================================
+   GRADIENT VARIABLES
+   ======================================== */
+
+:root {
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-primary-reverse: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  --gradient-danger: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+  --gradient-warning: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+  --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}

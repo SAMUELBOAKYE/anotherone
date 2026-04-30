@@ -1,0 +1,700 @@
+/* src/components/common/Breadcrumb.css */
+
+/* ========================================
+   VARIABLES & THEME
+   ======================================== */
+:root {
+  /* Colors */
+  --breadcrumb-bg: transparent;
+  --breadcrumb-text: #64748b;
+  --breadcrumb-text-hover: #1e293b;
+  --breadcrumb-active: #1e293b;
+  --breadcrumb-link: #3b82f6;
+  --breadcrumb-link-hover: #2563eb;
+  --breadcrumb-separator: #94a3b8;
+  --breadcrumb-back-bg: #f1f5f9;
+  --breadcrumb-back-hover: #e2e8f0;
+  --breadcrumb-back-text: #475569;
+  --breadcrumb-ellipsis: #64748b;
+  --breadcrumb-ellipsis-hover: #1e293b;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-spring: all 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+  
+  /* Spacing */
+  --breadcrumb-padding: 12px 0;
+  --breadcrumb-gap: 8px;
+  --breadcrumb-item-gap: 8px;
+  --breadcrumb-font-size: 14px;
+  --breadcrumb-icon-size: 16px;
+  --breadcrumb-back-radius: 8px;
+}
+
+[data-theme="dark"] {
+  --breadcrumb-text: #94a3b8;
+  --breadcrumb-text-hover: #f1f5f9;
+  --breadcrumb-active: #f1f5f9;
+  --breadcrumb-link: #60a5fa;
+  --breadcrumb-link-hover: #93c5fd;
+  --breadcrumb-separator: #64748b;
+  --breadcrumb-back-bg: #1e293b;
+  --breadcrumb-back-hover: #334155;
+  --breadcrumb-back-text: #cbd5e1;
+  --breadcrumb-ellipsis: #94a3b8;
+  --breadcrumb-ellipsis-hover: #f1f5f9;
+}
+
+/* ========================================
+   CONTAINER STYLES
+   ======================================== */
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: var(--breadcrumb-padding);
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   BACK BUTTON
+   ======================================== */
+.breadcrumb-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--breadcrumb-back-bg);
+  border: none;
+  border-radius: var(--breadcrumb-back-radius);
+  color: var(--breadcrumb-back-text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.breadcrumb-back::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(99, 102, 241, 0.1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.breadcrumb-back:hover::before {
+  transform: scaleX(1);
+}
+
+.breadcrumb-back:hover {
+  background: var(--breadcrumb-back-hover);
+  transform: translateX(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.breadcrumb-back:active {
+  transform: translateX(-2px) scale(0.98);
+}
+
+.breadcrumb-back svg {
+  transition: var(--transition-smooth);
+}
+
+.breadcrumb-back:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ========================================
+   MAIN BREADCRUMB NAVIGATION
+   ======================================== */
+.breadcrumb {
+  flex: 1;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--breadcrumb-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   BREADCRUMB ITEMS
+   ======================================== */
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--breadcrumb-item-gap);
+  font-size: var(--breadcrumb-font-size);
+  position: relative;
+  animation: slideInLeft 0.3s ease-out backwards;
+  animation-delay: calc(var(--index, 0) * 0.05s);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Breadcrumb Link */
+.breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--breadcrumb-link);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  position: relative;
+  padding: 4px 0;
+}
+
+.breadcrumb-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--breadcrumb-link);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.breadcrumb-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.breadcrumb-link:hover {
+  color: var(--breadcrumb-link-hover);
+  transform: translateX(2px);
+}
+
+.breadcrumb-link:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+/* Breadcrumb Current (Active) */
+.breadcrumb-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--breadcrumb-active);
+  font-weight: 600;
+  padding: 4px 0;
+  position: relative;
+  animation: pulse 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* Home Icon */
+.breadcrumb-link svg,
+.breadcrumb-current svg {
+  width: var(--breadcrumb-icon-size);
+  height: var(--breadcrumb-icon-size);
+  transition: var(--transition-smooth);
+}
+
+.breadcrumb-link:hover svg {
+  transform: scale(1.1);
+  color: var(--breadcrumb-link-hover);
+}
+
+.breadcrumb-text {
+  margin-left: 4px;
+}
+
+/* ========================================
+   SEPARATORS
+   ======================================== */
+.breadcrumb-separator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--breadcrumb-separator);
+  transition: var(--transition-smooth);
+}
+
+.breadcrumb-item:hover + .breadcrumb-separator,
+.breadcrumb-separator:hover {
+  transform: scale(1.1);
+  color: var(--breadcrumb-text-hover);
+}
+
+/* Separator Variants */
+.breadcrumb-separator svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+.breadcrumb-separator-text {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.breadcrumb-separator-dot {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ========================================
+   ELLIPSIS STYLES
+   ======================================== */
+.breadcrumb-ellipsis {
+  position: relative;
+}
+
+.breadcrumb-ellipsis-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--breadcrumb-back-bg);
+  border-radius: 6px;
+  color: var(--breadcrumb-ellipsis);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: default;
+  transition: var(--transition-smooth);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.breadcrumb-ellipsis:hover .breadcrumb-ellipsis-text {
+  background: var(--breadcrumb-back-hover);
+  color: var(--breadcrumb-ellipsis-hover);
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   DROPDOWN MENU FOR ELLIPSIS (Optional)
+   ======================================== */
+.breadcrumb-ellipsis {
+  position: relative;
+}
+
+.breadcrumb-ellipsis:hover .breadcrumb-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.breadcrumb-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: var(--breadcrumb-back-bg);
+  border: 1px solid var(--breadcrumb-separator);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: var(--transition-smooth);
+  z-index: 1000;
+  min-width: 150px;
+}
+
+.breadcrumb-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.breadcrumb-dropdown li {
+  padding: 0;
+}
+
+.breadcrumb-dropdown a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--breadcrumb-text);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.breadcrumb-dropdown a:hover {
+  background: var(--breadcrumb-back-hover);
+  color: var(--breadcrumb-text-hover);
+  padding-left: 20px;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Loading Skeleton */
+.breadcrumb-skeleton {
+  display: flex;
+  align-items: center;
+  gap: var(--breadcrumb-gap);
+  padding: var(--breadcrumb-padding);
+}
+
+.breadcrumb-skeleton-item {
+  height: 20px;
+  background: linear-gradient(90deg, var(--breadcrumb-back-bg) 25%, var(--breadcrumb-back-hover) 50%, var(--breadcrumb-back-bg) 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+}
+
+.breadcrumb-skeleton-item:nth-child(1) { width: 60px; }
+.breadcrumb-skeleton-item:nth-child(2) { width: 40px; }
+.breadcrumb-skeleton-item:nth-child(3) { width: 80px; }
+.breadcrumb-skeleton-item:nth-child(4) { width: 50px; }
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+  :root {
+    --breadcrumb-font-size: 13px;
+    --breadcrumb-icon-size: 14px;
+    --breadcrumb-gap: 6px;
+    --breadcrumb-item-gap: 6px;
+  }
+  
+  .breadcrumb-container {
+    gap: 12px;
+    padding: 10px 0;
+  }
+  
+  .breadcrumb-back span {
+    display: none;
+  }
+  
+  .breadcrumb-back {
+    padding: 6px 10px;
+  }
+  
+  .breadcrumb-ellipsis-text {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .breadcrumb-list {
+    gap: 4px;
+  }
+  
+  .breadcrumb-item {
+    font-size: 12px;
+  }
+  
+  .breadcrumb-link,
+  .breadcrumb-current {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .breadcrumb-text {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .breadcrumb-back {
+    margin-bottom: 4px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.breadcrumb-link:focus-visible,
+.breadcrumb-back:focus-visible {
+  outline: 2px solid var(--breadcrumb-link);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumb-container,
+  .breadcrumb-link,
+  .breadcrumb-back,
+  .breadcrumb-separator,
+  .breadcrumb-ellipsis-text,
+  .breadcrumb-dropdown {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .breadcrumb-link::after {
+    transition: none;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  .breadcrumb-container {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  
+  .breadcrumb-back,
+  .breadcrumb-separator,
+  .breadcrumb-ellipsis {
+    display: none;
+  }
+  
+  .breadcrumb-list {
+    display: block;
+  }
+  
+  .breadcrumb-item {
+    display: inline;
+  }
+  
+  .breadcrumb-link {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .breadcrumb-current {
+    font-weight: bold;
+  }
+  
+  .breadcrumb-link::after {
+    display: none;
+  }
+}
+
+/* ========================================
+   DARK MODE ENHANCEMENTS
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  .breadcrumb-link::after {
+    background: var(--breadcrumb-link-hover);
+  }
+  
+  .breadcrumb-ellipsis-text {
+    background: var(--breadcrumb-back-bg);
+  }
+  
+  .breadcrumb-ellipsis:hover .breadcrumb-ellipsis-text {
+    background: var(--breadcrumb-back-hover);
+  }
+}
+
+/* ========================================
+   ADDITIONAL ENHANCEMENTS
+   ======================================== */
+/* Gradient text effect for current item */
+.breadcrumb-current {
+  background: linear-gradient(135deg, var(--breadcrumb-active), var(--breadcrumb-link));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Hover underline animation for links */
+.breadcrumb-link {
+  position: relative;
+}
+
+.breadcrumb-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--breadcrumb-link), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.breadcrumb-link:hover::before {
+  transform: scaleX(1);
+}
+
+/* Tooltip for truncated items */
+.breadcrumb-link[data-full-text] {
+  position: relative;
+}
+
+.breadcrumb-link[data-full-text]:hover::after {
+  content: attr(data-full-text);
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+  background: var(--breadcrumb-back-bg);
+  color: var(--breadcrumb-text);
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+  z-index: 1000;
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scroll reveal animation */
+.breadcrumb-container {
+  animation: scrollReveal 0.5s ease-out;
+  animation-timeline: view();
+}
+
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth text rendering */
+.breadcrumb-link,
+.breadcrumb-current,
+.breadcrumb-ellipsis-text,
+.breadcrumb-back {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring enhancement */
+.breadcrumb-link:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+/* Custom cursor for interactive elements */
+.breadcrumb-link,
+.breadcrumb-back {
+  cursor: pointer;
+}
+
+/* Active state ripple effect */
+.breadcrumb-back {
+  position: relative;
+  overflow: hidden;
+}
+
+.breadcrumb-back .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.3);
+  transform: scale(0);
+  animation: rippleAnimation 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}

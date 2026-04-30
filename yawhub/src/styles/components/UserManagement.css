@@ -1,0 +1,842 @@
+/* UserManagement.css - Professional Enterprise-Grade Styling */
+
+/* ============================================
+   CSS Variables (Design System)
+   ============================================ */
+:root {
+  /* Color Palette - Modern Dark/Light Theme */
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  --primary-800: #1e40af;
+  --primary-900: #1e3a8a;
+  
+  --success-50: #f0fdf4;
+  --success-500: #22c55e;
+  --success-600: #16a34a;
+  --success-700: #15803d;
+  
+  --danger-50: #fef2f2;
+  --danger-500: #ef4444;
+  --danger-600: #dc2626;
+  --danger-700: #b91c1c;
+  
+  --warning-50: #fffbeb;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Z-index layers */
+  --z-dropdown: 1000;
+  --z-modal: 2000;
+  --z-toast: 3000;
+}
+
+/* ============================================
+   Dark Mode Support
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gray-50: #111827;
+    --gray-100: #1f2937;
+    --gray-200: #374151;
+    --gray-300: #4b5563;
+    --gray-400: #6b7280;
+    --gray-500: #9ca3af;
+    --gray-600: #d1d5db;
+    --gray-700: #e5e7eb;
+    --gray-800: #f3f4f6;
+    --gray-900: #f9fafb;
+  }
+}
+
+/* ============================================
+   Main Container
+   ============================================ */
+.user-management {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Header Section
+   ============================================ */
+.management-header {
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  animation: slideInDown 0.4s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.management-header:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.header-left h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.user-count {
+  font-size: 0.875rem;
+  color: var(--gray-500);
+  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   Filters Section
+   ============================================ */
+.management-filters {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-wrapper {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  transition: all var(--transition-base);
+  background: var(--gray-50);
+  color: var(--gray-900);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.clear-search {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--gray-400);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clear-search:hover {
+  color: var(--gray-600);
+  background: var(--gray-200);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.role-filter,
+.status-filter {
+  padding: 0.75rem 2rem 0.75rem 1rem;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  background: var(--gray-50);
+  color: var(--gray-900);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  min-width: 140px;
+}
+
+.role-filter:hover,
+.status-filter:hover {
+  border-color: var(--primary-300);
+}
+
+.role-filter:focus,
+.status-filter:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.reset-filters-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.reset-filters-btn:hover {
+  background: var(--gray-200);
+  border-color: var(--gray-300);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-lg);
+  color: var(--gray-400);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+  color: var(--gray-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+.user-management-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ============================================
+   Table Container (for UserTable component)
+   ============================================ */
+.users-table-container {
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.users-table-container:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+}
+
+.users-table th {
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-align: left;
+  font-weight: 600;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--gray-300);
+}
+
+.users-table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+  transition: background var(--transition-fast);
+}
+
+.users-table tr:hover {
+  background: var(--gray-100);
+  transform: scale(1.01);
+  transition: all var(--transition-fast);
+}
+
+/* Role Badges */
+.role-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  animation: badgePulse 0.3s ease-out;
+}
+
+@keyframes badgePulse {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.role-badge.admin {
+  background: linear-gradient(135deg, var(--primary-100), var(--primary-200));
+  color: var(--primary-800);
+}
+
+.role-badge.staff {
+  background: linear-gradient(135deg, var(--success-50), var(--success-100));
+  color: var(--success-700);
+}
+
+.role-badge.student {
+  background: linear-gradient(135deg, var(--warning-50), var(--warning-100));
+  color: var(--warning-700);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.edit-btn,
+.delete-btn,
+.role-select-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.edit-btn {
+  background: var(--primary-100);
+  color: var(--primary-700);
+}
+
+.edit-btn:hover {
+  background: var(--primary-200);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.delete-btn {
+  background: var(--danger-50);
+  color: var(--danger-600);
+}
+
+.delete-btn:hover {
+  background: var(--danger-100);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.role-select-btn {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  cursor: pointer;
+  min-width: 100px;
+  justify-content: space-between;
+}
+
+.role-select-btn:hover {
+  background: var(--gray-200);
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   Pagination Styles
+   ============================================ */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-md);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.page-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--gray-200);
+  background: var(--gray-50);
+  color: var(--gray-700);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+  min-width: 40px;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--primary-50);
+  border-color: var(--primary-400);
+  color: var(--primary-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.page-btn.active {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 1024px) {
+  .user-management {
+    padding: var(--spacing-lg);
+  }
+  
+  .management-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-wrapper,
+  .role-filter,
+  .status-filter,
+  .reset-filters-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-management {
+    padding: var(--spacing-md);
+  }
+  
+  .management-header {
+    padding: var(--spacing-lg);
+  }
+  
+  .header-left h2 {
+    font-size: 1.5rem;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .pagination-container {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .users-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .users-table-container {
+    overflow-x: auto;
+  }
+  
+  .header-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+  .management-filters,
+  .action-buttons,
+  .pagination-container {
+    display: none;
+  }
+  
+  .user-management {
+    padding: 0;
+  }
+  
+  .users-table-container {
+    box-shadow: none;
+  }
+}
+
+/* ============================================
+   Accessibility & Focus Styles
+   ============================================ */
+*:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   Loading Skeleton Animation
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gray-200) 25%,
+    var(--gray-300) 50%,
+    var(--gray-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   Tooltip Styles
+   ============================================ */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]:before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--gray-900);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+  z-index: var(--z-tooltip);
+}
+
+[data-tooltip]:hover:before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* ============================================
+   Animation for Table Rows
+   ============================================ */
+.users-table tbody tr {
+  animation: slideInRow 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInRow {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.users-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.users-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.users-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.users-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.users-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+.users-table tbody tr:nth-child(6) { animation-delay: 0.3s; }
+.users-table tbody tr:nth-child(7) { animation-delay: 0.35s; }
+.users-table tbody tr:nth-child(8) { animation-delay: 0.4s; }
+.users-table tbody tr:nth-child(9) { animation-delay: 0.45s; }
+.users-table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+
+/* ============================================
+   Status Indicators
+   ============================================ */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.status-dot.active {
+  background: var(--success-500);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.status-dot.inactive {
+  background: var(--gray-400);
+}
+
+.status-dot.suspended {
+  background: var(--danger-500);
+  animation: none;
+}
+
+/* ============================================
+   Hover Effects & Micro-interactions
+   ============================================ */
+.role-select-btn,
+.delete-btn,
+.edit-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.role-select-btn:after,
+.delete-btn:after,
+.edit-btn:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.role-select-btn:active:after,
+.delete-btn:active:after,
+.edit-btn:active:after {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: 0s;
+}
+
+/* ============================================
+   Gradient Text Animation
+   ============================================ */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--primary-600),
+    var(--primary-800),
+    var(--primary-600)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}

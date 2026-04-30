@@ -1,0 +1,1525 @@
+/* ============================================================
+   responsive.css
+   Full responsive support: iPhone, Android, Tablet, Desktop
+   Import this in your main index.css or App.css:
+     @import './responsive.css';
+   ============================================================ */
+
+/* ── Breakpoints used:
+   xs  : 0–479px      (small phones)
+   sm  : 480–767px    (phones)
+   md  : 768–1023px   (tablets)
+   lg  : 1024–1279px  (small laptops)
+   xl  : 1280px+      (desktop/large)
+   ──────────────────────────────────────────────────────────── */
+
+/* ============================================================
+   1. GLOBAL BASE — applies to ALL screen sizes
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape on iOS */
+}
+
+body {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make inputs touch-friendly */
+input,
+select,
+textarea,
+button {
+  touch-action: manipulation;
+  font-family: inherit;
+}
+
+/* Prevent tiny tap targets on mobile */
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ============================================================
+   2. LAYOUT CONTAINERS
+   ============================================================ */
+
+.container,
+.dashboard-container,
+.auth-container,
+.admin-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 480px) {
+  .container,
+  .dashboard-container,
+  .auth-container,
+  .admin-container {
+    padding: 0 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container,
+  .dashboard-container,
+  .auth-container,
+  .admin-container {
+    padding: 0 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container,
+  .dashboard-container,
+  .auth-container,
+  .admin-container {
+    padding: 0 48px;
+  }
+}
+
+/* ============================================================
+   3. ADMIN DASHBOARD
+   ============================================================ */
+
+.admin-dashboard {
+  min-height: 100vh;
+  padding: 12px;
+}
+
+@media (min-width: 768px) {
+  .admin-dashboard {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-dashboard {
+    padding: 24px 32px;
+  }
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  margin-bottom: 16px;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .header-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+}
+
+.dashboard-header h1 {
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+@media (min-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 26px;
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 30px;
+  }
+}
+
+.header-subtitle {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .header-subtitle {
+    font-size: 15px;
+  }
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Stat Card */
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-number {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .stat-number {
+    font-size: 28px;
+  }
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Tabs */
+.tabs-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  white-space: nowrap;
+  border: none;
+  background: transparent;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  min-height: auto;
+  min-width: auto;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 480px) {
+  .tab-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+}
+
+.tab-btn.active {
+  color: #1976d2;
+  background: #eff6ff;
+  border-bottom: 2px solid #1976d2;
+}
+
+/* Charts */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 1024px) {
+  .charts-row {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 768px) {
+  .chart-card {
+    padding: 20px;
+  }
+}
+
+.chart-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Users Panel */
+.users-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .users-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .filters {
+    width: auto;
+  }
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #1976d2;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+  background: #fff;
+  cursor: pointer;
+  min-height: auto;
+  min-width: auto;
+}
+
+/* Quick Actions */
+.quick-actions {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Refresh button */
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: auto;
+  min-width: auto;
+  align-self: flex-start;
+}
+
+/* ============================================================
+   4. AUTH PAGES (Login / Register)
+   ============================================================ */
+
+.auth-layout,
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .auth-layout,
+  .auth-page-wrapper {
+    padding: 32px;
+  }
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 480px;
+}
+
+@media (min-width: 768px) {
+  .auth-form-wrapper {
+    max-width: 520px;
+  }
+}
+
+/* Registration Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (min-width: 480px) {
+  .form-section {
+    padding: 20px;
+  }
+}
+
+.form-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+@media (min-width: 480px) {
+  .form-section-title {
+    font-size: 15px;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input,
+.input-wrapper select,
+.input-wrapper textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  background: #fff;
+  min-height: auto;
+  min-width: auto;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus,
+.input-wrapper textarea:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+}
+
+/* Role tabs */
+.role-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.role-tab {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  min-height: auto;
+  min-width: auto;
+}
+
+@media (min-width: 480px) {
+  .role-tab {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+}
+
+.role-tab.active {
+  border-color: #1976d2;
+  background: #eff6ff;
+  color: #1976d2;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+  min-height: auto;
+  min-width: auto;
+}
+
+.submit-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* File upload */
+.file-upload-area {
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.file-upload-area:hover {
+  border-color: #1976d2;
+}
+
+.file-upload-area.upload-verified {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.file-upload-area.upload-failed {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.file-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================================
+   5. LOGIN FORM
+   ============================================================ */
+
+.login-form-component {
+  width: 100%;
+}
+
+.login-form-component .form-group {
+  margin-bottom: 16px;
+}
+
+.login-form-component .submit-btn {
+  margin-top: 8px;
+}
+
+.error-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+/* ============================================================
+   6. ADMIN LOGIN PAGE (StandaloneAdminRegistration)
+   ============================================================ */
+
+.admin-registration-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+}
+
+.registration-wrapper {
+  width: 100%;
+  max-width: 460px;
+  position: relative;
+  z-index: 1;
+}
+
+.registration-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 28px 24px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #1976d2, #7c3aed);
+  color: #fff;
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.header-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.header-subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+@media (min-width: 480px) {
+  .card-body {
+    padding: 28px;
+  }
+}
+
+.registration-card .form-group {
+  margin-bottom: 16px;
+}
+
+.registration-card .form-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.registration-card .form-input {
+  width: 100%;
+  padding: 10px 14px 10px 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: auto;
+}
+
+.registration-card .form-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+}
+
+.registration-card .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.registration-card .input-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 4px;
+  min-height: auto;
+  min-width: auto;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #1976d2, #7c3aed);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s ease;
+  min-height: auto;
+  min-width: auto;
+}
+
+.submit-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.back-button {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #6b7280;
+  margin-top: 12px;
+  transition: background 0.2s;
+  min-height: auto;
+  min-width: auto;
+}
+
+.back-button:hover {
+  background: #f3f4f6;
+}
+
+.footer-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: center;
+  justify-content: center;
+}
+
+.header-divider,
+.footer-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 16px 0;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Alerts inside card */
+.registration-card .error-alert,
+.registration-card .success-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.registration-card .error-alert {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+
+.registration-card .success-alert {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #15803d;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+  min-height: auto;
+  min-width: auto;
+  color: inherit;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   7. NAVIGATION / MAIN LAYOUT — responsive
+   ============================================================ */
+
+/* Navbar */
+.navbar,
+.main-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Mobile hamburger: show on small screens */
+.nav-hamburger {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .nav-hamburger {
+    display: none;
+  }
+}
+
+/* Desktop nav links: hide on small screens */
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+}
+
+/* Mobile dropdown menu */
+.nav-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.nav-mobile-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(320px, 85vw);
+  height: 100vh;
+  background: #fff;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+/* ============================================================
+   8. HOME PAGE — responsive hero & sections
+   ============================================================ */
+
+.hero-section {
+  padding: 40px 16px 32px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    padding: 64px 32px 48px;
+  }
+}
+
+.hero-section h1 {
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+@media (min-width: 480px) {
+  .hero-section h1 {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-section h1 {
+    font-size: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-section h1 {
+    font-size: 56px;
+  }
+}
+
+.hero-section p {
+  font-size: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .hero-section p {
+    font-size: 18px;
+  }
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Cards Grid */
+.cards-grid,
+.notices-grid,
+.events-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+@media (min-width: 480px) {
+  .cards-grid,
+  .notices-grid,
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cards-grid,
+  .notices-grid,
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 24px 32px;
+  }
+}
+
+/* ============================================================
+   9. USER DASHBOARD
+   ============================================================ */
+
+.dashboard-page {
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-page {
+    padding: 24px 32px;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================================
+   10. TABLES — make them scrollable on mobile
+   ============================================================ */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  padding: 12px 14px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  th,
+  td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================================
+   11. TOAST NOTIFICATIONS — responsive position
+   ============================================================ */
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+}
+
+@media (min-width: 480px) {
+  .toast {
+    left: auto;
+    right: 20px;
+    width: auto;
+    max-width: 360px;
+  }
+}
+
+.toast.success {
+  background: #10b981;
+  color: #fff;
+}
+
+.toast.error {
+  background: #ef4444;
+  color: #fff;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   12. OFFLINE BANNER
+   ============================================================ */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  background: #f59e0b;
+  color: #fff;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   13. MODAL / DIALOG — responsive
+   ============================================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 24px;
+  }
+}
+
+.modal-content {
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px 16px 0 0;
+  background: #fff;
+  padding: 20px;
+}
+
+@media (min-width: 640px) {
+  .modal-content {
+    width: auto;
+    max-width: 560px;
+    border-radius: 16px;
+    padding: 28px;
+  }
+}
+
+/* ============================================================
+   14. ANALYTICS / INFO CARDS
+   ============================================================ */
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.info-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.info-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-list,
+.status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric-item,
+.status-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+/* ============================================================
+   15. ACTIVITY FEED
+   ============================================================ */
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-icon.user {
+  background: #eff6ff;
+  color: #1976d2;
+}
+.activity-icon.notice {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.activity-icon.event {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.activity-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-action {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activity-meta {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   16. LOADING STATES
+   ============================================================ */
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loading-spinner-small {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ============================================================
+   17. GRADIENT TEXT (shared utility)
+   ============================================================ */
+
+.gradient-text {
+  background: linear-gradient(135deg, #1976d2, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   18. BUTTONS — shared utilities
+   ============================================================ */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: auto;
+  min-width: auto;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: #1565c0;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  min-height: auto;
+  min-width: auto;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #6b7280;
+  min-height: auto;
+  min-width: auto;
+}
+
+/* ============================================================
+   19. PROFILE / SETTINGS PAGE
+   ============================================================ */
+
+.profile-page,
+.settings-page {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .profile-page,
+  .settings-page {
+    padding: 32px;
+  }
+}
+
+/* ============================================================
+   20. NOTICES / EVENTS DETAIL PAGE
+   ============================================================ */
+
+.detail-page {
+  padding: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .detail-page {
+    padding: 32px;
+  }
+}
+
+.detail-page img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* ============================================================
+   21. PRINT STYLES
+   ============================================================ */
+
+@media print {
+  .navbar,
+  .main-nav,
+  .sidebar,
+  .quick-actions,
+  .toast,
+  .offline-banner {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+}

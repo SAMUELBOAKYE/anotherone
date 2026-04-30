@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-04-14T15:25:16.632Z",
+  "period": {
+    "start": 1776180316553,
+    "end": 1776180316632,
+    "duration": 0
+  },
+  "statistics": {
+    "totalSamples": 0,
+    "alertsTriggered": 0,
+    "averageResponseTime": 0,
+    "peakMemoryUsage": 0,
+    "peakCpuUsage": 0,
+    "uptimePercentage": 100,
+    "lastAlertTime": null
+  },
+  "thresholds": {
+    "cpu": {
+      "warning": 70,
+      "critical": 85
+    },
+    "memory": {
+      "warning": 75,
+      "critical": 90
+    },
+    "heap": {
+      "warning": 80,
+      "critical": 90
+    },
+    "disk": {
+      "warning": 80,
+      "critical": 90
+    },
+    "eventLoop": {
+      "warning": 50,
+      "critical": 100
+    },
+    "activeConnections": {
+      "warning": 1000,
+      "critical": 2000
+    }
+  },
+  "recentAlerts": [],
+  "historySummary": {
+    "cpu": {
+      "average": 0,
+      "max": 0,
+      "min": 0
+    },
+    "memory": {
+      "average": 0,
+      "max": 0,
+      "min": 0
+    }
+  }
+}

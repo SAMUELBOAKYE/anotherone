@@ -1,0 +1,298 @@
+/* src/components/common/LoadingSpinner.css */
+
+/* ========================================
+   SPINNER CONTAINER
+   ======================================== */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ========================================
+   MAIN SPINNER
+   ======================================== */
+.spinner {
+  position: relative;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Inner animated dots */
+.spinner-inner-dot,
+.spinner-inner-dot-delayed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+}
+
+.spinner-inner-dot {
+  animation: pulseDot 0.8s ease-in-out infinite;
+  transform: translate(-50%, -50%) translateX(10px);
+}
+
+.spinner-inner-dot-delayed {
+  animation: pulseDot 0.8s ease-in-out 0.4s infinite;
+  transform: translate(-50%, -50%) translateX(-10px);
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ========================================
+   SPINNER TEXT
+   ======================================== */
+.spinner-text {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  letter-spacing: 0.025em;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   FULLSCREEN SPINNER
+   ======================================== */
+.fullscreen-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+}
+
+.fullscreen-spinner.with-overlay {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+.fullscreen-spinner.with-overlay .spinner-text {
+  color: #f1f5f9;
+}
+
+.fullscreen-spinner .spinner-container {
+  transform: scale(1);
+  animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================================
+   OVERLAY SPINNER (For inline overlays)
+   ======================================== */
+.overlay-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  border-radius: inherit;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   SIZE VARIANTS
+   ======================================== */
+/* Small size adjustments */
+.spinner[style*="24px"] .spinner-inner-dot,
+.spinner[style*="24px"] .spinner-inner-dot-delayed {
+  width: 3px;
+  height: 3px;
+}
+
+/* Large size adjustments */
+.spinner[style*="72px"] .spinner-inner-dot,
+.spinner[style*="72px"] .spinner-inner-dot-delayed {
+  width: 8px;
+  height: 8px;
+}
+
+/* ========================================
+   CUSTOM VARIANT STYLES
+   ======================================== */
+/* These will be applied via inline styles for borderTopColor */
+/* But we add hover and focus effects */
+
+.spinner {
+  transition: all 0.3s ease;
+}
+
+.spinner:hover {
+  transform: scale(1.05);
+}
+
+/* ========================================
+   LOADING STATES FOR BUTTONS
+   ======================================== */
+.button-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.button-loading .spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ========================================
+   SKELETON LOADING VARIATION
+   ======================================== */
+.skeleton-spinner {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.05) 25%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 768px) {
+  .spinner-text {
+    font-size: 0.75rem;
+  }
+  
+  .fullscreen-spinner {
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  .fullscreen-spinner {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+  }
+  
+  .spinner-text {
+    color: #cbd5e1;
+  }
+  
+  .overlay-spinner {
+    background: rgba(15, 23, 42, 0.9);
+  }
+  
+  .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .spinner-inner-dot,
+  .spinner-inner-dot-delayed,
+  .spinner-text,
+  .fullscreen-spinner .spinner-container {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .spinner {
+    animation: none;
+    transform: rotate(45deg);
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  .fullscreen-spinner,
+  .overlay-spinner {
+    display: none;
+  }
+}

@@ -1,0 +1,729 @@
+/* ============================================
+   USER SETTINGS - PROFESSIONAL CSS v1.0
+   Enterprise-Grade Settings Interface
+   ============================================ */
+
+/* ===== CSS Custom Properties ===== */
+:root {
+  /* Colors - Light Theme */
+  --settings-bg: #f8fafc;
+  --settings-sidebar-bg: #ffffff;
+  --settings-content-bg: #ffffff;
+  --settings-border: #e2e8f0;
+  --settings-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --settings-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                        0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  
+  /* Text Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-disabled: #94a3b8;
+  
+  /* Interactive Colors */
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-bg: rgba(59, 130, 246, 0.1);
+  
+  /* Nav Colors */
+  --nav-item-hover: #f1f5f9;
+  --nav-item-active: #eff6ff;
+  --nav-item-active-border: #3b82f6;
+  
+  /* Status Colors */
+  --badge-bg: #ef4444;
+  --badge-text: #ffffff;
+  
+  /* Spacing */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto',
+                 'Helvetica Neue', Arial, sans-serif;
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Z-index */
+  --z-sidebar: 100;
+  --z-mobile-menu: 200;
+  --z-overlay: 300;
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --settings-bg: #0f172a;
+    --settings-sidebar-bg: #1e293b;
+    --settings-content-bg: #1e293b;
+    --settings-border: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --text-disabled: #64748b;
+    --nav-item-hover: #334155;
+    --nav-item-active: #1e3a8a;
+  }
+}
+
+/* ============================================================================
+   MAIN CONTAINER
+   ============================================================================ */
+
+.user-settings {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--settings-bg);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.user-settings.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   SETTINGS CONTAINER
+   ============================================================================ */
+
+.settings-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--settings-bg);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ============================================================================
+   SIDEBAR NAVIGATION
+   ============================================================================ */
+
+.settings-sidebar {
+  width: 320px;
+  background: var(--settings-sidebar-bg);
+  border-right: 1px solid var(--settings-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: var(--z-sidebar);
+  transition: all var(--transition-base);
+}
+
+/* Custom Scrollbar for Sidebar */
+.settings-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings-sidebar::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  opacity: 0.3;
+}
+
+.settings-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.settings-sidebar-header {
+  padding: var(--spacing-8) var(--spacing-6);
+  border-bottom: 1px solid var(--settings-border);
+  background: linear-gradient(135deg, var(--settings-sidebar-bg), var(--settings-bg));
+}
+
+.settings-title {
+  margin: 0 0 var(--spacing-2);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.settings-subtitle {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--text-tertiary);
+}
+
+/* ============================================================================
+   NAVIGATION ITEMS
+   ============================================================================ */
+
+.settings-nav {
+  flex: 1;
+  padding: var(--spacing-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-6);
+  margin: 0 var(--spacing-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--nav-item-active-border);
+  transform: scaleY(0);
+  transition: transform var(--transition-base);
+}
+
+.settings-nav-item:hover {
+  background: var(--nav-item-hover);
+  transform: translateX(4px);
+}
+
+.settings-nav-item.active {
+  background: var(--nav-item-active);
+  color: var(--primary-color);
+}
+
+.settings-nav-item.active::before {
+  transform: scaleY(1);
+}
+
+.settings-nav-item .icon-wrapper {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+  transition: all var(--transition-base);
+}
+
+.settings-nav-item:hover .icon-wrapper,
+.settings-nav-item.active .icon-wrapper {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.nav-label {
+  flex: 1;
+  font-size: var(--font-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.5rem;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-full);
+  animation: bounce 0.5s var(--transition-bounce);
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.nav-chevron {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all var(--transition-base);
+  color: var(--text-tertiary);
+}
+
+.settings-nav-item:hover .nav-chevron,
+.settings-nav-item.active .nav-chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.settings-sidebar-footer {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: 1px solid var(--settings-border);
+  margin-top: auto;
+}
+
+.settings-version {
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ============================================================================
+   CONTENT AREA
+   ============================================================================ */
+
+.settings-content {
+  flex: 1;
+  background: var(--settings-content-bg);
+  overflow-y: auto;
+  padding: var(--spacing-8) var(--spacing-10);
+  animation: fadeIn 0.4s var(--transition-bounce);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.settings-content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-content-header {
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--settings-border);
+}
+
+.settings-content-title {
+  margin: 0 0 var(--spacing-2);
+  font-size: var(--font-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.settings-content-description {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.settings-content-body {
+  animation: slideUp 0.3s var(--transition-bounce);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   MOBILE RESPONSIVE
+   ============================================================================ */
+
+.settings-mobile-header {
+  display: none;
+  position: sticky;
+  top: 0;
+  background: var(--settings-sidebar-bg);
+  border-bottom: 1px solid var(--settings-border);
+  padding: var(--spacing-4) var(--spacing-6);
+  z-index: var(--z-mobile-menu);
+  backdrop-filter: blur(10px);
+}
+
+.mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  padding: var(--spacing-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: var(--font-base);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--nav-item-hover);
+}
+
+.mobile-chevron {
+  margin-left: auto;
+  transition: transform var(--transition-base);
+}
+
+.mobile-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .settings-mobile-header {
+    display: block;
+  }
+  
+  .settings-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+    z-index: var(--z-mobile-menu);
+    transition: left var(--transition-base);
+    box-shadow: var(--settings-shadow-lg);
+  }
+  
+  .settings-sidebar.mobile-open {
+    left: 0;
+  }
+  
+  /* Overlay */
+  .settings-sidebar.mobile-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    animation: fadeInOverlay 0.3s ease;
+  }
+  
+  @keyframes fadeInOverlay {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .settings-content {
+    padding: var(--spacing-6);
+  }
+  
+  .settings-content-wrapper {
+    max-width: 100%;
+  }
+  
+  .settings-content-header {
+    margin-bottom: var(--spacing-6);
+    padding-bottom: var(--spacing-4);
+  }
+  
+  .settings-content-title {
+    font-size: var(--font-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-content {
+    padding: var(--spacing-4);
+  }
+  
+  .settings-nav-item {
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+  
+  .nav-label {
+    font-size: var(--font-xs);
+  }
+}
+
+/* ============================================================================
+   LOADING STATES
+   ============================================================================ */
+
+.settings-loading-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-12);
+  text-align: center;
+  min-height: 400px;
+}
+
+.settings-loading-fallback p {
+  margin-top: var(--spacing-4);
+  color: var(--text-tertiary);
+  font-size: var(--font-sm);
+}
+
+/* ============================================================================
+   PLACEHOLDER STATE
+   ============================================================================ */
+
+.settings-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-12);
+  text-align: center;
+  min-height: 400px;
+}
+
+.settings-placeholder .icon-wrapper {
+  margin-bottom: var(--spacing-4);
+  color: var(--text-tertiary);
+  opacity: 0.5;
+}
+
+.settings-placeholder h3 {
+  margin: 0 0 var(--spacing-2);
+  font-size: var(--font-xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.settings-placeholder p {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--font-sm);
+}
+
+/* ============================================================================
+   ICON WRAPPER
+   ============================================================================ */
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.icon-wrapper svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.5;
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+/* Focus Styles */
+.settings-nav-item:focus-visible,
+.mobile-menu-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .settings-nav-item:hover {
+    transform: none;
+  }
+  
+  .nav-chevron {
+    transition: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .settings-sidebar,
+  .settings-content {
+    border: 1px solid currentColor;
+  }
+  
+  .settings-nav-item.active {
+    border-left: 3px solid currentColor;
+  }
+  
+  .settings-nav-item.active::before {
+    display: none;
+  }
+  
+  .nav-badge {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  .settings-sidebar,
+  .settings-mobile-header {
+    display: none;
+  }
+  
+  .settings-content {
+    padding: 0;
+  }
+  
+  .settings-container {
+    display: block;
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Staggered Animation for Nav Items */
+.settings-nav-item {
+  animation: slideInLeft 0.3s var(--transition-bounce);
+  animation-fill-mode: both;
+}
+
+.settings-nav-item:nth-child(1) { animation-delay: 0.05s; }
+.settings-nav-item:nth-child(2) { animation-delay: 0.1s; }
+.settings-nav-item:nth-child(3) { animation-delay: 0.15s; }
+.settings-nav-item:nth-child(4) { animation-delay: 0.2s; }
+.settings-nav-item:nth-child(5) { animation-delay: 0.25s; }
+.settings-nav-item:nth-child(6) { animation-delay: 0.3s; }
+.settings-nav-item:nth-child(7) { animation-delay: 0.35s; }
+
+/* ============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================================ */
+
+.settings-nav-item,
+.settings-content,
+.mobile-menu-toggle {
+  will-change: transform;
+}
+
+/* CSS Grid Support */
+@supports (display: grid) {
+  .settings-nav {
+    display: grid;
+    gap: var(--spacing-1);
+  }
+  
+  @media (max-width: 768px) {
+    .settings-sidebar.mobile-open {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+  }
+}
+
+/* Smooth Scrolling */
+.settings-sidebar,
+.settings-content {
+  scroll-behavior: smooth;
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Focus Visible Enhancement */
+.settings-nav-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-color);
+  transform: translateX(2px);
+}

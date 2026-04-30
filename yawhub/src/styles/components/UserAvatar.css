@@ -1,0 +1,701 @@
+/* ============================================
+   USER AVATAR - PROFESSIONAL CSS v1.0
+   Premium Avatar Component with Advanced Features
+   ============================================ */
+
+/* ===== CSS Custom Properties ===== */
+:root {
+  /* Colors */
+  --avatar-bg-default: #3b82f6;
+  --avatar-border-color: #ffffff;
+  --avatar-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --avatar-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --avatar-overlay-bg: rgba(0, 0, 0, 0.6);
+  --avatar-overlay-text: #ffffff;
+  
+  /* Status Colors */
+  --status-online: #10b981;
+  --status-offline: #9ca3af;
+  --status-away: #f59e0b;
+  --status-busy: #ef4444;
+  
+  /* Ring Colors */
+  --ring-focus: #3b82f6;
+  --ring-focus-offset: 2px;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Spacing */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  
+  /* Sizes */
+  --avatar-small: 32px;
+  --avatar-medium: 48px;
+  --avatar-large: 64px;
+  --avatar-xlarge: 96px;
+  
+  /* Font Sizes */
+  --font-small: 14px;
+  --font-medium: 18px;
+  --font-large: 24px;
+  --font-xlarge: 36px;
+}
+
+/* Dark Theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --avatar-border-color: #1e293b;
+    --avatar-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --avatar-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --avatar-overlay-bg: rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* ============================================================================
+   WRAPPER
+   ============================================================================ */
+
+.user-avatar-wrapper {
+  position: relative;
+  display: inline-flex;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto',
+               'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   BASE AVATAR STYLES
+   ============================================================================ */
+
+.user-avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--avatar-bg-default), #60a5fa);
+  box-shadow: var(--avatar-shadow);
+  transition: all var(--transition-base);
+  user-select: none;
+}
+
+/* Size Variations */
+.avatar-small {
+  width: var(--avatar-small);
+  height: var(--avatar-small);
+  font-size: var(--font-small);
+}
+
+.avatar-medium {
+  width: var(--avatar-medium);
+  height: var(--avatar-medium);
+  font-size: var(--font-medium);
+}
+
+.avatar-large {
+  width: var(--avatar-large);
+  height: var(--avatar-large);
+  font-size: var(--font-large);
+}
+
+.avatar-xlarge {
+  width: var(--avatar-xlarge);
+  height: var(--avatar-xlarge);
+  font-size: var(--font-xlarge);
+}
+
+/* Interactive State */
+.user-avatar.interactive {
+  cursor: pointer;
+  position: relative;
+}
+
+.user-avatar.interactive:hover {
+  transform: scale(1.05);
+  box-shadow: var(--avatar-shadow-hover);
+}
+
+.user-avatar.interactive:active {
+  transform: scale(0.95);
+}
+
+/* Disabled State */
+.user-avatar.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.2);
+}
+
+/* Focus Ring for Accessibility */
+.user-avatar.interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ring-focus-offset) var(--avatar-border-color),
+              0 0 0 calc(var(--ring-focus-offset) + 2px) var(--ring-focus);
+  transform: scale(1.02);
+}
+
+/* ============================================================================
+   AVATAR CONTENT
+   ============================================================================ */
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.user-avatar:hover .avatar-image {
+  transform: scale(1.05);
+}
+
+.avatar-initials {
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  transition: transform var(--transition-base);
+}
+
+.user-avatar:hover .avatar-initials {
+  transform: scale(1.05);
+}
+
+/* ============================================================================
+   UPLOAD OVERLAY
+   ============================================================================ */
+
+.avatar-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  background: var(--avatar-overlay-bg);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  animation: fadeIn 0.3s var(--transition-bounce);
+  transition: all var(--transition-base);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.avatar-upload-overlay:hover {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.avatar-upload-overlay .icon-wrapper {
+  color: var(--avatar-overlay-text);
+  transition: transform var(--transition-bounce);
+}
+
+.avatar-upload-overlay:hover .icon-wrapper {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.upload-text {
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--avatar-overlay-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   UPLOADING STATE
+   ============================================================================ */
+
+.avatar-uploading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.avatar-uploading .icon-wrapper {
+  color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
+   STATUS INDICATOR
+   ============================================================================ */
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  border: 2px solid var(--avatar-border-color);
+  transition: all var(--transition-base);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Status Colors */
+.status--online {
+  background-color: var(--status-online);
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  animation: onlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes onlinePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0);
+  }
+}
+
+.status--offline {
+  background-color: var(--status-offline);
+}
+
+.status--away {
+  background-color: var(--status-away);
+}
+
+.status--busy {
+  background-color: var(--status-busy);
+}
+
+/* Position adjustments for different sizes */
+.avatar-small .status-indicator {
+  bottom: -2px;
+  right: -2px;
+  border-width: 1.5px;
+}
+
+.avatar-medium .status-indicator {
+  bottom: -2px;
+  right: -2px;
+  border-width: 2px;
+}
+
+.avatar-large .status-indicator {
+  bottom: -3px;
+  right: -3px;
+  border-width: 2.5px;
+}
+
+.avatar-xlarge .status-indicator {
+  bottom: -4px;
+  right: -4px;
+  border-width: 3px;
+}
+
+/* ============================================================================
+   ICON WRAPPER
+   ============================================================================ */
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.icon-wrapper svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.5;
+}
+
+/* ============================================================================
+   ANIMATION KEYFRAMES
+   ============================================================================ */
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Loading Shimmer Effect for Avatar */
+.user-avatar.loading {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .user-avatar.loading {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  }
+}
+
+/* ============================================================================
+   GROUP AVATAR SUPPORT
+   ============================================================================ */
+
+.user-avatar-group {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.user-avatar-group .user-avatar {
+  margin-left: -8px;
+  transition: margin var(--transition-base);
+}
+
+.user-avatar-group .user-avatar:hover {
+  margin-left: 0;
+}
+
+.user-avatar-group .user-avatar:first-child {
+  margin-left: 0;
+}
+
+/* ============================================================================
+   RIPPLE EFFECT
+   ============================================================================ */
+
+.user-avatar.interactive {
+  position: relative;
+  overflow: hidden;
+}
+
+.user-avatar.interactive::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+}
+
+.user-avatar.interactive:active::after {
+  width: 200%;
+  height: 200%;
+}
+
+/* ============================================================================
+   TOOLTIP SUPPORT
+   ============================================================================ */
+
+.user-avatar[data-tooltip] {
+  position: relative;
+}
+
+.user-avatar[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: var(--font-small);
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.user-avatar[data-tooltip]:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+/* Focus Styles */
+.user-avatar.interactive:focus-visible {
+  outline: none;
+  position: relative;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .user-avatar,
+  .avatar-image,
+  .avatar-initials,
+  .avatar-upload-overlay,
+  .status-indicator {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .user-avatar.interactive:hover {
+    transform: none;
+  }
+  
+  .user-avatar.interactive:active {
+    transform: none;
+  }
+  
+  .status-indicator {
+    animation: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .user-avatar {
+    border: 2px solid currentColor;
+  }
+  
+  .avatar-upload-overlay {
+    border: 1px solid white;
+  }
+  
+  .status-indicator {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .avatar-xlarge {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+  
+  .avatar-large {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+  
+  .upload-text {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-xlarge {
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+  
+  .avatar-large {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+  
+  .avatar-medium {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  .user-avatar {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .avatar-upload-overlay,
+  .status-indicator {
+    display: none;
+  }
+  
+  .user-avatar.interactive {
+    cursor: default;
+  }
+}
+
+/* ============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================================ */
+
+.user-avatar,
+.avatar-image,
+.avatar-initials,
+.avatar-upload-overlay {
+  will-change: transform;
+}
+
+/* CSS Grid Support for Group Avatars */
+@supports (display: grid) {
+  .user-avatar-group {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min-content;
+    justify-content: start;
+  }
+}
+
+/* Backdrop Filter Support */
+@supports (backdrop-filter: blur(4px)) or (-webkit-backdrop-filter: blur(4px)) {
+  .avatar-upload-overlay {
+    backdrop-filter: blur(4px);
+  }
+  
+  .avatar-uploading {
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* ============================================================================
+   CUSTOM PROGRESS INDICATOR FOR UPLOAD
+   ============================================================================ */
+
+.avatar-upload-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.avatar-upload-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+  width: 0%;
+  transition: width var(--transition-base);
+  animation: shimmer 1s infinite;
+}
+
+/* ============================================================================
+   BADGE SUPPORT
+   ============================================================================ */
+
+.avatar-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: var(--ring-focus);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  border: 2px solid var(--avatar-border-color);
+  animation: badgePop 0.3s var(--transition-bounce);
+}
+
+@keyframes badgePop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.avatar-small .avatar-badge {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+}
+
+.avatar-medium .avatar-badge {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+
+.avatar-large .avatar-badge {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}

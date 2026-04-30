@@ -1,0 +1,112 @@
+{
+  "short_name": "KAAF Noticeboard",
+  "name": "KAAF University Digital Campus Noticeboard and Event Management System",
+  "description": "Official digital noticeboard and event management platform for KAAF University students, faculty, and staff. Stay updated with campus announcements, events, and academic notices in real-time.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#4F46E5",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "news", "events"],
+  "iarc_rating_id": "0",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "Notices",
+      "short_name": "Notices",
+      "description": "View latest campus notices",
+      "url": "/notices",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "short_name": "Events",
+      "description": "Browse upcoming events",
+      "url": "/events",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "My Profile",
+      "short_name": "Profile",
+      "description": "View and edit your profile",
+      "url": "/profile",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "short_name": "Notif",
+      "description": "Check your notifications",
+      "url": "/notifications",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop view of KAAF Noticeboard"
+    },
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile view of KAAF Noticeboard"
+    }
+  ],
+  "display_override": ["standalone", "minimal-ui"],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
+  "note": "KAAF University Noticeboard System PWA Configuration"
+}

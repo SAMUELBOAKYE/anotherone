@@ -1,0 +1,842 @@
+/* src/styles/components/ErrorBoundary.css */
+
+/* ========================================
+   CSS Variables & Theme Configuration
+   ======================================== */
+:root {
+  /* Colors */
+  --error-critical: #ef4444;
+  --error-critical-dark: #dc2626;
+  --error-warning: #f59e0b;
+  --error-warning-dark: #d97706;
+  --error-medium: #3b82f6;
+  --error-medium-dark: #2563eb;
+  --error-low: #8b5cf6;
+  --error-low-dark: #7c3aed;
+
+  /* Gradients */
+  --gradient-critical: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-medium: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --gradient-low: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.2);
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Z-index */
+  --z-error-boundary: 9999;
+}
+
+/* Dark Theme Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --error-critical: #f87171;
+    --error-critical-dark: #ef4444;
+    --error-warning: #fbbf24;
+    --error-warning-dark: #f59e0b;
+    --error-medium: #60a5fa;
+    --error-medium-dark: #3b82f6;
+    --error-low: #a78bfa;
+    --error-low-dark: #8b5cf6;
+  }
+}
+
+/* ========================================
+   Main Container
+   ======================================== */
+.error-boundary {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-bg);
+  z-index: var(--z-error-boundary);
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-3px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+}
+
+/* ========================================
+   Container
+   ======================================== */
+.error-boundary__container {
+  max-width: 550px;
+  width: 90%;
+  padding: var(--space-2xl);
+  background: var(--form-bg, #ffffff);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
+  text-align: center;
+  animation: slideUp 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.error-boundary__container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-bg);
+  animation: shimmer 2s infinite;
+}
+
+/* Severity-specific borders */
+.error-boundary--critical .error-boundary__container::before {
+  background: var(--gradient-critical);
+}
+
+.error-boundary--warning .error-boundary__container::before {
+  background: var(--gradient-warning);
+}
+
+.error-boundary--medium .error-boundary__container::before {
+  background: var(--gradient-medium);
+}
+
+.error-boundary--low .error-boundary__container::before {
+  background: var(--gradient-low);
+}
+
+/* ========================================
+   Icon Styles
+   ======================================== */
+.error-boundary__icon {
+  margin-bottom: var(--space-lg);
+  position: relative;
+  display: inline-block;
+}
+
+.error-boundary__icon svg {
+  width: 85px;
+  height: 85px;
+  animation: shake 0.6s ease-in-out;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+  transition: all var(--transition-base);
+}
+
+.error-boundary__icon:hover svg {
+  transform: scale(1.05);
+}
+
+/* Severity-specific icon colors */
+.error-boundary--critical .error-boundary__icon svg {
+  color: var(--error-critical);
+  animation: pulse 2s infinite;
+}
+
+.error-boundary--warning .error-boundary__icon svg {
+  color: var(--error-warning);
+}
+
+.error-boundary--medium .error-boundary__icon svg {
+  color: var(--error-medium);
+}
+
+.error-boundary--low .error-boundary__icon svg {
+  color: var(--error-low);
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+.error-boundary__title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  margin-bottom: var(--space-md);
+  color: var(--form-text, #1e293b);
+  letter-spacing: -0.02em;
+  background: linear-gradient(
+    135deg,
+    var(--form-text, #1e293b) 0%,
+    var(--form-text-light, #64748b) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.error-boundary__message {
+  font-size: 1rem;
+  color: var(--form-text-light, #64748b);
+  line-height: 1.6;
+  margin-bottom: var(--space-xl);
+  font-weight: 400;
+}
+
+/* ========================================
+   Recovery Message
+   ======================================== */
+.error-boundary__recovery {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-xl);
+  color: #92400e;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-left: 3px solid var(--error-warning);
+  animation: slideUp 0.3s ease-out;
+}
+
+.recovery-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #92400e;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ========================================
+   Action Buttons
+   ======================================== */
+.error-boundary__actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.error-boundary__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-boundary__btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+}
+
+.error-boundary__btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.error-boundary__btn svg {
+  transition: transform var(--transition-fast);
+}
+
+.error-boundary__btn:hover svg {
+  transform: scale(1.1);
+}
+
+.error-boundary__btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary Button */
+.error-boundary__btn--primary {
+  background: var(--gradient-critical);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.error-boundary__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Secondary Button */
+.error-boundary__btn--secondary {
+  background: var(--form-border, #e2e8f0);
+  color: var(--form-text, #1e293b);
+}
+
+.error-boundary__btn--secondary:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+/* Danger Button */
+.error-boundary__btn--danger {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.error-boundary__btn--danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3);
+}
+
+/* ========================================
+   Additional Actions
+   ======================================== */
+.error-boundary__additional {
+  display: flex;
+  gap: var(--space-lg);
+  justify-content: center;
+  margin-bottom: var(--space-xl);
+}
+
+.error-boundary__link {
+  background: none;
+  border: none;
+  color: var(--error-medium);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all var(--transition-fast);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+}
+
+.error-boundary__link:hover {
+  color: var(--error-medium-dark);
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.error-boundary__link:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   Error Details
+   ======================================== */
+.error-boundary__details {
+  text-align: left;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--form-border, #e2e8f0);
+}
+
+.error-boundary__details summary {
+  cursor: pointer;
+  color: var(--form-text-light, #64748b);
+  font-size: 0.875rem;
+  font-weight: 500;
+  user-select: none;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  display: inline-block;
+}
+
+.error-boundary__details summary:hover {
+  color: var(--error-medium);
+  background: rgba(59, 130, 246, 0.05);
+  transform: translateX(4px);
+}
+
+.error-boundary__details summary::-webkit-details-marker {
+  color: var(--error-medium);
+}
+
+.error-details-content {
+  margin-top: var(--space-md);
+  font-size: 0.75rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  overflow-x: auto;
+  border: 1px solid var(--form-border, #e2e8f0);
+}
+
+.error-detail-section {
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.error-detail-section:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateX(4px);
+}
+
+.error-detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.error-detail-section strong {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--form-text, #1e293b);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.error-detail-section code,
+.error-detail-section pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-family: "Courier New", "Monaco", "Menlo", monospace;
+  font-size: 0.7rem;
+  overflow-x: auto;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+.error-detail-section pre {
+  padding: var(--space-md);
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.error-detail-section pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.error-detail-section pre::-webkit-scrollbar-track {
+  background: #334155;
+  border-radius: var(--radius-full);
+}
+
+.error-detail-section pre::-webkit-scrollbar-thumb {
+  background: var(--error-medium);
+  border-radius: var(--radius-full);
+}
+
+/* ========================================
+   Support Section
+   ======================================== */
+.error-boundary__support {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  font-size: 0.75rem;
+  color: var(--form-text-light, #64748b);
+  border-top: 1px solid var(--form-border, #e2e8f0);
+}
+
+.error-boundary__support a {
+  color: var(--error-medium);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.error-boundary__support a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--error-medium);
+  transition: width var(--transition-base);
+}
+
+.error-boundary__support a:hover::after {
+  width: 100%;
+}
+
+.error-boundary__support a:hover {
+  color: var(--error-medium-dark);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+  .error-boundary__container {
+    padding: var(--space-xl);
+    width: 95%;
+    max-width: 500px;
+  }
+
+  .error-boundary__title {
+    font-size: 1.5rem;
+  }
+
+  .error-boundary__message {
+    font-size: 0.875rem;
+  }
+
+  .error-boundary__icon svg {
+    width: 65px;
+    height: 65px;
+  }
+
+  .error-boundary__actions {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .error-boundary__btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .error-boundary__additional {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .error-boundary__link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .error-details-content {
+    padding: var(--space-md);
+  }
+
+  .error-detail-section code,
+  .error-detail-section pre {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-boundary__container {
+    padding: var(--space-lg);
+  }
+
+  .error-boundary__title {
+    font-size: 1.25rem;
+  }
+
+  .error-boundary__icon svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .error-boundary__recovery {
+    font-size: 0.75rem;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .error-detail-section strong {
+    font-size: 0.7rem;
+  }
+
+  .error-detail-section code,
+  .error-detail-section pre {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* ========================================
+   Reduced Motion Support
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .error-boundary,
+  .error-boundary__container,
+  .error-boundary__icon svg,
+  .error-boundary__btn,
+  .error-boundary__link,
+  .error-detail-section {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .error-boundary__icon svg {
+    animation: none !important;
+  }
+
+  .error-boundary__btn::before {
+    display: none;
+  }
+
+  .recovery-spinner {
+    animation: none !important;
+  }
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+  .error-boundary {
+    position: static;
+    background: white;
+    backdrop-filter: none;
+  }
+
+  .error-boundary__container {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .error-boundary__actions,
+  .error-boundary__additional,
+  .error-boundary__support {
+    display: none;
+  }
+
+  .error-boundary__details {
+    display: block;
+  }
+}
+
+/* ========================================
+   Loading States & Progress Indicators
+   ======================================== */
+.error-boundary__btn--loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.error-boundary__btn--loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  right: var(--space-md);
+}
+
+/* ========================================
+   Accessibility Improvements
+   ======================================== */
+.error-boundary__btn:focus-visible,
+.error-boundary__link:focus-visible,
+.error-boundary__details summary:focus-visible {
+  outline: 2px solid var(--error-medium);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.error-boundary__btn:focus-visible:not(:focus-visible) {
+  outline: none;
+}
+
+/* High Contrast Mode Support */
+@media (forced-colors: active) {
+  .error-boundary__btn,
+  .error-boundary__link {
+    border: 1px solid currentColor;
+  }
+
+  .error-boundary__container {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ========================================
+   Custom Scrollbar
+   ======================================== */
+.error-details-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.error-details-content::-webkit-scrollbar-track {
+  background: var(--form-border, #e2e8f0);
+  border-radius: var(--radius-full);
+}
+
+.error-details-content::-webkit-scrollbar-thumb {
+  background: var(--error-medium);
+  border-radius: var(--radius-full);
+}
+
+.error-details-content::-webkit-scrollbar-thumb:hover {
+  background: var(--error-medium-dark);
+}
+
+/* ========================================
+   Glass Morphism Effect (Modern Browsers)
+   ======================================== */
+@supports (backdrop-filter: blur(10px)) {
+  .error-boundary {
+    backdrop-filter: blur(8px);
+  }
+
+  .error-boundary__container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .error-boundary__container {
+      background: rgba(30, 41, 59, 0.95);
+    }
+  }
+}
+
+/* ========================================
+   Hover Effects Enhancement
+   ======================================== */
+.error-boundary__btn--primary:hover {
+  animation: glowPulse 1s infinite;
+}
+
+.error-detail-section:hover strong {
+  color: var(--error-medium);
+}
+
+/* ========================================
+   RTL Support
+   ======================================== */
+[dir="rtl"] .error-boundary__details summary:hover {
+  transform: translateX(-4px);
+}
+
+[dir="rtl"] .error-detail-section:hover {
+  transform: translateX(-4px);
+}
+
+/* ========================================
+   Focus Within Styles
+   ======================================== */
+.error-boundary__container:focus-within {
+  box-shadow: var(--shadow-2xl);
+}
+
+/* ========================================
+   Selection Styles
+   ======================================== */
+.error-boundary__container ::selection {
+  background: var(--error-medium);
+  color: white;
+}
+
+.error-detail-section pre ::selection {
+  background: var(--error-warning);
+  color: #1e293b;
+}

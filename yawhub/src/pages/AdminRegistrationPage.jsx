@@ -59,7 +59,7 @@ import {
   MdStarOutline,
   MdTrendingUp as MdTrendingUpIcon,
 } from "react-icons/md";
-import api from "../../services/api";
+import api from "../services/api";
 import "../styles/components/AdminRegistrationPage.css";
 
 // Animation variants

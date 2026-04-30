@@ -1,22 +1,62 @@
-// src/pages/AboutPage.jsx - FIXED (removed invalid FiNetwork)
+// src/pages/AboutPage.jsx - FIXED
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FiTerminal, FiCpu, FiDatabase, FiServer, FiCloud,
-  FiCode, FiGitBranch, FiUsers, FiCalendar, FiClock,
-  FiShield, FiLock, FiZap, FiTrendingUp, FiAward,
-  FiStar, FiHeart, FiGlobe, FiMail, FiGithub,
-  FiLinkedin, FiTwitter, FiFacebook, FiInstagram,
-  FiChevronRight, FiCommand, FiHardDrive, FiActivity,
-  FiBarChart2, FiPieChart, FiBox, FiLayers,
-  FiWifi, FiBattery, FiMonitor, FiSmartphone, FiTablet,
-  FiCheckCircle
+  FiTerminal,
+  FiCpu,
+  FiDatabase,
+  FiServer,
+  FiCloud,
+  FiCode,
+  FiGitBranch,
+  FiUsers,
+  FiCalendar,
+  FiClock,
+  FiShield,
+  FiLock,
+  FiZap,
+  FiTrendingUp,
+  FiAward,
+  FiStar,
+  FiHeart,
+  FiGlobe,
+  FiMail,
+  FiGithub,
+  FiLinkedin,
+  FiTwitter,
+  FiFacebook,
+  FiInstagram,
+  FiChevronRight,
+  FiCommand,
+  FiHardDrive,
+  FiActivity,
+  FiBarChart2,
+  FiPieChart,
+  FiBox,
+  FiLayers,
+  FiWifi,
+  FiBattery,
+  FiMonitor,
+  FiSmartphone,
+  FiTablet,
+  FiCheckCircle,
 } from "react-icons/fi";
 import {
-  MdCode, MdStorage, MdSecurity, MdAnalytics,
-  MdSpeed, MdPeople, MdEvent, MdAnnouncement,
-  MdDashboard, MdSettings, MdNotifications, MdEmail,
-  MdPhone, MdLocationOn, MdAccessTime
+  MdCode,
+  MdStorage,
+  MdSecurity,
+  MdAnalytics,
+  MdSpeed,
+  MdPeople,
+  MdEvent,
+  MdAnnouncement,
+  MdDashboard,
+  MdSettings,
+  MdNotifications,
+  MdEmail,
+  MdPhone,
+  MdLocationOn,
+  MdAccessTime,
 } from "react-icons/md";
 import "../styles/components/AboutPage.css";
 
@@ -27,7 +67,7 @@ const AboutPage = () => {
     { type: "system", content: "Interactive System Information Terminal" },
     { type: "system", content: "Type 'help' to see available commands" },
     { type: "system", content: "─".repeat(60) },
-    { type: "output", content: "" }
+    { type: "output", content: "" },
   ]);
   const [activeCommand, setActiveCommand] = useState(null);
   const [typingEffect, setTypingEffect] = useState(false);
@@ -46,7 +86,7 @@ const AboutPage = () => {
     database: "MongoDB + Redis",
     hosting: "AWS Cloud",
     apiVersion: "v2.1.0",
-    websocket: "Socket.io v4.5.0"
+    websocket: "Socket.io v4.5.0",
   };
 
   const stats = {
@@ -57,25 +97,69 @@ const AboutPage = () => {
     totalRegistrations: 5678,
     dailyActive: 456,
     monthlyGrowth: "+15.3%",
-    satisfaction: "94.8%"
+    satisfaction: "94.8%",
   };
 
   const features = [
-    { name: "Event Management", status: " Active", icon: <MdEvent size={16} /> },
-    { name: "Notice Board", status: " Active", icon: <MdAnnouncement size={16} /> },
-    { name: "User Authentication", status: " Secure", icon: <FiShield size={16} /> },
-    { name: "Real-time Notifications", status: " Online", icon: <MdNotifications size={16} /> },
-    { name: "Analytics Dashboard", status: " Live", icon: <MdAnalytics size={16} /> },
+    {
+      name: "Event Management",
+      status: " Active",
+      icon: <MdEvent size={16} />,
+    },
+    {
+      name: "Notice Board",
+      status: " Active",
+      icon: <MdAnnouncement size={16} />,
+    },
+    {
+      name: "User Authentication",
+      status: " Secure",
+      icon: <FiShield size={16} />,
+    },
+    {
+      name: "Real-time Notifications",
+      status: " Online",
+      icon: <MdNotifications size={16} />,
+    },
+    {
+      name: "Analytics Dashboard",
+      status: " Live",
+      icon: <MdAnalytics size={16} />,
+    },
     { name: "API Gateway", status: " Connected", icon: <FiGlobe size={16} /> },
-    { name: "Database", status: " Operational", icon: <FiDatabase size={16} /> },
-    { name: "CDN", status: " Global", icon: <FiGlobe size={16} /> }
+    {
+      name: "Database",
+      status: " Operational",
+      icon: <FiDatabase size={16} />,
+    },
+    { name: "CDN", status: " Global", icon: <FiGlobe size={16} /> },
   ];
 
   const team = [
-    { role: "Lead Developer", name: "Samuel Boakye", expertise: "Full Stack Architecture", icon: <FiCode size={20} /> },
-    { role: "Backend Engineer", name: "Boakye Samuel", expertise: "API & Database", icon: <FiServer size={20} /> },
-    { role: "Frontend Developer", name: "Boakye Yiadom", expertise: "UI/UX & React", icon: <FiMonitor size={20} /> },
-    { role: "Security Analyst", name: "Samuel Boakye Yiadom", expertise: "Cybersecurity", icon: <FiShield size={20} /> }
+    {
+      role: "Lead Developer",
+      name: "Samuel Boakye",
+      expertise: "Full Stack Architecture",
+      icon: <FiCode size={20} />,
+    },
+    {
+      role: "Backend Engineer",
+      name: "Boakye Samuel",
+      expertise: "API & Database",
+      icon: <FiServer size={20} />,
+    },
+    {
+      role: "Frontend Developer",
+      name: "Boakye Yiadom",
+      expertise: "UI/UX & React",
+      icon: <FiMonitor size={20} />,
+    },
+    {
+      role: "Security Analyst",
+      name: "Samuel Boakye Yiadom",
+      expertise: "Cybersecurity",
+      icon: <FiShield size={20} />,
+    },
   ];
 
   const technologies = [
@@ -86,7 +170,7 @@ const AboutPage = () => {
     { name: "Redis", category: "Cache", version: "7.2" },
     { name: "Socket.io", category: "WebSocket", version: "4.5" },
     { name: "JWT", category: "Auth", version: "9.0" },
-    { name: "AWS S3", category: "Storage", version: "latest" }
+    { name: "AWS S3", category: "Storage", version: "latest" },
   ];
 
   const commands = {
@@ -99,18 +183,21 @@ const AboutPage = () => {
     status: "Check system status",
     clear: "Clear terminal screen",
     about: "About this system",
-    version: "Show version info"
+    version: "Show version info",
   };
 
   const executeCommand = (cmd) => {
     const command = cmd.toLowerCase().trim();
     let output = [];
 
-    switch(command) {
+    switch (command) {
       case "help":
         output.push({ type: "output", content: "Available Commands:" });
         Object.entries(commands).forEach(([cmdKey, desc]) => {
-          output.push({ type: "command", content: `  ${cmdKey.padEnd(10)} → ${desc}` });
+          output.push({
+            type: "command",
+            content: `  ${cmdKey.padEnd(10)} → ${desc}`,
+          });
         });
         break;
 
@@ -119,7 +206,10 @@ const AboutPage = () => {
         output.push({ type: "output", content: "SYSTEM INFORMATION" });
         output.push({ type: "output", content: "═".repeat(50) });
         Object.entries(systemInfo).forEach(([key, value]) => {
-          output.push({ type: "info", content: `${key.padEnd(15)} : ${value}` });
+          output.push({
+            type: "info",
+            content: `${key.padEnd(15)} : ${value}`,
+          });
         });
         break;
 
@@ -128,7 +218,10 @@ const AboutPage = () => {
         output.push({ type: "output", content: "PLATFORM STATISTICS" });
         output.push({ type: "output", content: "═".repeat(50) });
         Object.entries(stats).forEach(([key, value]) => {
-          output.push({ type: "info", content: `${key.padEnd(18)} : ${value}` });
+          output.push({
+            type: "info",
+            content: `${key.padEnd(18)} : ${value}`,
+          });
         });
         break;
 
@@ -136,8 +229,11 @@ const AboutPage = () => {
         output.push({ type: "output", content: "═".repeat(50) });
         output.push({ type: "output", content: "ACTIVE FEATURES" });
         output.push({ type: "output", content: "═".repeat(50) });
-        features.forEach(feature => {
-          output.push({ type: "success", content: `${feature.icon} ${feature.name.padEnd(25)} ${feature.status}` });
+        features.forEach((feature) => {
+          output.push({
+            type: "success",
+            content: `${feature.icon} ${feature.name.padEnd(25)} ${feature.status}`,
+          });
         });
         break;
 
@@ -145,8 +241,11 @@ const AboutPage = () => {
         output.push({ type: "output", content: "═".repeat(50) });
         output.push({ type: "output", content: "TECHNOLOGY STACK" });
         output.push({ type: "output", content: "═".repeat(50) });
-        technologies.forEach(tech => {
-          output.push({ type: "info", content: `${tech.name.padEnd(15)} | ${tech.category.padEnd(12)} | v${tech.version}` });
+        technologies.forEach((tech) => {
+          output.push({
+            type: "info",
+            content: `${tech.name.padEnd(15)} | ${tech.category.padEnd(12)} | v${tech.version}`,
+          });
         });
         break;
 
@@ -154,8 +253,11 @@ const AboutPage = () => {
         output.push({ type: "output", content: "═".repeat(50) });
         output.push({ type: "output", content: "DEVELOPMENT TEAM" });
         output.push({ type: "output", content: "═".repeat(50) });
-        team.forEach(member => {
-          output.push({ type: "info", content: `${member.role.padEnd(18)} → ${member.name} (${member.expertise})` });
+        team.forEach((member) => {
+          output.push({
+            type: "info",
+            content: `${member.role.padEnd(18)} → ${member.name} (${member.expertise})`,
+          });
         });
         break;
 
@@ -174,24 +276,54 @@ const AboutPage = () => {
         output.push({ type: "output", content: "═".repeat(50) });
         output.push({ type: "output", content: "ABOUT KAAF NOTICEBOARD" });
         output.push({ type: "output", content: "═".repeat(50) });
-        output.push({ type: "output", content: "KAAF University Noticeboard is a comprehensive digital platform" });
-        output.push({ type: "output", content: "designed to streamline communication between the university" });
-        output.push({ type: "output", content: "administration, faculty, and students. The platform provides" });
-        output.push({ type: "output", content: "real-time notices, event management, registration system," });
-        output.push({ type: "output", content: "and analytics dashboards to enhance campus communication." });
+        output.push({
+          type: "output",
+          content:
+            "KAAF University Noticeboard is a comprehensive digital platform",
+        });
+        output.push({
+          type: "output",
+          content:
+            "designed to streamline communication between the university",
+        });
+        output.push({
+          type: "output",
+          content:
+            "administration, faculty, and students. The platform provides",
+        });
+        output.push({
+          type: "output",
+          content: "real-time notices, event management, registration system,",
+        });
+        output.push({
+          type: "output",
+          content: "and analytics dashboards to enhance campus communication.",
+        });
         break;
 
       case "version":
-        output.push({ type: "output", content: `KAAF Noticeboard v${systemInfo.version}` });
-        output.push({ type: "output", content: `Build: ${systemInfo.buildNumber}` });
-        output.push({ type: "output", content: `Release: ${systemInfo.releaseDate}` });
+        output.push({
+          type: "output",
+          content: `KAAF Noticeboard v${systemInfo.version}`,
+        });
+        output.push({
+          type: "output",
+          content: `Build: ${systemInfo.buildNumber}`,
+        });
+        output.push({
+          type: "output",
+          content: `Release: ${systemInfo.releaseDate}`,
+        });
         break;
 
       case "clear":
         return { clear: true };
 
       default:
-        output.push({ type: "error", content: `Command not found: '${cmd}'. Type 'help' for available commands.` });
+        output.push({
+          type: "error",
+          content: `Command not found: '${cmd}'. Type 'help' for available commands.`,
+        });
     }
 
     return { output, clear: false };
@@ -201,18 +333,20 @@ const AboutPage = () => {
     e.preventDefault();
     if (!commandInput.trim()) return;
 
-    const historyEntry = [
-      { type: "input", content: `$ ${commandInput}` }
-    ];
+    const historyEntry = [{ type: "input", content: `$ ${commandInput}` }];
 
     const result = executeCommand(commandInput);
-    
+
     if (result.clear) {
       setTerminalHistory([]);
     } else {
-      setTerminalHistory(prev => [...prev, ...historyEntry, ...result.output]);
+      setTerminalHistory((prev) => [
+        ...prev,
+        ...historyEntry,
+        ...result.output,
+      ]);
     }
-    
+
     setCommandInput("");
     setActiveCommand(commandInput);
   };
@@ -236,9 +370,15 @@ const AboutPage = () => {
               KAAF University Noticeboard - Enterprise Information System
             </p>
             <div className="hero-badges">
-              <span className="badge"><FiCheckCircle size={14} /> Production Ready</span>
-              <span className="badge"><FiShield size={14} /> Enterprise Grade</span>
-              <span className="badge"><FiZap size={14} /> High Performance</span>
+              <span className="badge">
+                <FiCheckCircle size={14} /> Production Ready
+              </span>
+              <span className="badge">
+                <FiShield size={14} /> Enterprise Grade
+              </span>
+              <span className="badge">
+                <FiZap size={14} /> High Performance
+              </span>
             </div>
           </motion.div>
         </div>
@@ -266,7 +406,9 @@ const AboutPage = () => {
               </div>
               <div className="stat-value">{value}</div>
               <div className="stat-label">
-                {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                {key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (str) => str.toUpperCase())}
               </div>
             </motion.div>
           ))}
@@ -292,14 +434,16 @@ const AboutPage = () => {
               <span className="status-dot"></span> ONLINE
             </div>
           </div>
-          
+
           <div className="terminal-body">
             <div className="terminal-output">
               {terminalHistory.map((line, index) => (
                 <div key={index} className={`terminal-line ${line.type}`}>
                   {line.type === "input" && <span className="prompt">$</span>}
                   {line.type === "command" && <span className="prompt">→</span>}
-                  {line.type === "output" && <span className="prompt">></span>}
+                  {line.type === "output" && (
+                    <span className="prompt">{">"}</span>
+                  )}
                   {line.type === "info" && <span className="prompt">ℹ</span>}
                   {line.type === "success" && <span className="prompt">✓</span>}
                   {line.type === "error" && <span className="prompt">✗</span>}
@@ -307,8 +451,11 @@ const AboutPage = () => {
                 </div>
               ))}
             </div>
-            
-            <form onSubmit={handleCommandSubmit} className="terminal-input-line">
+
+            <form
+              onSubmit={handleCommandSubmit}
+              className="terminal-input-line"
+            >
               <span className="prompt">$</span>
               <input
                 type="text"
@@ -458,10 +605,18 @@ const AboutPage = () => {
             </div>
           </div>
           <div className="footer-links">
-            <a href="/privacy" className="footer-link">Privacy Policy</a>
-            <a href="/terms" className="footer-link">Terms of Service</a>
-            <a href="/contact" className="footer-link">Contact Us</a>
-            <a href="/help" className="footer-link">Help Center</a>
+            <a href="/privacy" className="footer-link">
+              Privacy Policy
+            </a>
+            <a href="/terms" className="footer-link">
+              Terms of Service
+            </a>
+            <a href="/contact" className="footer-link">
+              Contact Us
+            </a>
+            <a href="/help" className="footer-link">
+              Help Center
+            </a>
           </div>
           <div className="copyright">
             © 2025 KAAF University. All rights reserved.

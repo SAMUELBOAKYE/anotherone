@@ -16,7 +16,7 @@ import {
   FiShield,
   FiBriefcase,
   FiPhone,
-  FiBuilding,
+  FiHome,
   FiUserCheck,
   FiLock as FiLockOutlined,
   FiUserPlus,

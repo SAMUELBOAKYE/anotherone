@@ -32,43 +32,20 @@ iframe {
   height: auto;
 }
 
-/* ── 2. Navbar Fixes ───────────────────────────────────────── */
+/* ── 2. Navbar Base ────────────────────────────────────────── */
 :root {
   --navbar-height: 70px;
   --navbar-height-mobile: 64px;
 }
 
-.navbar {
-  height: var(--navbar-height-mobile) !important;
+/* ✅ KEY FIX: Hide hamburger by default (desktop) */
+.mobile-menu-btn {
+  display: none !important;
 }
 
-.navbar-container {
-  padding: 0 16px !important;
-  gap: 8px;
-}
-
-/* Always show brand text on mobile — don't hide it */
+/* Always show brand text */
 .navbar-brand-text-group {
   display: flex !important;
-}
-
-.navbar-brand-text {
-  font-size: 1rem !important;
-  white-space: nowrap;
-}
-
-.navbar-brand-subtext {
-  font-size: 0.58rem !important;
-}
-
-.navbar-logo {
-  height: 38px !important;
-}
-
-.navbar-logo-fallback {
-  width: 38px !important;
-  height: 38px !important;
-  font-size: 22px !important;
 }
 
 .navbar-brand {
@@ -77,21 +54,110 @@ iframe {
   min-width: 0;
 }
 
-/* Mobile menu button — always visible on mobile */
-.mobile-menu-btn {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  padding: 10px;
-  border-radius: 10px;
-  touch-action: manipulation;
+/* ── 3. Desktop Navbar (769px and above) ───────────────────── */
+@media (min-width: 769px) {
+  .navbar {
+    height: var(--navbar-height) !important;
+  }
+
+  .navbar-container {
+    padding: 0 2rem !important;
+  }
+
+  /* Always show full menu on desktop */
+  .navbar-menu {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    display: flex !important;
+  }
+
+  .navbar-menu-inner {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 2rem !important;
+    padding: 0 !important;
+  }
+
+  .navbar-nav {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+
+  .navbar-auth-section {
+    flex-direction: row !important;
+    align-items: center !important;
+    border-top: none !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    gap: 1rem !important;
+  }
+
+  .user-name {
+    display: inline !important;
+  }
+
+  /* No overlay on desktop */
+  .navbar-overlay {
+    display: none !important;
+  }
 }
 
-/* Mobile menu panel */
+/* ── 4. Mobile Navbar (768px and below) ────────────────────── */
 @media (max-width: 768px) {
+  .navbar {
+    height: var(--navbar-height-mobile) !important;
+  }
+
+  .navbar.navbar-scrolled {
+    height: 60px !important;
+  }
+
+  .navbar-container {
+    padding: 0 16px !important;
+    gap: 8px;
+  }
+
+  .navbar-brand-text {
+    font-size: 1rem !important;
+    white-space: nowrap;
+  }
+
+  .navbar-brand-subtext {
+    font-size: 0.58rem !important;
+  }
+
+  .navbar-logo {
+    height: 38px !important;
+  }
+
+  .navbar-logo-fallback {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 22px !important;
+  }
+
+  /* ✅ Show hamburger ONLY on mobile */
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: 10px;
+    touch-action: manipulation;
+  }
+
+  /* Mobile slide-in panel */
   .navbar-menu {
     position: fixed !important;
     top: var(--navbar-height-mobile) !important;
@@ -170,9 +236,8 @@ iframe {
     top: var(--navbar-height-mobile) !important;
   }
 
-  /* Hide desktop-only elements on mobile */
   .user-name {
-    display: none;
+    display: none !important;
   }
 
   .dropdown-chevron {
@@ -180,7 +245,7 @@ iframe {
   }
 }
 
-/* ── 3. Layout Fixes ───────────────────────────────────────── */
+/* ── 5. Layout Fixes ───────────────────────────────────────── */
 .main-layout {
   min-height: 100vh;
   overflow-x: hidden !important;
@@ -191,15 +256,13 @@ iframe {
   overflow-x: hidden !important;
 }
 
-.layout-content {
-  padding: 16px !important;
-  margin-top: var(--navbar-height-mobile);
-  width: 100% !important;
-  overflow-x: hidden !important;
-}
-
-/* Override inline maxWidth on mobile */
 @media (max-width: 768px) {
+  .layout-content {
+    padding: 16px !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
   .content-container {
     max-width: 100% !important;
     width: 100% !important;
@@ -207,9 +270,8 @@ iframe {
   }
 }
 
-/* ── 4. Hero Section ───────────────────────────────────────── */
+/* ── 6. Hero Section ───────────────────────────────────────── */
 @media (max-width: 480px) {
-  /* Target common hero class names */
   [class*="hero"],
   [class*="Hero"] {
     padding: 24px 16px !important;
@@ -235,22 +297,19 @@ iframe {
   }
 }
 
-/* ── 5. Cards & Grids ──────────────────────────────────────── */
+/* ── 7. Cards & Grids ──────────────────────────────────────── */
 @media (max-width: 640px) {
-  /* All card grids stack to 1 column */
   [class*="grid"],
   [class*="Grid"] {
     grid-template-columns: 1fr !important;
   }
 
-  /* Notice & Event cards */
   [class*="card"],
   [class*="Card"] {
     margin-bottom: 12px;
     border-radius: 12px !important;
   }
 
-  /* Dashboard stats grid */
   .dashboard-grid,
   [class*="stats"],
   [class*="Stats"] {
@@ -259,18 +318,17 @@ iframe {
   }
 }
 
-/* ── 6. Buttons & Touch Targets ───────────────────────────── */
+/* ── 8. Buttons & Touch Targets ───────────────────────────── */
 @media (max-width: 768px) {
   button,
   [role="button"],
   a.btn,
   .btn-primary,
   .btn-secondary {
-    min-height: 44px; /* Apple HIG minimum touch target */
+    min-height: 44px;
     touch-action: manipulation;
   }
 
-  /* Stack button groups vertically */
   [class*="button-group"],
   [class*="btn-group"],
   .hero-buttons {
@@ -288,12 +346,12 @@ iframe {
   }
 }
 
-/* ── 7. Forms ──────────────────────────────────────────────── */
+/* ── 9. Forms ──────────────────────────────────────────────── */
 @media (max-width: 640px) {
   input,
   select,
   textarea {
-    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    font-size: 16px !important;
     border-radius: 10px !important;
   }
 
@@ -308,7 +366,7 @@ iframe {
   }
 }
 
-/* ── 8. Tables ─────────────────────────────────────────────── */
+/* ── 10. Tables ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .table-container,
   [class*="table-wrap"],
@@ -330,7 +388,7 @@ iframe {
   }
 }
 
-/* ── 9. Modals ─────────────────────────────────────────────── */
+/* ── 11. Modals ────────────────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="modal"],
   [class*="Modal"],
@@ -350,7 +408,7 @@ iframe {
   }
 }
 
-/* ── 10. Pagination ────────────────────────────────────────── */
+/* ── 12. Pagination ────────────────────────────────────────── */
 @media (max-width: 480px) {
   [class*="pagination"],
   [class*="Pagination"] {
@@ -368,7 +426,7 @@ iframe {
   }
 }
 
-/* ── 11. Filters & Search ──────────────────────────────────── */
+/* ── 13. Filters & Search ──────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="filter"],
   [class*="Filter"],
@@ -387,19 +445,14 @@ iframe {
   }
 }
 
-/* ── 12. Notification Bell ─────────────────────────────────── */
+/* ── 14. Notification Bell ─────────────────────────────────── */
 @media (max-width: 768px) {
   .navbar-notification-wrapper {
-    order: -1; /* Move bell before user name in mobile menu */
-  }
-
-  [class*="notification-bell"],
-  [class*="NotificationBell"] {
-    position: relative;
+    order: -1;
   }
 }
 
-/* ── 13. Footer ────────────────────────────────────────────── */
+/* ── 15. Footer ────────────────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="footer"],
   [class*="Footer"] {
@@ -414,7 +467,7 @@ iframe {
   }
 }
 
-/* ── 14. Page Headers ──────────────────────────────────────── */
+/* ── 16. Page Headers ──────────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="page-header"],
   [class*="PageHeader"] {
@@ -438,7 +491,7 @@ iframe {
   }
 }
 
-/* ── 15. Scroll to top button ──────────────────────────────── */
+/* ── 17. Scroll to top button ──────────────────────────────── */
 @media (max-width: 640px) {
   .scroll-to-top {
     bottom: 16px !important;
@@ -448,7 +501,7 @@ iframe {
   }
 }
 
-/* ── 16. Profile & Settings Pages ─────────────────────────── */
+/* ── 18. Profile & Settings Pages ─────────────────────────── */
 @media (max-width: 640px) {
   .profile-page,
   .settings-page,
@@ -464,7 +517,7 @@ iframe {
   }
 }
 
-/* ── 17. Safe area for notched phones (iPhone X+) ─────────── */
+/* ── 19. Safe area for notched phones (iPhone X+) ─────────── */
 @supports (padding: env(safe-area-inset-bottom)) {
   .layout-footer,
   [class*="footer"],
@@ -477,7 +530,7 @@ iframe {
   }
 }
 
-/* ── 18. Very small phones (iPhone SE = 375px) ────────────── */
+/* ── 20. Very small phones (iPhone SE = 375px) ────────────── */
 @media (max-width: 380px) {
   .navbar-brand-text {
     font-size: 0.85rem !important;
@@ -496,7 +549,7 @@ iframe {
   }
 }
 
-/* ── 19. Landscape mobile fix ──────────────────────────────── */
+/* ── 21. Landscape mobile fix ──────────────────────────────── */
 @media (max-height: 500px) and (orientation: landscape) {
   .navbar {
     height: 56px !important;
@@ -505,13 +558,9 @@ iframe {
   .navbar-menu {
     top: 56px !important;
   }
-
-  .layout-content {
-    margin-top: 56px !important;
-  }
 }
 
-/* ── 20. Remove hover effects on touch devices ────────────── */
+/* ── 22. Remove hover effects on touch devices ────────────── */
 @media (hover: none) and (pointer: coarse) {
   .navbar-link:hover,
   .navbar-brand:hover .navbar-logo,
@@ -520,7 +569,6 @@ iframe {
     box-shadow: none !important;
   }
 
-  /* Add active state instead */
   .navbar-link:active {
     background: var(--hover-bg, rgba(67, 97, 238, 0.08)) !important;
   }

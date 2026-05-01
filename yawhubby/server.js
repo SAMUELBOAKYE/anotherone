@@ -266,23 +266,31 @@ app.locals.sendNotificationEmail = sendNotificationEmail;
 app.locals.sendMail = sendMail;
 
 // ============================================================
-// CORS CONFIGURATION
+// CORS CONFIGURATION — UPDATED FOR PRODUCTION
 // ============================================================
 
 const allowedOrigins = [
+  // Local development
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:5174",
   "http://127.0.0.1:5000",
+  // Production frontend
+  "https://kaafuni-board.netlify.app",
+  // Production backend (for self-referencing calls)
+  "https://anotherone-2.onrender.com",
+  // Legacy / other deployments
   "https://kaaf-noticeboard.vercel.app",
+  // Dynamic from environment variables
   process.env.FRONTEND_URL,
   process.env.BACKEND_URL,
 ].filter(Boolean);
 
 const corsOptions = {
   origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
     if (!origin) return callback(null, true);
     if (
       allowedOrigins.includes(origin) ||
@@ -839,7 +847,6 @@ process.on("unhandledRejection", (reason, promise) => {
 // START SERVER IMMEDIATELY - DON'T WAIT FOR DATABASE (RENDER FIX)
 // ============================================================
 
-// Create directories function
 const createDirectories = async () => {
   const directories = ["uploads", "logs", "backups", "temp", "public"];
   for (const dir of directories) {
@@ -851,7 +858,6 @@ const createDirectories = async () => {
   }
 };
 
-// Initialize services function
 const initializeAllServices = async () => {
   try {
     cacheManager = await getCacheManager();
@@ -866,7 +872,6 @@ const initializeAllServices = async () => {
     systemUtils = await getSystemUtils();
     if (systemUtils) logger.info("✅ System utils initialized");
 
-    // Initialize Socket.IO if enabled
     if (process.env.ENABLE_SOCKETIO !== "false") {
       const { Server } = require("socket.io");
 
@@ -983,11 +988,10 @@ const initializeAllServices = async () => {
   }
 };
 
-// START SERVER FIRST - This is the critical fix for Render
+// START SERVER FIRST - Critical fix for Render
 (async () => {
   await createDirectories();
 
-  // Start server immediately - before database connection
   server.listen(PORT, "0.0.0.0", () => {
     logger.info("=".repeat(50));
     logger.info(
@@ -1013,7 +1017,6 @@ const initializeAllServices = async () => {
     logger.info("=".repeat(50));
   });
 
-  // Connect to database in background - doesn't block server startup
   connectDB()
     .then(() => {
       logger.info("✅ MongoDB connected successfully after server startup");

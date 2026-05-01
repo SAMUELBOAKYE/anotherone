@@ -1,0 +1,12 @@
+[build]
+  base = "yawhub"
+  command = "npm install --legacy-peer-deps && npm run build"
+  publish = "yawhub/dist"
+
+[build.environment]
+  VITE_API_URL = "https://anotherone-2.onrender.com"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

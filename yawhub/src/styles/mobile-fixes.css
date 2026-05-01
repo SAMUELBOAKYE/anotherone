@@ -1,0 +1,531 @@
+/* ============================================================
+   KAAF UNIVERSITY NOTICEBOARD
+   Global Mobile Responsive Fixes
+   Targets: iPhone SE, iPhone 14, Android phones (360px–430px)
+   ============================================================ */
+
+/* ── 1. Base Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── 2. Navbar Fixes ───────────────────────────────────────── */
+:root {
+  --navbar-height: 70px;
+  --navbar-height-mobile: 64px;
+}
+
+.navbar {
+  height: var(--navbar-height-mobile) !important;
+}
+
+.navbar-container {
+  padding: 0 16px !important;
+  gap: 8px;
+}
+
+/* Always show brand text on mobile — don't hide it */
+.navbar-brand-text-group {
+  display: flex !important;
+}
+
+.navbar-brand-text {
+  font-size: 1rem !important;
+  white-space: nowrap;
+}
+
+.navbar-brand-subtext {
+  font-size: 0.58rem !important;
+}
+
+.navbar-logo {
+  height: 38px !important;
+}
+
+.navbar-logo-fallback {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 22px !important;
+}
+
+.navbar-brand {
+  gap: 0.5rem !important;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Mobile menu button — always visible on mobile */
+.mobile-menu-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border-radius: 10px;
+  touch-action: manipulation;
+}
+
+/* Mobile menu panel */
+@media (max-width: 768px) {
+  .navbar-menu {
+    position: fixed !important;
+    top: var(--navbar-height-mobile) !important;
+    left: -100% !important;
+    bottom: 0 !important;
+    width: 85vw !important;
+    max-width: 320px !important;
+    background: var(--navbar-bg, #fff) !important;
+    backdrop-filter: blur(20px);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 1010 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .navbar-menu.active {
+    left: 0 !important;
+  }
+
+  .navbar-menu-inner {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding: 16px !important;
+  }
+
+  .navbar-nav {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+  }
+
+  .navbar-link {
+    padding: 14px 16px !important;
+    font-size: 1rem !important;
+    border-radius: 12px !important;
+    touch-action: manipulation;
+    min-height: 48px;
+    display: flex !important;
+    align-items: center;
+  }
+
+  .navbar-auth-section {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    border-top: 1px solid var(--navbar-border, #eee) !important;
+    padding-top: 12px !important;
+    margin-top: 8px !important;
+  }
+
+  .navbar-dropdown {
+    width: 100% !important;
+  }
+
+  .navbar-dropdown-trigger {
+    width: 100% !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    border-radius: 12px !important;
+    min-height: 48px;
+  }
+
+  .dropdown-menu {
+    position: static !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+    box-shadow: none !important;
+    border: 1px solid var(--navbar-border, #eee) !important;
+    animation: none !important;
+    border-radius: 12px !important;
+  }
+
+  .navbar-overlay {
+    top: var(--navbar-height-mobile) !important;
+  }
+
+  /* Hide desktop-only elements on mobile */
+  .user-name {
+    display: none;
+  }
+
+  .dropdown-chevron {
+    display: flex !important;
+  }
+}
+
+/* ── 3. Layout Fixes ───────────────────────────────────────── */
+.main-layout {
+  min-height: 100vh;
+  overflow-x: hidden !important;
+}
+
+.layout-main {
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.layout-content {
+  padding: 16px !important;
+  margin-top: var(--navbar-height-mobile);
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Override inline maxWidth on mobile */
+@media (max-width: 768px) {
+  .content-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+/* ── 4. Hero Section ───────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Target common hero class names */
+  [class*="hero"],
+  [class*="Hero"] {
+    padding: 24px 16px !important;
+    min-height: auto !important;
+  }
+
+  [class*="hero"] h1,
+  [class*="Hero"] h1 {
+    font-size: clamp(22px, 7vw, 36px) !important;
+    line-height: 1.2 !important;
+    word-break: break-word;
+  }
+
+  [class*="hero"] p,
+  [class*="Hero"] p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  [class*="hero"] h2,
+  [class*="Hero"] h2 {
+    font-size: clamp(18px, 5vw, 28px) !important;
+  }
+}
+
+/* ── 5. Cards & Grids ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* All card grids stack to 1 column */
+  [class*="grid"],
+  [class*="Grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Notice & Event cards */
+  [class*="card"],
+  [class*="Card"] {
+    margin-bottom: 12px;
+    border-radius: 12px !important;
+  }
+
+  /* Dashboard stats grid */
+  .dashboard-grid,
+  [class*="stats"],
+  [class*="Stats"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
+/* ── 6. Buttons & Touch Targets ───────────────────────────── */
+@media (max-width: 768px) {
+  button,
+  [role="button"],
+  a.btn,
+  .btn-primary,
+  .btn-secondary {
+    min-height: 44px; /* Apple HIG minimum touch target */
+    touch-action: manipulation;
+  }
+
+  /* Stack button groups vertically */
+  [class*="button-group"],
+  [class*="btn-group"],
+  .hero-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  [class*="button-group"] button,
+  [class*="btn-group"] button,
+  .hero-buttons a,
+  .hero-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 7. Forms ──────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    border-radius: 10px !important;
+  }
+
+  .form-group {
+    margin-bottom: 14px !important;
+  }
+
+  [class*="form"],
+  [class*="Form"] {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ── 8. Tables ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .table-container,
+  [class*="table-wrap"],
+  [class*="TableWrap"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 10px !important;
+  }
+
+  table {
+    min-width: 500px;
+    font-size: 13px !important;
+  }
+
+  th,
+  td {
+    padding: 10px 12px !important;
+    white-space: nowrap;
+  }
+}
+
+/* ── 9. Modals ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="modal"],
+  [class*="Modal"],
+  [class*="dialog"],
+  [class*="Dialog"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ── 10. Pagination ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  [class*="pagination"],
+  [class*="Pagination"] {
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  [class*="pagination"] button,
+  [class*="Pagination"] button {
+    min-width: 36px !important;
+    min-height: 36px !important;
+    font-size: 13px !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* ── 11. Filters & Search ──────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="filter"],
+  [class*="Filter"],
+  [class*="search"],
+  [class*="Search"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  [class*="filter"] select,
+  [class*="Filter"] select,
+  [class*="search"] input,
+  [class*="Search"] input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+/* ── 12. Notification Bell ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .navbar-notification-wrapper {
+    order: -1; /* Move bell before user name in mobile menu */
+  }
+
+  [class*="notification-bell"],
+  [class*="NotificationBell"] {
+    position: relative;
+  }
+}
+
+/* ── 13. Footer ────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="footer"],
+  [class*="Footer"] {
+    padding: 24px 16px !important;
+    text-align: center !important;
+  }
+
+  [class*="footer-grid"],
+  [class*="FooterGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* ── 14. Page Headers ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="page-header"],
+  [class*="PageHeader"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  [class*="page-title"],
+  [class*="PageTitle"],
+  h1 {
+    font-size: clamp(20px, 6vw, 30px) !important;
+  }
+
+  h2 {
+    font-size: clamp(17px, 5vw, 24px) !important;
+  }
+
+  h3 {
+    font-size: clamp(15px, 4vw, 20px) !important;
+  }
+}
+
+/* ── 15. Scroll to top button ──────────────────────────────── */
+@media (max-width: 640px) {
+  .scroll-to-top {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+/* ── 16. Profile & Settings Pages ─────────────────────────── */
+@media (max-width: 640px) {
+  .profile-page,
+  .settings-page,
+  [class*="profile"],
+  [class*="Profile"] {
+    padding: 16px !important;
+  }
+
+  [class*="avatar"],
+  [class*="Avatar"] {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}
+
+/* ── 17. Safe area for notched phones (iPhone X+) ─────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .layout-footer,
+  [class*="footer"],
+  [class*="Footer"] {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .navbar {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* ── 18. Very small phones (iPhone SE = 375px) ────────────── */
+@media (max-width: 380px) {
+  .navbar-brand-text {
+    font-size: 0.85rem !important;
+  }
+
+  .navbar-brand-subtext {
+    display: none !important;
+  }
+
+  .navbar-logo {
+    height: 32px !important;
+  }
+
+  .layout-content {
+    padding: 12px !important;
+  }
+}
+
+/* ── 19. Landscape mobile fix ──────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .navbar {
+    height: 56px !important;
+  }
+
+  .navbar-menu {
+    top: 56px !important;
+  }
+
+  .layout-content {
+    margin-top: 56px !important;
+  }
+}
+
+/* ── 20. Remove hover effects on touch devices ────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .navbar-link:hover,
+  .navbar-brand:hover .navbar-logo,
+  .dropdown-item:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Add active state instead */
+  .navbar-link:active {
+    background: var(--hover-bg, rgba(67, 97, 238, 0.08)) !important;
+  }
+
+  .dropdown-item:active {
+    background: var(--hover-bg, rgba(67, 97, 238, 0.08)) !important;
+  }
+}

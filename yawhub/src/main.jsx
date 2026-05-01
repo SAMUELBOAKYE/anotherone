@@ -1,16 +1,16 @@
-// src/main.jsx - COMPLETE FIXED VERSION
+// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import { ThemeProvider } from "./context/ThemeContext";
-import { AuthProvider } from "./context/AuthContext"; // ADD THIS IMPORT
+import { AuthProvider } from "./context/AuthContext";
 
-// Styles
+// Styles — order matters: base → global → variables → mobile fixes
 import "./index.css";
 import "./styles/global.css";
-import "./styles/variables.css";
+import "./styles/mobile-fixes.css"; // ✅ Mobile responsive fixes
 
 const isDevelopment = import.meta.env.DEV;
 const appName = import.meta.env.VITE_APP_NAME || "KAAF Noticeboard";
@@ -43,13 +43,10 @@ ReactDOM.createRoot(rootElement).render(
       }}
     >
       <AuthProvider>
-        {" "}
-        {/* ADD THIS - MUST wrap App */}
         <ThemeProvider>
           <App />
         </ThemeProvider>
-      </AuthProvider>{" "}
-      {/* CLOSE AuthProvider */}
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

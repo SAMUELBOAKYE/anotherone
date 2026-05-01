@@ -2,7 +2,12 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL || "/api";
+// ✅ FIX: In production there is no proxy, so we need the full backend URL.
+//         In development, "/api" is fine because Vite proxies it to localhost:5000.
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? "https://anotherone-2.onrender.com/api" : "/api");
+
 const REQUEST_TIMEOUT = Number(import.meta.env.VITE_API_TIMEOUT) || 30000;
 const IS_DEVELOPMENT = import.meta.env.DEV;
 const ENABLE_LOGGING =
@@ -166,10 +171,7 @@ api.interceptors.response.use(
             `tokenValid=${tokenValid} hasSession=${hasSession}`,
         );
 
-      // ── RULE: only redirect when there is genuinely no session at all ─────
       if (isSilent || inGrace || hasSession) {
-        // Attempt a quiet token refresh (skip during grace period to avoid
-        // hammering refresh endpoint before auth is fully settled)
         if (!inGrace) {
           try {
             const rt = getRefreshToken();
@@ -191,11 +193,9 @@ api.interceptors.response.use(
             /* silent */
           }
         }
-        // Silently pass the error back — NotificationContext etc. handle it
         return Promise.reject(error);
       }
 
-      // Genuinely no session — redirect
       clearAuthStorage();
       if (
         typeof window !== "undefined" &&

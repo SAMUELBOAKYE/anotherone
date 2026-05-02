@@ -7,7 +7,8 @@ import App from "./App";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 
-// Styles — order matters: base → global → variables → mobile fixes
+// Styles — order matters: variables FIRST, then base → global → mobile fixes
+import "./styles/variables.css"; // ✅ CRITICAL FIX: CSS variables must load first
 import "./index.css";
 import "./styles/global.css";
 import "./styles/mobile-fixes.css"; // ✅ Mobile responsive fixes

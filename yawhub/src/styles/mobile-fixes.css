@@ -1,8 +1,48 @@
 /* ============================================================
    KAAF UNIVERSITY NOTICEBOARD
-   Global Mobile Responsive Fixes
-   Targets: iPhone SE, iPhone 14, Android phones (360px–430px)
+   Global Mobile Responsive Fixes — COMPREHENSIVE
+   Covers ALL components and pages
+   Targets: iPhone SE (375px), iPhone 14, Android (360px–430px)
    ============================================================ */
+
+/* ── 0. CSS Variable Fallbacks (in case variables.css fails) ─ */
+:root {
+  --navbar-height: 70px;
+  --navbar-height-mobile: 64px;
+  --navbar-bg: #ffffff;
+  --navbar-text: #1e293b;
+  --navbar-text-light: #64748b;
+  --navbar-border: #e2e8f0;
+  --brand-primary: #4361ee;
+  --brand-primary-dark: #3451d1;
+  --brand-gradient: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);
+  --hover-bg: rgba(67, 97, 238, 0.06);
+  --hover-bg-dark: rgba(67, 97, 238, 0.12);
+  --transition-base: 0.25s ease;
+  --transition-fast: 0.15s ease;
+  --z-navbar: 1000;
+  --z-dropdown: 1020;
+  --z-overlay: 1005;
+  --z-modal: 1050;
+  --accent-danger: #ef4444;
+  --accent-success: #22c55e;
+  --accent-warning: #f59e0b;
+  --accent-info: #3b82f6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
 
 /* ── 1. Base Reset ─────────────────────────────────────────── */
 *,
@@ -32,18 +72,11 @@ iframe {
   height: auto;
 }
 
-/* ── 2. Navbar Base ────────────────────────────────────────── */
-:root {
-  --navbar-height: 70px;
-  --navbar-height-mobile: 64px;
-}
-
-/* ✅ KEY FIX: Hide hamburger by default (desktop) */
+/* ── 2. Navbar — Desktop defaults ─────────────────────────── */
 .mobile-menu-btn {
   display: none !important;
 }
 
-/* Always show brand text */
 .navbar-brand-text-group {
   display: flex !important;
 }
@@ -54,7 +87,7 @@ iframe {
   min-width: 0;
 }
 
-/* ── 3. Desktop Navbar (769px and above) ───────────────────── */
+/* ── 3. Desktop Navbar (769px+) ────────────────────────────── */
 @media (min-width: 769px) {
   .navbar {
     height: var(--navbar-height) !important;
@@ -64,7 +97,6 @@ iframe {
     padding: 0 2rem !important;
   }
 
-  /* Always show full menu on desktop */
   .navbar-menu {
     position: static !important;
     left: auto !important;
@@ -104,7 +136,6 @@ iframe {
     display: inline !important;
   }
 
-  /* No overlay on desktop */
   .navbar-overlay {
     display: none !important;
   }
@@ -144,20 +175,26 @@ iframe {
     font-size: 22px !important;
   }
 
-  /* ✅ Show hamburger ONLY on mobile */
+  /* ✅ HAMBURGER FIX — Show on mobile */
   .mobile-menu-btn {
     display: flex !important;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
     flex-shrink: 0;
     width: 44px;
     height: 44px;
     padding: 10px;
     border-radius: 10px;
     touch-action: manipulation;
+    background: var(--hover-bg) !important;
+    border: 1px solid var(--navbar-border) !important;
+    color: var(--navbar-text) !important;
+    cursor: pointer;
+    z-index: 1100 !important;
+    position: relative !important;
   }
 
-  /* Mobile slide-in panel */
+  /* ✅ MOBILE SLIDE-IN PANEL FIX */
   .navbar-menu {
     position: fixed !important;
     top: var(--navbar-height-mobile) !important;
@@ -165,17 +202,23 @@ iframe {
     bottom: 0 !important;
     width: 85vw !important;
     max-width: 320px !important;
-    background: var(--navbar-bg, #fff) !important;
+    background: var(--navbar-bg, #ffffff) !important;
     backdrop-filter: blur(20px);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
     transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     z-index: 1010 !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
+    display: block !important;
   }
 
   .navbar-menu.active {
     left: 0 !important;
+  }
+
+  .navbar-scrolled .navbar-menu {
+    top: 60px !important;
   }
 
   .navbar-menu-inner {
@@ -183,6 +226,7 @@ iframe {
     align-items: stretch !important;
     gap: 0 !important;
     padding: 16px !important;
+    display: flex !important;
   }
 
   .navbar-nav {
@@ -205,7 +249,7 @@ iframe {
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 8px !important;
-    border-top: 1px solid var(--navbar-border, #eee) !important;
+    border-top: 1px solid var(--navbar-border, #e2e8f0) !important;
     padding-top: 12px !important;
     margin-top: 8px !important;
   }
@@ -227,13 +271,23 @@ iframe {
     width: 100% !important;
     margin-top: 8px !important;
     box-shadow: none !important;
-    border: 1px solid var(--navbar-border, #eee) !important;
+    border: 1px solid var(--navbar-border, #e2e8f0) !important;
     animation: none !important;
     border-radius: 12px !important;
   }
 
   .navbar-overlay {
+    position: fixed !important;
     top: var(--navbar-height-mobile) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 1005 !important;
+  }
+
+  .navbar-scrolled .navbar-overlay {
+    top: 60px !important;
   }
 
   .user-name {
@@ -245,7 +299,7 @@ iframe {
   }
 }
 
-/* ── 5. Layout Fixes ───────────────────────────────────────── */
+/* ── 5. Layout ─────────────────────────────────────────────── */
 .main-layout {
   min-height: 100vh;
   overflow-x: hidden !important;
@@ -268,37 +322,873 @@ iframe {
     width: 100% !important;
     padding: 0 !important;
   }
+
+  /* MainLayout */
+  [class*="main-layout"],
+  [class*="MainLayout"],
+  .layout-wrapper {
+    flex-direction: column !important;
+  }
+
+  /* AdminLayout sidebar collapse */
+  [class*="admin-layout"],
+  [class*="AdminLayout"] {
+    flex-direction: column !important;
+  }
+
+  [class*="admin-sidebar"],
+  [class*="AdminSidebar"],
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    position: relative !important;
+  }
+
+  /* AuthLayout */
+  [class*="auth-layout"],
+  [class*="AuthLayout"],
+  .auth-container {
+    padding: 16px !important;
+    min-height: 100vh;
+  }
 }
 
-/* ── 6. Hero Section ───────────────────────────────────────── */
-@media (max-width: 480px) {
+/* ── 6. Sidebar ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar,
+  [class*="sidebar"],
+  [class*="Sidebar"] {
+    position: fixed !important;
+    left: -280px !important;
+    top: var(--navbar-height-mobile) !important;
+    bottom: 0 !important;
+    width: 280px !important;
+    z-index: 900 !important;
+    transition: left 0.3s ease !important;
+    overflow-y: auto !important;
+    background: var(--bg-card, #fff) !important;
+  }
+
+  .sidebar.open,
+  [class*="sidebar"].open {
+    left: 0 !important;
+  }
+
+  .sidebar-nav {
+    padding: 12px !important;
+  }
+
+  .sidebar-link,
+  [class*="sidebar-link"] {
+    min-height: 48px;
+    padding: 12px 16px !important;
+    border-radius: 10px !important;
+  }
+}
+
+/* ── 7. HomePage ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hero */
   [class*="hero"],
-  [class*="Hero"] {
-    padding: 24px 16px !important;
+  [class*="Hero"],
+  .hero-section {
+    padding: 32px 16px !important;
     min-height: auto !important;
+    text-align: center !important;
   }
 
   [class*="hero"] h1,
-  [class*="Hero"] h1 {
-    font-size: clamp(22px, 7vw, 36px) !important;
+  [class*="Hero"] h1,
+  .hero-title {
+    font-size: clamp(24px, 8vw, 40px) !important;
     line-height: 1.2 !important;
     word-break: break-word;
   }
 
   [class*="hero"] p,
-  [class*="Hero"] p {
-    font-size: 14px !important;
+  [class*="Hero"] p,
+  .hero-description {
+    font-size: 15px !important;
     line-height: 1.6 !important;
   }
 
-  [class*="hero"] h2,
-  [class*="Hero"] h2 {
-    font-size: clamp(18px, 5vw, 28px) !important;
+  .hero-buttons,
+  [class*="hero-actions"],
+  [class*="hero-cta"] {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+    align-items: stretch !important;
+  }
+
+  .hero-buttons a,
+  .hero-buttons button,
+  [class*="hero-actions"] a,
+  [class*="hero-actions"] button {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+    min-height: 48px;
+  }
+
+  /* Stats section */
+  [class*="stats-grid"],
+  [class*="StatsGrid"],
+  .stats-section {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Features section */
+  [class*="features-grid"],
+  [class*="FeaturesGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Notices/Events preview on homepage */
+  [class*="notices-preview"],
+  [class*="events-preview"],
+  [class*="recent-section"] {
+    padding: 16px !important;
   }
 }
 
-/* ── 7. Cards & Grids ──────────────────────────────────────── */
+/* ── 8. Dashboard ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dashboard-page,
+  [class*="DashboardPage"],
+  [class*="dashboard-page"] {
+    padding: 16px !important;
+  }
+
+  .dashboard-grid,
+  [class*="dashboard-grid"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  [class*="stat-card"],
+  [class*="StatCard"],
+  .stat-item {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  [class*="stat-card"] [class*="stat-value"],
+  [class*="stat-value"] {
+    font-size: 1.5rem !important;
+  }
+
+  [class*="welcome-banner"],
+  [class*="WelcomeBanner"] {
+    padding: 20px 16px !important;
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+
+  [class*="quick-actions"],
+  [class*="QuickActions"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid,
+  [class*="dashboard-grid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [class*="quick-actions"],
+  [class*="QuickActions"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 9. Admin Dashboard ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="admin-dashboard"],
+  [class*="AdminDashboard"],
+  .admin-page {
+    padding: 16px !important;
+  }
+
+  [class*="admin-stats"],
+  [class*="AdminStats"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  [class*="admin-table"],
+  [class*="AdminTable"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  [class*="admin-header"],
+  [class*="AdminHeader"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  [class*="admin-actions"],
+  [class*="AdminActions"] {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  [class*="admin-actions"] button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 10. Analytics ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="analytics"],
+  [class*="Analytics"] {
+    padding: 16px !important;
+  }
+
+  [class*="analytics-grid"],
+  [class*="AnalyticsGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  [class*="chart-container"],
+  [class*="ChartContainer"] {
+    overflow-x: auto !important;
+    min-height: 250px !important;
+  }
+
+  [class*="analytics-filters"],
+  [class*="AnalyticsFilters"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+}
+
+/* ── 11. Events Page ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .events-page,
+  [class*="EventsPage"],
+  [class*="events-page"] {
+    padding: 16px !important;
+  }
+
+  [class*="events-grid"],
+  [class*="EventsGrid"],
+  .events-list {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  [class*="events-header"],
+  .events-page-header {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  [class*="events-header"] button,
+  [class*="events-header"] a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 12. Event Card ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="event-card"],
+  [class*="EventCard"],
+  .event-item {
+    border-radius: 12px !important;
+    overflow: hidden;
+  }
+
+  [class*="event-card-image"],
+  [class*="EventCardImage"] {
+    height: 160px !important;
+  }
+
+  [class*="event-card-body"],
+  [class*="EventCardBody"] {
+    padding: 14px !important;
+  }
+
+  [class*="event-card-title"],
+  [class*="EventCardTitle"] {
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+  }
+
+  [class*="event-card-meta"],
+  [class*="EventCardMeta"] {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    font-size: 0.8rem !important;
+  }
+
+  [class*="event-card-actions"],
+  [class*="EventCardActions"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [class*="event-card-actions"] button,
+  [class*="event-card-actions"] a {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px;
+  }
+}
+
+/* ── 13. Event Detail ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="event-detail"],
+  [class*="EventDetail"] {
+    padding: 16px !important;
+  }
+
+  [class*="event-detail-header"],
+  [class*="EventDetailHeader"] {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  [class*="event-detail-image"],
+  [class*="EventDetailImage"] {
+    width: 100% !important;
+    height: 200px !important;
+    border-radius: 12px !important;
+  }
+
+  [class*="event-detail-info"],
+  [class*="EventDetailInfo"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [class*="event-detail-actions"],
+  [class*="EventDetailActions"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  [class*="event-detail-actions"] button,
+  [class*="event-detail-actions"] a {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px;
+  }
+}
+
+/* ── 14. Event Filters ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="event-filters"],
+  [class*="EventFilters"],
+  .filters-container {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+
+  [class*="event-filters"] select,
+  [class*="event-filters"] input,
+  [class*="EventFilters"] select,
+  [class*="EventFilters"] input {
+    width: 100% !important;
+    min-height: 44px;
+    font-size: 16px !important;
+    border-radius: 10px !important;
+  }
+
+  [class*="filter-row"],
+  [class*="FilterRow"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+}
+
+/* ── 15. Event Form ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="event-form"],
+  [class*="EventForm"],
+  .create-event-page,
+  .edit-event-page {
+    padding: 16px !important;
+  }
+
+  [class*="event-form"] [class*="form-grid"],
+  [class*="EventForm"] [class*="form-grid"],
+  [class*="form-row"] {
+    grid-template-columns: 1fr !important;
+    flex-direction: column !important;
+  }
+
+  [class*="form-actions"],
+  [class*="FormActions"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  [class*="form-actions"] button {
+    width: 100% !important;
+    min-height: 48px;
+    justify-content: center !important;
+  }
+}
+
+/* ── 16. Event Registration ─────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="event-registration"],
+  [class*="EventRegistration"],
+  .register-event-page {
+    padding: 16px !important;
+  }
+
+  [class*="registration-form"],
+  [class*="RegistrationForm"] {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  [class*="registration-summary"],
+  [class*="RegistrationSummary"] {
+    padding: 16px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* ── 17. Notices Page ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .notices-page,
+  [class*="NoticesPage"],
+  [class*="notices-page"] {
+    padding: 16px !important;
+  }
+
+  [class*="notices-grid"],
+  [class*="NoticesGrid"],
+  .notices-list {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  [class*="notices-header"],
+  .notices-page-header {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  [class*="notices-header"] button,
+  [class*="notices-header"] a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 18. Notice Card ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="notice-card"],
+  [class*="NoticeCard"],
+  .notice-item {
+    border-radius: 12px !important;
+    padding: 14px !important;
+  }
+
+  [class*="notice-card-header"],
+  [class*="NoticeCardHeader"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  [class*="notice-card-title"],
+  [class*="NoticeCardTitle"] {
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+  }
+
+  [class*="notice-card-meta"],
+  [class*="NoticeCardMeta"] {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    font-size: 0.78rem !important;
+  }
+
+  [class*="notice-card-actions"],
+  [class*="NoticeCardActions"] {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+}
+
+/* ── 19. Notice Detail ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="notice-detail"],
+  [class*="NoticeDetail"] {
+    padding: 16px !important;
+  }
+
+  [class*="notice-detail-header"],
+  [class*="NoticeDetailHeader"] {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  [class*="notice-detail-actions"],
+  [class*="NoticeDetailActions"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [class*="notice-detail-actions"] button,
+  [class*="notice-detail-actions"] a {
+    width: 100% !important;
+    min-height: 44px;
+    justify-content: center !important;
+  }
+
+  [class*="notice-attachments"],
+  [class*="NoticeAttachments"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 20. Notice Filters ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="notice-filters"],
+  [class*="NoticeFilters"],
+  [class*="notice-search"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  [class*="notice-filters"] select,
+  [class*="notice-filters"] input,
+  [class*="NoticeFilters"] select,
+  [class*="NoticeFilters"] input {
+    width: 100% !important;
+    font-size: 16px !important;
+    min-height: 44px;
+    border-radius: 10px !important;
+  }
+}
+
+/* ── 21. Notice Categories ──────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="notice-categories"],
+  [class*="NoticeCategories"] {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  [class*="category-chip"],
+  [class*="CategoryChip"],
+  [class*="category-badge"] {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    border-radius: 20px !important;
+  }
+}
+
+/* ── 22. Notifications ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="notification-bell"],
+  [class*="NotificationBell"] {
+    position: relative;
+  }
+
+  [class*="notification-dropdown"],
+  [class*="NotificationDropdown"] {
+    position: fixed !important;
+    top: var(--navbar-height-mobile) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 0 16px 16px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    z-index: 1030 !important;
+  }
+
+  [class*="notification-item"],
+  [class*="NotificationItem"] {
+    padding: 12px 16px !important;
+    gap: 10px !important;
+  }
+
+  [class*="notifications-page"],
+  [class*="NotificationsPage"] {
+    padding: 16px !important;
+  }
+
+  [class*="notification-list"],
+  [class*="NotificationList"] {
+    gap: 8px !important;
+  }
+
+  [class*="notification-preferences"],
+  [class*="NotificationPreferences"] {
+    padding: 16px !important;
+  }
+}
+
+/* ── 23. User Profile & Settings ────────────────────────────── */
+@media (max-width: 768px) {
+  .profile-page,
+  [class*="ProfilePage"],
+  [class*="profile-page"],
+  .settings-page,
+  [class*="SettingsPage"],
+  [class*="settings-page"] {
+    padding: 16px !important;
+  }
+
+  [class*="profile-header"],
+  [class*="ProfileHeader"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+  }
+
+  [class*="profile-avatar"],
+  [class*="ProfileAvatar"],
+  [class*="avatar"],
+  [class*="Avatar"] {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 50% !important;
+  }
+
+  [class*="profile-info"],
+  [class*="ProfileInfo"] {
+    text-align: center !important;
+  }
+
+  [class*="profile-tabs"],
+  [class*="ProfileTabs"],
+  [class*="settings-tabs"],
+  [class*="SettingsTabs"] {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  [class*="profile-form"],
+  [class*="ProfileForm"],
+  [class*="settings-form"],
+  [class*="SettingsForm"] {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  [class*="form-grid"],
+  [class*="FormGrid"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [class*="profile-actions"],
+  [class*="ProfileActions"],
+  [class*="settings-actions"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  [class*="profile-actions"] button,
+  [class*="settings-actions"] button {
+    width: 100% !important;
+    min-height: 48px;
+    justify-content: center !important;
+  }
+}
+
+/* ── 24. User Dashboard ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="user-dashboard"],
+  [class*="UserDashboard"] {
+    padding: 16px !important;
+  }
+
+  [class*="user-stats"],
+  [class*="UserStats"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  [class*="recent-activity"],
+  [class*="RecentActivity"] {
+    padding: 12px !important;
+  }
+
+  [class*="activity-item"],
+  [class*="ActivityItem"] {
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 10px !important;
+  }
+}
+
+/* ── 25. User Management ────────────────────────────────────── */
+@media (max-width: 768px) {
+  [class*="user-management"],
+  [class*="UserManagement"] {
+    padding: 16px !important;
+  }
+
+  [class*="user-table"],
+  [class*="UserTable"] {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  [class*="user-filters"],
+  [class*="UserFilters"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [class*="user-filters"] input,
+  [class*="user-filters"] select {
+    width: 100% !important;
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+}
+
+/* ── 26. Auth Pages ─────────────────────────────────────────── */
 @media (max-width: 640px) {
+  [class*="auth-container"],
+  [class*="AuthContainer"],
+  .auth-page,
+  .login-page,
+  .register-page {
+    padding: 16px !important;
+    min-height: 100vh;
+  }
+
+  [class*="auth-card"],
+  [class*="AuthCard"],
+  [class*="login-card"],
+  [class*="register-card"] {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  [class*="auth-title"],
+  [class*="AuthTitle"] {
+    font-size: 1.5rem !important;
+  }
+
+  [class*="auth-form"],
+  [class*="AuthForm"],
+  .login-form,
+  .register-form {
+    gap: 14px !important;
+  }
+
+  [class*="auth-footer"],
+  [class*="AuthFooter"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center !important;
+  }
+}
+
+/* ── 27. Forms (Global) ─────────────────────────────────────── */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    border-radius: 10px !important;
+    min-height: 44px;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+
+  .form-group,
+  [class*="form-group"],
+  [class*="FormGroup"] {
+    margin-bottom: 14px !important;
+  }
+
+  [class*="form-row"],
+  [class*="FormRow"] {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+
+  [class*="form-actions"],
+  [class*="FormActions"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  [class*="form-actions"] button {
+    width: 100% !important;
+    min-height: 48px;
+    justify-content: center !important;
+  }
+
+  label {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ── 28. Buttons & Touch Targets ────────────────────────────── */
+@media (max-width: 768px) {
+  button,
+  [role="button"],
+  a.btn,
+  .btn,
+  [class*="btn-primary"],
+  [class*="btn-secondary"],
+  [class*="button-primary"],
+  [class*="button-secondary"] {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  [class*="button-group"],
+  [class*="btn-group"],
+  [class*="action-buttons"],
+  [class*="ActionButtons"] {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  [class*="button-group"] button,
+  [class*="btn-group"] button,
+  [class*="action-buttons"] button,
+  [class*="action-buttons"] a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 29. Cards & Grids ──────────────────────────────────────── */
+@media (max-width: 768px) {
   [class*="grid"],
   [class*="Grid"] {
     grid-template-columns: 1fr !important;
@@ -309,71 +1199,29 @@ iframe {
     margin-bottom: 12px;
     border-radius: 12px !important;
   }
+}
 
-  .dashboard-grid,
-  [class*="stats"],
-  [class*="Stats"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+@media (max-width: 640px) {
+  [class*="card-grid"],
+  [class*="CardGrid"],
+  [class*="items-grid"],
+  [class*="ItemsGrid"] {
+    grid-template-columns: 1fr !important;
     gap: 12px !important;
   }
 }
 
-/* ── 8. Buttons & Touch Targets ───────────────────────────── */
-@media (max-width: 768px) {
-  button,
-  [role="button"],
-  a.btn,
-  .btn-primary,
-  .btn-secondary {
-    min-height: 44px;
-    touch-action: manipulation;
-  }
-
-  [class*="button-group"],
-  [class*="btn-group"],
-  .hero-buttons {
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 10px !important;
-  }
-
-  [class*="button-group"] button,
-  [class*="btn-group"] button,
-  .hero-buttons a,
-  .hero-buttons button {
-    width: 100% !important;
-    justify-content: center !important;
-  }
-}
-
-/* ── 9. Forms ──────────────────────────────────────────────── */
-@media (max-width: 640px) {
-  input,
-  select,
-  textarea {
-    font-size: 16px !important;
-    border-radius: 10px !important;
-  }
-
-  .form-group {
-    margin-bottom: 14px !important;
-  }
-
-  [class*="form"],
-  [class*="Form"] {
-    padding: 16px !important;
-    border-radius: 16px !important;
-  }
-}
-
-/* ── 10. Tables ────────────────────────────────────────────── */
+/* ── 30. Tables ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .table-container,
   [class*="table-wrap"],
-  [class*="TableWrap"] {
+  [class*="TableWrap"],
+  [class*="table-container"],
+  [class*="TableContainer"] {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     border-radius: 10px !important;
+    width: 100% !important;
   }
 
   table {
@@ -388,7 +1236,7 @@ iframe {
   }
 }
 
-/* ── 11. Modals ────────────────────────────────────────────── */
+/* ── 31. Modals ─────────────────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="modal"],
   [class*="Modal"],
@@ -406,9 +1254,34 @@ iframe {
     max-height: 90vh !important;
     overflow-y: auto !important;
   }
+
+  [class*="modal-header"],
+  [class*="ModalHeader"] {
+    padding: 16px !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+
+  [class*="modal-body"],
+  [class*="ModalBody"] {
+    padding: 16px !important;
+  }
+
+  [class*="modal-footer"],
+  [class*="ModalFooter"] {
+    padding: 12px 16px !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  [class*="modal-footer"] button {
+    width: 100% !important;
+    min-height: 48px;
+    justify-content: center !important;
+  }
 }
 
-/* ── 12. Pagination ────────────────────────────────────────── */
+/* ── 32. Pagination ─────────────────────────────────────────── */
 @media (max-width: 480px) {
   [class*="pagination"],
   [class*="Pagination"] {
@@ -418,68 +1291,75 @@ iframe {
   }
 
   [class*="pagination"] button,
-  [class*="Pagination"] button {
+  [class*="Pagination"] button,
+  [class*="page-btn"],
+  [class*="PageBtn"] {
     min-width: 36px !important;
     min-height: 36px !important;
     font-size: 13px !important;
     padding: 4px 8px !important;
+    border-radius: 8px !important;
   }
 }
 
-/* ── 13. Filters & Search ──────────────────────────────────── */
+/* ── 33. Search Bar ─────────────────────────────────────────── */
 @media (max-width: 640px) {
-  [class*="filter"],
-  [class*="Filter"],
-  [class*="search"],
-  [class*="Search"] {
-    flex-wrap: wrap !important;
+  [class*="search-bar"],
+  [class*="SearchBar"],
+  [class*="search-container"],
+  [class*="SearchContainer"] {
+    width: 100% !important;
+  }
+
+  [class*="search-bar"] input,
+  [class*="SearchBar"] input,
+  [class*="search-input"],
+  [class*="SearchInput"] {
+    width: 100% !important;
+    font-size: 16px !important;
+    min-height: 44px;
+    border-radius: 12px !important;
+  }
+
+  [class*="search-filters"],
+  [class*="SearchFilters"] {
+    flex-direction: column !important;
     gap: 8px !important;
   }
-
-  [class*="filter"] select,
-  [class*="Filter"] select,
-  [class*="search"] input,
-  [class*="Search"] input {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
 }
 
-/* ── 14. Notification Bell ─────────────────────────────────── */
-@media (max-width: 768px) {
-  .navbar-notification-wrapper {
-    order: -1;
-  }
-}
-
-/* ── 15. Footer ────────────────────────────────────────────── */
+/* ── 34. Breadcrumb ─────────────────────────────────────────── */
 @media (max-width: 640px) {
-  [class*="footer"],
-  [class*="Footer"] {
-    padding: 24px 16px !important;
-    text-align: center !important;
-  }
-
-  [class*="footer-grid"],
-  [class*="FooterGrid"] {
-    grid-template-columns: 1fr !important;
-    gap: 24px !important;
+  [class*="breadcrumb"],
+  [class*="Breadcrumb"] {
+    font-size: 0.8rem !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
   }
 }
 
-/* ── 16. Page Headers ──────────────────────────────────────── */
+/* ── 35. Page Headers ───────────────────────────────────────── */
 @media (max-width: 640px) {
   [class*="page-header"],
   [class*="PageHeader"] {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 12px !important;
+    padding: 0 0 16px !important;
+  }
+
+  [class*="page-header"] button,
+  [class*="page-header"] a {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 44px;
   }
 
   [class*="page-title"],
   [class*="PageTitle"],
   h1 {
     font-size: clamp(20px, 6vw, 30px) !important;
+    line-height: 1.3 !important;
   }
 
   h2 {
@@ -489,11 +1369,158 @@ iframe {
   h3 {
     font-size: clamp(15px, 4vw, 20px) !important;
   }
+
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
 }
 
-/* ── 17. Scroll to top button ──────────────────────────────── */
+/* ── 36. Footer ─────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .scroll-to-top {
+  [class*="footer"],
+  [class*="Footer"],
+  footer {
+    padding: 24px 16px !important;
+    text-align: center !important;
+  }
+
+  [class*="footer-grid"],
+  [class*="FooterGrid"],
+  [class*="footer-content"] {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  [class*="footer-links"],
+  [class*="FooterLinks"] {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  [class*="footer-social"],
+  [class*="FooterSocial"] {
+    justify-content: center !important;
+    gap: 12px !important;
+  }
+}
+
+/* ── 37. Alert & Error Components ───────────────────────────── */
+@media (max-width: 640px) {
+  [class*="error-alert"],
+  [class*="ErrorAlert"],
+  [class*="success-alert"],
+  [class*="SuccessAlert"],
+  [class*="alert"],
+  [class*="Alert"] {
+    padding: 12px 16px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  [class*="confirm-dialog"],
+  [class*="ConfirmDialog"] {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ── 38. Loading Spinner ────────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="loading-spinner"],
+  [class*="LoadingSpinner"] {
+    padding: 32px 16px !important;
+  }
+}
+
+/* ── 39. Admin-specific Pages ───────────────────────────────── */
+@media (max-width: 768px) {
+  /* Admin Notices */
+  [class*="admin-notices"],
+  [class*="AdminNotices"] {
+    padding: 16px !important;
+  }
+
+  /* Admin Settings */
+  [class*="admin-settings"],
+  [class*="AdminSettings"],
+  [class*="system-settings"],
+  [class*="SystemSettings"] {
+    padding: 16px !important;
+  }
+
+  [class*="settings-section"],
+  [class*="SettingsSection"] {
+    padding: 16px !important;
+    border-radius: 12px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Manage Events */
+  [class*="manage-events"],
+  [class*="ManageEvents"] {
+    padding: 16px !important;
+  }
+
+  /* Registrations List */
+  [class*="registrations-list"],
+  [class*="RegistrationsList"],
+  [class*="my-registrations"],
+  [class*="MyRegistrations"] {
+    padding: 16px !important;
+  }
+
+  [class*="registration-card"],
+  [class*="RegistrationCard"] {
+    padding: 14px !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* ── 40. Help & Static Pages ────────────────────────────────── */
+@media (max-width: 640px) {
+  [class*="help-center"],
+  [class*="HelpCenter"],
+  [class*="faq-page"],
+  [class*="FAQPage"],
+  [class*="about-page"],
+  [class*="AboutPage"],
+  [class*="contact-page"],
+  [class*="ContactPage"],
+  [class*="privacy-page"],
+  [class*="PrivacyPage"],
+  [class*="terms-page"],
+  [class*="TermsPage"],
+  [class*="security-tips"],
+  [class*="SecurityTips"] {
+    padding: 16px !important;
+  }
+
+  [class*="faq-item"],
+  [class*="FAQItem"] {
+    padding: 14px !important;
+    border-radius: 10px !important;
+  }
+
+  [class*="help-article"],
+  [class*="HelpArticle"] {
+    padding: 16px !important;
+  }
+
+  [class*="contact-form"],
+  [class*="ContactForm"] {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ── 41. Scroll to top ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .scroll-to-top,
+  [class*="scroll-top"],
+  [class*="ScrollTop"] {
     bottom: 16px !important;
     right: 16px !important;
     width: 44px !important;
@@ -501,27 +1528,52 @@ iframe {
   }
 }
 
-/* ── 18. Profile & Settings Pages ─────────────────────────── */
+/* ── 42. Offline Banner ─────────────────────────────────────── */
+.offline-banner,
+[class*="offline-banner"],
+[class*="OfflineBanner"] {
+  padding: 8px 16px !important;
+  font-size: 0.85rem !important;
+  text-align: center !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+/* ── 43. NotFound Page ──────────────────────────────────────── */
 @media (max-width: 640px) {
-  .profile-page,
-  .settings-page,
-  [class*="profile"],
-  [class*="Profile"] {
-    padding: 16px !important;
+  [class*="not-found"],
+  [class*="NotFound"],
+  .error-page {
+    padding: 32px 16px !important;
+    text-align: center !important;
   }
 
-  [class*="avatar"],
-  [class*="Avatar"] {
-    width: 80px !important;
-    height: 80px !important;
+  [class*="not-found"] h1,
+  [class*="NotFound"] h1 {
+    font-size: clamp(60px, 20vw, 120px) !important;
+  }
+
+  [class*="not-found"] [class*="actions"],
+  [class*="NotFound"] [class*="actions"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  [class*="not-found"] [class*="actions"] a,
+  [class*="not-found"] [class*="actions"] button {
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 
-/* ── 19. Safe area for notched phones (iPhone X+) ─────────── */
+/* ── 44. Safe Area for notched phones (iPhone X+) ───────────── */
 @supports (padding: env(safe-area-inset-bottom)) {
-  .layout-footer,
   [class*="footer"],
-  [class*="Footer"] {
+  [class*="Footer"],
+  footer,
+  .layout-footer {
     padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   }
 
@@ -530,7 +1582,7 @@ iframe {
   }
 }
 
-/* ── 20. Very small phones (iPhone SE = 375px) ────────────── */
+/* ── 45. Very small phones (375px and below) ────────────────── */
 @media (max-width: 380px) {
   .navbar-brand-text {
     font-size: 0.85rem !important;
@@ -547,24 +1599,39 @@ iframe {
   .layout-content {
     padding: 12px !important;
   }
+
+  [class*="event-card"],
+  [class*="notice-card"] {
+    padding: 12px !important;
+  }
+
+  h1 {
+    font-size: clamp(18px, 6vw, 26px) !important;
+  }
 }
 
-/* ── 21. Landscape mobile fix ──────────────────────────────── */
+/* ── 46. Landscape mobile fix ───────────────────────────────── */
 @media (max-height: 500px) and (orientation: landscape) {
   .navbar {
-    height: 56px !important;
+    height: 52px !important;
   }
 
   .navbar-menu {
-    top: 56px !important;
+    top: 52px !important;
+  }
+
+  .navbar-overlay {
+    top: 52px !important;
   }
 }
 
-/* ── 22. Remove hover effects on touch devices ────────────── */
+/* ── 47. Remove hover effects on touch devices ──────────────── */
 @media (hover: none) and (pointer: coarse) {
   .navbar-link:hover,
   .navbar-brand:hover .navbar-logo,
-  .dropdown-item:hover {
+  .dropdown-item:hover,
+  [class*="card"]:hover,
+  [class*="btn"]:hover {
     transform: none !important;
     box-shadow: none !important;
   }
@@ -575,5 +1642,28 @@ iframe {
 
   .dropdown-item:active {
     background: var(--hover-bg, rgba(67, 97, 238, 0.08)) !important;
+  }
+
+  [class*="card"]:active,
+  [class*="notice-card"]:active,
+  [class*="event-card"]:active {
+    transform: scale(0.99) !important;
+  }
+}
+
+/* ── 48. Print styles ───────────────────────────────────────── */
+@media print {
+  .navbar,
+  .mobile-menu-btn,
+  .navbar-overlay,
+  .sidebar,
+  [class*="footer"],
+  [class*="notification-bell"],
+  [class*="scroll-top"] {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
   }
 }

@@ -25,6 +25,10 @@
   --accent-danger: #ef4444;
   --accent-info: #3b82f6;
 
+  /* Background Colors for Mobile */
+  --bg-card: #ffffff;
+  --bg-secondary: #f8f9fa;
+
   /* Hover States */
   --hover-bg: rgba(67, 97, 238, 0.05);
   --hover-bg-dark: rgba(67, 97, 238, 0.1);
@@ -55,6 +59,8 @@
     --navbar-border: rgba(255, 255, 255, 0.08);
     --hover-bg: rgba(67, 97, 238, 0.1);
     --hover-bg-dark: rgba(67, 97, 238, 0.15);
+    --bg-card: #1e293b;
+    --bg-secondary: #0f172a;
   }
 }
 
@@ -712,7 +718,7 @@
     justify-content: center;
   }
 
-  /* Mobile Menu Panel */
+  /* Mobile Menu Panel - FIXED VISIBILITY */
   .navbar-menu {
     position: fixed;
     top: var(--navbar-height-mobile);
@@ -720,12 +726,22 @@
     bottom: 0;
     width: 100%;
     max-width: 350px;
-    background: var(--navbar-bg);
+    background: var(--bg-secondary, #f8f9fa) !important;
     backdrop-filter: blur(20px);
+    border-right: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.1)) !important;
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
     transition: left var(--transition-base);
     z-index: var(--z-dropdown);
     overflow-y: auto;
+  }
+
+  /* Dark theme mobile menu background */
+  [data-theme="dark"] .navbar-menu,
+  @media (prefers-color-scheme: dark) {
+    .navbar-menu {
+      background: var(--bg-secondary, #1e1b4b) !important;
+      background-color: #1a1a2e !important;
+    }
   }
 
   .navbar-scrolled .navbar-menu {
@@ -743,7 +759,7 @@
     padding: 1.5rem;
   }
 
-  /* Mobile Navigation Links */
+  /* Mobile Navigation Links - Ensure text is visible */
   .navbar-nav {
     flex-direction: column;
     align-items: stretch;
@@ -755,6 +771,7 @@
     font-size: 1rem;
     text-align: left;
     border-radius: 12px;
+    color: var(--navbar-text, #ffffff) !important;
   }
 
   .navbar-link.active::after {
@@ -764,14 +781,15 @@
   .navbar-link.active {
     background: var(--hover-bg);
     border-left: 3px solid var(--brand-primary);
+    color: var(--brand-primary) !important;
   }
 
-  /* Mobile Auth Section */
+  /* Mobile Auth Section - Ensure visibility */
   .navbar-auth-section {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
-    border-top: 1px solid var(--navbar-border);
+    border-top: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.15));
     padding-top: 1rem;
   }
 
@@ -785,6 +803,7 @@
     justify-content: space-between;
     padding: 0.75rem 1rem;
     border-radius: 12px;
+    color: var(--navbar-text, #ffffff) !important;
   }
 
   .dropdown-menu {
@@ -792,7 +811,7 @@
     width: 100%;
     margin-top: 0.75rem;
     box-shadow: none;
-    border: 1px solid var(--navbar-border);
+    border: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.1));
     animation: none;
   }
 
@@ -966,5 +985,77 @@ html {
   .navbar-overlay,
   .dropdown-menu {
     display: none;
+  }
+}
+
+/* ========================================
+   MOBILE MENU VISIBILITY FIX - ADDITIONAL SAFEGUARD
+   ======================================== */
+
+/* Force mobile menu background to be visible on all themes */
+@media (max-width: 768px) {
+  .navbar-menu {
+    background: var(--bg-secondary, #1e1b4b) !important;
+    background-color: #1a1a2e !important;
+    border-right: 2px solid var(--brand-primary) !important;
+  }
+
+  /* Ensure all text in mobile menu is white/visible */
+  .navbar-menu .navbar-link,
+  .navbar-menu .navbar-link span,
+  .navbar-menu .user-name,
+  .navbar-menu .dropdown-chevron,
+  .navbar-menu .navbar-dropdown-trigger span {
+    color: #ffffff !important;
+  }
+
+  /* Keep active link brand color */
+  .navbar-menu .navbar-link.active,
+  .navbar-menu .navbar-link.active span {
+    color: var(--brand-primary) !important;
+  }
+
+  /* Ensure auth section border is visible */
+  .navbar-menu .navbar-auth-section {
+    border-top-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Style dropdown items for visibility */
+  .navbar-menu .dropdown-item {
+    color: #ffffff !important;
+  }
+
+  .navbar-menu .dropdown-item:hover {
+    background: rgba(67, 97, 238, 0.2) !important;
+    color: var(--brand-primary) !important;
+  }
+
+  /* Ensure icons are visible */
+  .navbar-menu svg {
+    stroke: #ffffff !important;
+  }
+
+  .navbar-menu .navbar-link.active svg {
+    stroke: var(--brand-primary) !important;
+  }
+}
+
+/* Light theme specific mobile menu */
+@media (max-width: 768px) and (prefers-color-scheme: light) {
+  .navbar-menu {
+    background: #ffffff !important;
+    background-color: #f8f9fa !important;
+  }
+
+  .navbar-menu .navbar-link,
+  .navbar-menu .navbar-link span,
+  .navbar-menu .user-name,
+  .navbar-menu .dropdown-chevron,
+  .navbar-menu .navbar-dropdown-trigger span {
+    color: #1a1a2e !important;
+  }
+
+  .navbar-menu svg {
+    stroke: #1a1a2e !important;
   }
 }

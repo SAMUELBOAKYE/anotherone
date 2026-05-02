@@ -16,6 +16,7 @@ import OfflineBanner from "./components/common/OfflineBanner";
 import TestLogin from "./components/auth/TestLogin";
 import StandaloneAdminRegistration from "./components/admin/StandaloneAdminRegistration";
 import "./styles/components/App.css";
+import "./styles/components/responsive.css";
 
 // ============================================================
 // NETWORK STATUS CONTEXT (FALLBACK)
@@ -272,55 +273,11 @@ const RequireGuest = ({ children }) => {
 // ERROR FALLBACK
 // ============================================================
 const ErrorFallback = ({ error, resetErrorBoundary }) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      minHeight: "100vh",
-      padding: "20px",
-      textAlign: "center",
-      backgroundColor: "#f8f9fa",
-    }}
-  >
-    <div
-      style={{
-        maxWidth: "500px",
-        padding: "40px",
-        borderRadius: "16px",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-        background: "#fff",
-      }}
-    >
-      <h2 style={{ marginBottom: "16px", color: "#1976d2" }}>
-        Something went wrong
-      </h2>
-      <pre
-        style={{
-          backgroundColor: "#f8f9fa",
-          padding: "12px",
-          borderRadius: "4px",
-          overflow: "auto",
-          fontSize: "12px",
-          marginBottom: "20px",
-          textAlign: "left",
-        }}
-      >
-        {error.message}
-      </pre>
-      <button
-        onClick={resetErrorBoundary}
-        style={{
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "16px",
-          background: "#1976d2",
-          color: "#fff",
-        }}
-      >
+  <div className="error-fallback">
+    <div className="error-fallback-content">
+      <h2 className="error-fallback-title">Something went wrong</h2>
+      <pre className="error-fallback-message">{error.message}</pre>
+      <button onClick={resetErrorBoundary} className="error-fallback-button">
         Try again
       </button>
     </div>
@@ -332,9 +289,16 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => (
 // ============================================================
 const AppContent = () => {
   const { isOnline } = useNetworkStatus();
+  const location = useLocation();
+
+  // Get page name for responsive classes
+  const getPageClass = () => {
+    const path = location.pathname.replace("/", "") || "home";
+    return `page-${path.replace(/\//g, "-")}`;
+  };
 
   return (
-    <>
+    <div className={`app-container ${getPageClass()}`}>
       {!isOnline && <OfflineBanner className="offline-banner" />}
       <ScrollToTop />
 
@@ -566,7 +530,7 @@ const AppContent = () => {
         {/* ── 404 ──────────────────────────────────────────── */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

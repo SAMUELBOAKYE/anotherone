@@ -190,7 +190,11 @@ const Navbar = () => {
   }, [logout, navigate]);
 
   const toggleMenu = useCallback(() => {
-    setIsMenuOpen((prev) => !prev);
+    setIsMenuOpen((prev) => {
+      const newState = !prev;
+      console.log("Menu toggled:", newState); // Debug log
+      return newState;
+    });
     setIsDropdownOpen(false);
   }, []);
 
@@ -468,8 +472,6 @@ const Navbar = () => {
               ) : (
                 <>
                   {/* ── PUBLIC LINKS — Login & Register only ─────────── */}
-                  {/* NOTE: Admin button is intentionally NOT shown here.  */}
-                  {/* Admin accesses the portal via direct bookmarked URL. */}
                   {unauthenticatedLinks.map(({ to, label }) => (
                     <Link
                       key={to}

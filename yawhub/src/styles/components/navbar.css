@@ -326,6 +326,18 @@
   }
 }
 
+/* Icon Styles - NO BACKGROUND */
+.navbar-link svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  transition: all var(--transition-base);
+}
+
+.navbar-link span {
+  flex: 1;
+}
+
 /* ========================================
    Auth Section
    ======================================== */
@@ -594,6 +606,13 @@
   color: var(--accent-danger);
 }
 
+/* Dropdown Item Icons */
+.dropdown-item svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
 /* ========================================
    Mobile Overlay
    ======================================== */
@@ -679,7 +698,9 @@
   }
 }
 
-/* Mobile Styles */
+/* ========================================
+   MOBILE STYLES - COMPLETELY FIXED
+   ======================================== */
 @media (max-width: 768px) {
   .navbar {
     height: var(--navbar-height-mobile);
@@ -711,67 +732,91 @@
     font-size: 24px;
   }
 
-  /* Mobile Menu Button */
+  /* Mobile Menu Button - VISIBLE AND CLICKABLE */
   .mobile-menu-btn {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    z-index: 1100;
+    position: relative;
+    background: var(--brand-primary) !important;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    color: white !important;
   }
 
-  /* Mobile Menu Panel - FIXED VISIBILITY */
+  .mobile-menu-btn svg {
+    stroke: white !important;
+  }
+
+  /* Mobile Menu Panel - Hidden by default */
   .navbar-menu {
-    position: fixed;
-    top: var(--navbar-height-mobile);
-    left: -100%;
-    bottom: 0;
-    width: 100%;
-    max-width: 350px;
-    background: var(--bg-secondary, #f8f9fa) !important;
+    position: fixed !important;
+    top: var(--navbar-height-mobile) !important;
+    left: -100% !important;
+    bottom: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    background: #ffffff !important;
     backdrop-filter: blur(20px);
-    border-right: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.1)) !important;
+    border-right: 2px solid var(--brand-primary) !important;
     box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
-    transition: left var(--transition-base);
-    z-index: var(--z-dropdown);
-    overflow-y: auto;
+    transition: left 0.3s ease !important;
+    z-index: 9999 !important;
+    overflow-y: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  /* Dark theme mobile menu background */
-  [data-theme="dark"] .navbar-menu,
-  @media (prefers-color-scheme: dark) {
-    .navbar-menu {
-      background: var(--bg-secondary, #1e1b4b) !important;
-      background-color: #1a1a2e !important;
-    }
+  /* Mobile Menu Panel - Visible when active */
+  .navbar-menu.active {
+    left: 0 !important;
+    background-color: #ffffff !important;
   }
 
   .navbar-scrolled .navbar-menu {
-    top: 65px;
+    top: 65px !important;
   }
 
-  .navbar-menu.active {
-    left: 0;
-  }
-
+  /* Menu Inner Content */
   .navbar-menu-inner {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important;
+    padding: 1.5rem !important;
   }
 
-  /* Mobile Navigation Links - Ensure text is visible */
+  /* Navigation Links Container */
   .navbar-nav {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.25rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.25rem !important;
   }
 
+  /* Individual Links */
   .navbar-link {
-    padding: 0.85rem 1rem;
-    font-size: 1rem;
-    text-align: left;
-    border-radius: 12px;
-    color: var(--navbar-text, #ffffff) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0.85rem 1rem !important;
+    font-size: 1rem !important;
+    text-align: left !important;
+    border-radius: 12px !important;
+    color: #1f2937 !important;
+    background: transparent !important;
+    text-decoration: none !important;
+  }
+
+  .navbar-link svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: #1f2937 !important;
+    background: transparent !important;
   }
 
   .navbar-link.active::after {
@@ -779,18 +824,35 @@
   }
 
   .navbar-link.active {
-    background: var(--hover-bg);
+    background: rgba(67, 97, 238, 0.1) !important;
     border-left: 3px solid var(--brand-primary);
     color: var(--brand-primary) !important;
   }
 
-  /* Mobile Auth Section - Ensure visibility */
+  .navbar-link.active svg {
+    stroke: var(--brand-primary) !important;
+  }
+
+  /* Auth Section */
   .navbar-auth-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1rem;
-    border-top: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.15));
-    padding-top: 1rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 1rem !important;
+  }
+
+  /* Auth buttons styling */
+  .navbar-auth-section .navbar-link {
+    background: var(--brand-primary) !important;
+    color: white !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .navbar-auth-section .navbar-link svg {
+    stroke: white !important;
   }
 
   /* Mobile Dropdown */
@@ -803,7 +865,7 @@
     justify-content: space-between;
     padding: 0.75rem 1rem;
     border-radius: 12px;
-    color: var(--navbar-text, #ffffff) !important;
+    color: #1f2937 !important;
   }
 
   .dropdown-menu {
@@ -811,7 +873,7 @@
     width: 100%;
     margin-top: 0.75rem;
     box-shadow: none;
-    border: 1px solid var(--navbar-border, rgba(255, 255, 255, 0.1));
+    border: 1px solid rgba(0, 0, 0, 0.1);
     animation: none;
   }
 
@@ -823,6 +885,48 @@
   .navbar-scrolled .navbar-overlay {
     top: 65px;
   }
+
+  .user-name {
+    display: inline-block !important;
+  }
+}
+
+/* Dark theme mobile menu */
+[data-theme="dark"] .navbar-menu,
+[data-theme="dark"] .navbar-menu.active {
+  /* background-color: #1f2937 !important; */
+  border-radius: 0 0 20px 20px !important;
+}
+
+[data-theme="dark"] .navbar-menu .navbar-link,
+[data-theme="dark"] .navbar-menu .navbar-dropdown-trigger {
+  color: #f3f4f6 !important;
+}
+
+[data-theme="dark"] .navbar-menu .navbar-link svg {
+  stroke: #f3f4f6 !important;
+  background: transparent !important;
+}
+
+[data-theme="dark"] .navbar-menu .navbar-link.active svg {
+  stroke: var(--brand-primary) !important;
+}
+
+[data-theme="dark"] .navbar-menu .navbar-auth-section {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .navbar-menu .dropdown-menu {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .navbar-auth-section .navbar-link {
+  background: var(--brand-primary) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .navbar-auth-section .navbar-link svg {
+  stroke: white !important;
 }
 
 /* Small Mobile Styles */
@@ -836,6 +940,7 @@
   }
 
   .navbar-menu {
+    width: 100%;
     max-width: 100%;
   }
 
@@ -866,44 +971,6 @@
     opacity: 1;
     transform: translateX(0);
   }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Entrance Animations for Menu Items */
-.navbar-link {
-  animation: fadeInRight 0.5s ease backwards;
-  animation-delay: calc(var(--index, 0) * 0.05s);
-}
-
-.navbar-link:nth-child(1) {
-  --index: 1;
-}
-.navbar-link:nth-child(2) {
-  --index: 2;
-}
-.navbar-link:nth-child(3) {
-  --index: 3;
 }
 
 /* Hover Glow Effect */
@@ -988,74 +1055,8 @@ html {
   }
 }
 
-/* ========================================
-   MOBILE MENU VISIBILITY FIX - ADDITIONAL SAFEGUARD
-   ======================================== */
-
-/* Force mobile menu background to be visible on all themes */
-@media (max-width: 768px) {
-  .navbar-menu {
-    background: var(--bg-secondary, #1e1b4b) !important;
-    background-color: #1a1a2e !important;
-    border-right: 2px solid var(--brand-primary) !important;
-  }
-
-  /* Ensure all text in mobile menu is white/visible */
-  .navbar-menu .navbar-link,
-  .navbar-menu .navbar-link span,
-  .navbar-menu .user-name,
-  .navbar-menu .dropdown-chevron,
-  .navbar-menu .navbar-dropdown-trigger span {
-    color: #ffffff !important;
-  }
-
-  /* Keep active link brand color */
-  .navbar-menu .navbar-link.active,
-  .navbar-menu .navbar-link.active span {
-    color: var(--brand-primary) !important;
-  }
-
-  /* Ensure auth section border is visible */
-  .navbar-menu .navbar-auth-section {
-    border-top-color: rgba(255, 255, 255, 0.2) !important;
-  }
-
-  /* Style dropdown items for visibility */
-  .navbar-menu .dropdown-item {
-    color: #ffffff !important;
-  }
-
-  .navbar-menu .dropdown-item:hover {
-    background: rgba(67, 97, 238, 0.2) !important;
-    color: var(--brand-primary) !important;
-  }
-
-  /* Ensure icons are visible */
-  .navbar-menu svg {
-    stroke: #ffffff !important;
-  }
-
-  .navbar-menu .navbar-link.active svg {
-    stroke: var(--brand-primary) !important;
-  }
-}
-
-/* Light theme specific mobile menu */
-@media (max-width: 768px) and (prefers-color-scheme: light) {
-  .navbar-menu {
-    background: #ffffff !important;
-    background-color: #f8f9fa !important;
-  }
-
-  .navbar-menu .navbar-link,
-  .navbar-menu .navbar-link span,
-  .navbar-menu .user-name,
-  .navbar-menu .dropdown-chevron,
-  .navbar-menu .navbar-dropdown-trigger span {
-    color: #1a1a2e !important;
-  }
-
-  .navbar-menu svg {
-    stroke: #1a1a2e !important;
-  }
+/* Remove any default background from icons */
+svg,
+svg * {
+  background: transparent !important;
 }

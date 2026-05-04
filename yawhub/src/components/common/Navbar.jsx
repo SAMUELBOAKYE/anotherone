@@ -91,6 +91,65 @@ const ShieldIcon = React.memo(() => (
 ));
 ShieldIcon.displayName = "ShieldIcon";
 
+const HomeIcon = React.memo(() => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+));
+HomeIcon.displayName = "HomeIcon";
+
+const NoticeIcon = React.memo(() => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38756 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38756 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+));
+NoticeIcon.displayName = "NoticeIcon";
+
+const EventIcon = React.memo(() => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+  </svg>
+));
+EventIcon.displayName = "EventIcon";
+
+const DashboardIcon = React.memo(() => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M4 6H20M4 12H20M4 18H20"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+    <rect
+      x="4"
+      y="3"
+      width="16"
+      height="18"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="2"
+    />
+  </svg>
+));
+DashboardIcon.displayName = "DashboardIcon";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -155,7 +214,13 @@ const Navbar = () => {
       }
     };
 
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    // Prevent body scroll when menu is open
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -190,11 +255,7 @@ const Navbar = () => {
   }, [logout, navigate]);
 
   const toggleMenu = useCallback(() => {
-    setIsMenuOpen((prev) => {
-      const newState = !prev;
-      console.log("Menu toggled:", newState); // Debug log
-      return newState;
-    });
+    setIsMenuOpen((prev) => !prev);
     setIsDropdownOpen(false);
   }, []);
 
@@ -230,16 +291,16 @@ const Navbar = () => {
     return user?.role || "user";
   }, [user?.role, user?.email]);
 
-  // Navigation links
+  // Navigation links with icons for mobile
   const navigationLinks = [
-    { to: "/", label: "Home", exact: true },
-    { to: "/notices", label: "Notices" },
-    { to: "/events", label: "Events" },
+    { to: "/", label: "Home", exact: true, icon: <HomeIcon /> },
+    { to: "/notices", label: "Notices", icon: <NoticeIcon /> },
+    { to: "/events", label: "Events", icon: <EventIcon /> },
   ];
 
   const unauthenticatedLinks = [
-    { to: "/login", label: "Login" },
-    { to: "/register", label: "Register" },
+    { to: "/login", label: "Login", icon: null },
+    { to: "/register", label: "Register", icon: null },
   ];
 
   if (authLoading) {
@@ -313,7 +374,7 @@ const Navbar = () => {
               role="navigation"
               aria-label="Main links"
             >
-              {navigationLinks.map(({ to, label, exact }) => (
+              {navigationLinks.map(({ to, label, exact, icon }) => (
                 <Link
                   key={to}
                   to={to}
@@ -321,7 +382,8 @@ const Navbar = () => {
                   onClick={handleLinkClick}
                   aria-current={isActiveLink(to, exact) ? "page" : undefined}
                 >
-                  {label}
+                  {icon && <span className="navbar-link-icon">{icon}</span>}
+                  <span className="navbar-link-text">{label}</span>
                 </Link>
               ))}
             </div>
@@ -336,7 +398,8 @@ const Navbar = () => {
                     className={`navbar-link ${isActiveLink("/dashboard") ? "active" : ""}`}
                     onClick={handleLinkClick}
                   >
-                    Dashboard
+                    <DashboardIcon />
+                    <span className="navbar-link-text">Dashboard</span>
                   </Link>
 
                   {/* Notification Bell */}
@@ -480,7 +543,7 @@ const Navbar = () => {
                       onClick={handleLinkClick}
                       aria-current={isActiveLink(to) ? "page" : undefined}
                     >
-                      {label}
+                      <span className="navbar-link-text">{label}</span>
                     </Link>
                   ))}
                 </>

@@ -1,7 +1,7 @@
 /* src/components/common/ConfirmDialog.css */
 
 /* ========================================
-   VARIABLES & THEME
+   VARIABLES & THEME - Mobile First
    ======================================== */
 :root {
   /* Colors */
@@ -11,65 +11,89 @@
   --dialog-text-secondary: #475569;
   --dialog-overlay-bg: rgba(0, 0, 0, 0.6);
   --dialog-overlay-blur: 8px;
-  
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
   /* Button Variants */
   --btn-primary-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --btn-primary-hover: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   --btn-primary-active: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
   --btn-primary-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4);
-  
+
   --btn-success-bg: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
   --btn-success-hover: linear-gradient(135deg, #059669 0%, #0d9488 100%);
   --btn-success-shadow: 0 8px 20px -5px rgba(16, 185, 129, 0.4);
-  
+
   --btn-danger-bg: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%);
   --btn-danger-hover: linear-gradient(135deg, #dc2626 0%, #e11d48 100%);
   --btn-danger-shadow: 0 8px 20px -5px rgba(239, 68, 68, 0.4);
-  
+
   --btn-secondary-bg: linear-gradient(135deg, #64748b 0%, #94a3b8 100%);
   --btn-secondary-hover: linear-gradient(135deg, #475569 0%, #64748b 100%);
   --btn-outline-bg: transparent;
   --btn-outline-border: #cbd5e1;
   --btn-outline-hover-bg: rgba(99, 102, 241, 0.1);
-  
+
   /* Icon Colors */
   --icon-danger: #ef4444;
   --icon-warning: #f59e0b;
   --icon-success: #10b981;
   --icon-info: #3b82f6;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  
-  /* Transitions */
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-spring: all 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
-  
-  /* Dimensions */
-  --dialog-width: 450px;
-  --dialog-padding: 32px;
-  --dialog-radius: 24px;
-  --btn-radius: 12px;
-}
 
-[data-theme="dark"] {
-  --dialog-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  --dialog-border: rgba(51, 65, 85, 0.5);
-  --dialog-text: #f1f5f9;
-  --dialog-text-secondary: #cbd5e1;
-  --dialog-overlay-bg: rgba(0, 0, 0, 0.85);
-  
-  --btn-outline-border: #475569;
-  --btn-outline-hover-bg: rgba(99, 102, 241, 0.2);
+  /* Transitions - Performance optimized */
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Dimensions - Mobile First */
+  --dialog-width: calc(100vw - 32px);
+  --dialog-padding: 20px;
+  --dialog-radius: 20px;
+  --btn-radius: 10px;
 }
 
 /* ========================================
-   OVERLAY STYLES
+   DESKTOP SPACING OVERRIDES
+   ======================================== */
+@media (min-width: 480px) {
+  :root {
+    --dialog-width: 420px;
+    --dialog-padding: 28px;
+    --dialog-radius: 24px;
+    --btn-radius: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --dialog-width: 450px;
+    --dialog-padding: 32px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dialog-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    --dialog-border: rgba(51, 65, 85, 0.5);
+    --dialog-text: #f1f5f9;
+    --dialog-text-secondary: #cbd5e1;
+    --dialog-overlay-bg: rgba(0, 0, 0, 0.85);
+
+    --btn-outline-border: #475569;
+    --btn-outline-hover-bg: rgba(99, 102, 241, 0.2);
+  }
+}
+
+/* ========================================
+   OVERLAY STYLES - Mobile First
    ======================================== */
 .dialog-overlay {
   position: fixed;
@@ -80,11 +104,18 @@
   background: var(--dialog-overlay-bg);
   backdrop-filter: blur(var(--dialog-overlay-blur));
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   z-index: 9999;
-  animation: overlayFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 20px;
+  animation: overlayFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .dialog-overlay {
+    align-items: center;
+    padding: 20px;
+  }
 }
 
 @keyframes overlayFadeIn {
@@ -99,20 +130,29 @@
 }
 
 /* ========================================
-   DIALOG CONTAINER
+   DIALOG CONTAINER - Mobile First (Bottom Sheet)
    ======================================== */
 .dialog-container {
   position: relative;
   background: var(--dialog-bg);
   backdrop-filter: blur(10px);
-  border-radius: var(--dialog-radius);
+  border-radius: var(--dialog-radius) var(--dialog-radius) 0 0;
   width: 100%;
   max-width: var(--dialog-width);
   padding: var(--dialog-padding);
   box-shadow: var(--shadow-2xl);
   border: 1px solid var(--dialog-border);
-  animation: dialogSlideIn 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-  transform-origin: center;
+  animation: dialogSlideUp 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  transform-origin: bottom;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .dialog-container {
+    border-radius: var(--dialog-radius);
+    animation: dialogSlideIn 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+    transform-origin: center;
+  }
 }
 
 @keyframes dialogSlideIn {
@@ -126,9 +166,20 @@
   }
 }
 
+@keyframes dialogSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Close button animation for exit */
 .dialog-overlay.closing .dialog-container {
-  animation: dialogSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: dialogSlideOut 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes dialogSlideOut {
@@ -143,17 +194,17 @@
 }
 
 /* ========================================
-   CLOSE BUTTON
+   CLOSE BUTTON - Touch Optimized
    ======================================== */
 .dialog-close {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 12px;
+  right: 12px;
   background: rgba(0, 0, 0, 0.05);
   border: none;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
+  width: var(--touch-target-min);
+  height: var(--touch-target-min);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -163,61 +214,108 @@
   z-index: 10;
 }
 
-.dialog-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  transform: rotate(90deg) scale(1.05);
+@media (min-width: 768px) {
+  .dialog-close {
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+  }
 }
 
 .dialog-close:active {
-  transform: rotate(90deg) scale(0.95);
+  transform: rotate(90deg) scale(0.92);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+@media (hover: hover) {
+  .dialog-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg) scale(1.05);
+  }
 }
 
 .dialog-close svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   stroke-width: 2.5;
 }
 
+@media (min-width: 768px) {
+  .dialog-close svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 /* ========================================
-   ICON STYLES
+   ICON STYLES - Responsive
    ======================================== */
 .dialog-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  animation: iconPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  margin-bottom: 16px;
+  animation: iconPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@media (min-width: 768px) {
+  .dialog-icon {
+    margin-bottom: 20px;
+  }
 }
 
 .dialog-icon svg {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
   transition: var(--transition-smooth);
+}
+
+@media (min-width: 768px) {
+  .dialog-icon svg {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* Icon Animations - Reduced on mobile */
+@media (prefers-reduced-motion: no-preference) {
+  .dialog-icon.danger svg {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  .dialog-icon.warning svg {
+    animation: pulse 0.5s ease-in-out;
+  }
+
+  .dialog-icon.success svg {
+    animation: checkmark 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dialog-icon.info svg {
+    animation: fadeInScale 0.4s ease-out;
+  }
 }
 
 .dialog-icon.danger svg {
   color: var(--icon-danger);
   stroke: var(--icon-danger);
-  animation: shake 0.5s ease-in-out;
 }
 
 .dialog-icon.warning svg {
   color: var(--icon-warning);
   stroke: var(--icon-warning);
-  animation: pulse 0.5s ease-in-out;
 }
 
 .dialog-icon.success svg {
   color: var(--icon-success);
   stroke: var(--icon-success);
-  animation: checkmark 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .dialog-icon.info svg {
   color: var(--icon-info);
   stroke: var(--icon-info);
-  animation: fadeInScale 0.5s ease-out;
 }
 
 @keyframes iconPop {
@@ -225,8 +323,8 @@
     opacity: 0;
     transform: scale(0) rotate(-180deg);
   }
-  50% {
-    transform: scale(1.2) rotate(10deg);
+  60% {
+    transform: scale(1.15) rotate(5deg);
   }
   100% {
     opacity: 1;
@@ -235,9 +333,16 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  75% { transform: translateX(8px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 @keyframes checkmark {
@@ -245,7 +350,7 @@
     opacity: 0;
     transform: scale(0) rotate(-45deg);
   }
-  50% {
+  60% {
     transform: scale(1.2) rotate(0);
   }
   100% {
@@ -257,7 +362,7 @@
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.85);
   }
   to {
     opacity: 1;
@@ -266,93 +371,125 @@
 }
 
 /* ========================================
-   HEADER STYLES
+   HEADER STYLES - Responsive
    ======================================== */
 .dialog-header {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+  .dialog-header {
+    margin-bottom: 12px;
+  }
 }
 
 .dialog-header h3 {
-  font-size: 24px;
+  font-size: clamp(1.125rem, 5vw, 1.5rem);
   font-weight: 700;
   color: var(--dialog-text);
   margin: 0;
   letter-spacing: -0.02em;
   line-height: 1.3;
-  animation: slideInDown 0.4s ease-out 0.1s both;
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  word-break: break-word;
 }
 
 /* ========================================
-   BODY STYLES
+   BODY STYLES - Responsive
    ======================================== */
 .dialog-body {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .dialog-body {
+    margin-bottom: 28px;
+  }
 }
 
 .dialog-body p {
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: clamp(0.875rem, 4vw, 0.9375rem);
+  line-height: 1.5;
   color: var(--dialog-text-secondary);
   margin: 0;
-  animation: slideInUp 0.4s ease-out 0.2s both;
+  word-break: break-word;
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+/* Scrollable content for long messages */
+.dialog-body {
+  max-height: 40vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 4px;
+}
+
+@media (min-width: 768px) {
+  .dialog-body {
+    max-height: 50vh;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+.dialog-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+@media (min-width: 768px) {
+  .dialog-body::-webkit-scrollbar {
+    width: 6px;
   }
+}
+
+.dialog-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.dialog-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 /* ========================================
-   FOOTER BUTTONS
+   FOOTER BUTTONS - Mobile First (Stacked)
    ======================================== */
 .dialog-footer {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  animation: fadeIn 0.4s ease-out 0.3s both;
+  flex-direction: column;
+  gap: 10px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
+@media (min-width: 480px) {
+  .dialog-footer {
+    flex-direction: row;
+    gap: 12px;
   }
 }
 
-/* Base Button Styles */
+/* Base Button Styles - Touch Optimized */
 .dialog-btn {
   flex: 1;
-  padding: 12px 24px;
+  padding: 12px 16px;
+  min-height: var(--touch-target-min);
   border: none;
   border-radius: var(--btn-radius);
-  font-size: 14px;
+  font-size: clamp(0.875rem, 3.5vw, 0.9375rem);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition-smooth);
   position: relative;
   overflow: hidden;
   letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .dialog-btn {
+    padding: 12px 24px;
+  }
 }
 
 /* Confirm Button Variants */
@@ -362,22 +499,18 @@
   z-index: 1;
 }
 
-.confirm-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.2);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
+.confirm-btn:active {
+  transform: scale(0.96);
 }
 
-.confirm-btn:hover::before {
-  transform: scaleX(1);
+@media (hover: hover) {
+  .confirm-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .confirm-btn:active {
+    transform: translateY(0) scale(0.96);
+  }
 }
 
 .confirm-btn.primary {
@@ -385,10 +518,11 @@
   box-shadow: var(--btn-primary-shadow);
 }
 
-.confirm-btn.primary:hover {
-  background: var(--btn-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px -8px rgba(99, 102, 241, 0.5);
+@media (hover: hover) {
+  .confirm-btn.primary:hover {
+    background: var(--btn-primary-hover);
+    box-shadow: 0 12px 25px -8px rgba(99, 102, 241, 0.5);
+  }
 }
 
 .confirm-btn.success {
@@ -396,10 +530,11 @@
   box-shadow: var(--btn-success-shadow);
 }
 
-.confirm-btn.success:hover {
-  background: var(--btn-success-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px -8px rgba(16, 185, 129, 0.5);
+@media (hover: hover) {
+  .confirm-btn.success:hover {
+    background: var(--btn-success-hover);
+    box-shadow: 0 12px 25px -8px rgba(16, 185, 129, 0.5);
+  }
 }
 
 .confirm-btn.danger {
@@ -407,14 +542,11 @@
   box-shadow: var(--btn-danger-shadow);
 }
 
-.confirm-btn.danger:hover {
-  background: var(--btn-danger-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px -8px rgba(239, 68, 68, 0.5);
-}
-
-.confirm-btn:active {
-  transform: translateY(0) scale(0.98);
+@media (hover: hover) {
+  .confirm-btn.danger:hover {
+    background: var(--btn-danger-hover);
+    box-shadow: 0 12px 25px -8px rgba(239, 68, 68, 0.5);
+  }
 }
 
 /* Cancel Button Variants */
@@ -424,9 +556,11 @@
   box-shadow: var(--shadow-md);
 }
 
-.cancel-btn.secondary:hover {
-  background: var(--btn-secondary-hover);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .cancel-btn.secondary:hover {
+    background: var(--btn-secondary-hover);
+    transform: translateY(-2px);
+  }
 }
 
 .cancel-btn.outline {
@@ -435,14 +569,16 @@
   color: var(--dialog-text);
 }
 
-.cancel-btn.outline:hover {
-  background: var(--btn-outline-hover-bg);
-  border-color: #6366f1;
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .cancel-btn.outline:hover {
+    background: var(--btn-outline-hover-bg);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+  }
 }
 
 .cancel-btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.96);
 }
 
 /* Disabled state */
@@ -460,6 +596,8 @@
   margin-right: 8px;
   animation: spin 0.8s linear infinite;
   vertical-align: middle;
+  width: 16px;
+  height: 16px;
 }
 
 @keyframes spin {
@@ -472,152 +610,171 @@
 }
 
 /* ========================================
-   RIPPLE EFFECT
-   ======================================== */
-.dialog-btn {
-  position: relative;
-  overflow: hidden;
-}
+   iPhone Specific Optimizations
+   ============================================ */
 
-.dialog-btn .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: scale(0);
-  animation: ripple 0.6s linear;
-  pointer-events: none;
-}
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .dialog-container {
+    padding: 16px;
+  }
 
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-  :root {
-    --dialog-width: 90vw;
-    --dialog-padding: 24px;
-    --dialog-radius: 20px;
-  }
-  
-  .dialog-header h3 {
-    font-size: 20px;
-  }
-  
-  .dialog-body p {
-    font-size: 14px;
-  }
-  
-  .dialog-footer {
-    flex-direction: column;
-  }
-  
-  .dialog-btn {
-    padding: 10px 20px;
-  }
-  
   .dialog-icon svg {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .dialog-header h3 {
+    font-size: 1rem;
+  }
+
+  .dialog-body p {
+    font-size: 0.8rem;
+  }
+
+  .dialog-btn {
+    padding: 10px 14px;
+    font-size: 0.8rem;
   }
 }
 
-@media (max-width: 480px) {
-  :root {
-    --dialog-padding: 20px;
+/* iPhone 12/13/14/15 (390px) - Default mobile styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .dialog-container {
+    padding: 14px;
   }
-  
-  .dialog-close {
-    top: 16px;
-    right: 16px;
-    width: 28px;
-    height: 28px;
+
+  .dialog-icon {
+    margin-bottom: 12px;
   }
-  
-  .dialog-header h3 {
-    font-size: 18px;
+
+  .dialog-body {
+    margin-bottom: 16px;
   }
-  
-  .dialog-body p {
-    font-size: 13px;
+
+  .dialog-footer {
+    gap: 8px;
   }
 }
 
 /* ========================================
-   ACCESSIBILITY
-   ======================================== */
-.dialog-btn:focus-visible {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dialog-container {
+    max-width: 85vw;
+  }
 }
 
-.dialog-close:focus-visible {
-  outline: 2px solid #6366f1;
-  outline-offset: 2px;
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .dialog-container {
+    transition:
+      transform var(--transition-smooth),
+      box-shadow var(--transition-smooth);
+  }
 }
 
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .confirm-btn:hover,
+  .cancel-btn:hover,
+  .dialog-close:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .dialog-btn:active,
+  .dialog-close:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Disable gradient shift animation on touch */
+  .confirm-btn.primary {
+    animation: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .dialog-overlay,
   .dialog-container,
   .dialog-icon svg,
   .dialog-btn,
-  .dialog-close,
-  .dialog-header h3,
-  .dialog-body p,
-  .dialog-footer {
+  .dialog-close {
     animation: none !important;
     transition: none !important;
     transform: none !important;
   }
-  
+
   .button-spinner {
     animation: none !important;
   }
 }
 
 /* ========================================
-   FOCUS TRAP INDICATOR
-   ======================================== */
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.dialog-btn:focus-visible,
+.dialog-close:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 .dialog-container:focus-visible {
   outline: none;
 }
 
 /* ========================================
-   SCROLLBAR STYLES
-   ======================================== */
-.dialog-body {
-  max-height: 60vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding-right: 4px;
-}
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .dialog-overlay {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
 
-.dialog-body::-webkit-scrollbar {
-  width: 6px;
-}
+  .dialog-container {
+    margin-bottom: max(0px, env(safe-area-inset-bottom));
+  }
 
-.dialog-body::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.dialog-body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-.dialog-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  @media (min-width: 640px) {
+    .dialog-overlay {
+      padding: max(20px, env(safe-area-inset-top))
+        max(20px, env(safe-area-inset-right))
+        max(20px, env(safe-area-inset-bottom))
+        max(20px, env(safe-area-inset-left));
+    }
+  }
 }
 
 /* ========================================
    PRINT STYLES
-   ======================================== */
+   ============================================ */
 @media print {
   .dialog-overlay {
     position: static;
@@ -625,23 +782,27 @@
     backdrop-filter: none;
     padding: 0;
   }
-  
+
   .dialog-container {
     box-shadow: none;
     border: 1px solid #ccc;
     page-break-inside: avoid;
+    padding: 20px;
   }
-  
+
   .dialog-close,
   .dialog-footer {
     display: none;
   }
+
+  .dialog-icon svg {
+    stroke: #000;
+  }
 }
 
 /* ========================================
-   ADDITIONAL ENHANCEMENTS
-   ======================================== */
-/* Glass morphism enhancement */
+   GLASS MORPHISM ENHANCEMENT
+   ============================================ */
 .dialog-container {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -656,21 +817,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hover effects for icon */
-.dialog-icon:hover svg {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+/* Hover effects for icon (desktop only) */
+@media (hover: hover) and (min-width: 1024px) {
+  .dialog-icon:hover svg {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
 }
 
-/* Gradient border animation for primary button */
-.confirm-btn.primary {
-  position: relative;
-  background-size: 200% 200%;
-  animation: gradientShift 3s ease infinite;
+/* Gradient border animation for primary button (desktop only) */
+@media (min-width: 1024px) {
+  .confirm-btn.primary {
+    position: relative;
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+  }
 }
 
 @keyframes gradientShift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -679,10 +845,12 @@
 }
 
 /* Success checkmark animation enhancement */
-.dialog-icon.success svg path {
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  animation: drawCheck 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+@media (prefers-reduced-motion: no-preference) {
+  .dialog-icon.success svg path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: drawCheck 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
 }
 
 @keyframes drawCheck {
@@ -691,25 +859,11 @@
   }
 }
 
-/* Warning pulse animation */
-.dialog-icon.warning svg {
-  animation: warningPulse 2s infinite;
-}
-
-@keyframes warningPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.9;
-  }
-}
-
 /* Danger alert enhancement */
-.dialog-icon.danger svg circle {
-  animation: dangerRing 0.5s ease-out;
+@media (prefers-reduced-motion: no-preference) {
+  .dialog-icon.danger svg circle {
+    animation: dangerRing 0.4s ease-out;
+  }
 }
 
 @keyframes dangerRing {
@@ -723,7 +877,9 @@
 
 /* Focus trap visual indicator */
 .dialog-container:focus-within {
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), var(--shadow-2xl);
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.3),
+    var(--shadow-2xl);
 }
 
 /* Loading state enhancement */
@@ -731,7 +887,39 @@
   animation: spin 0.6s linear infinite;
 }
 
-/* Smooth height transitions */
-.dialog-container {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ========================================
+   SCROLLBAR - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ========================================
+   SELECTION STYLE
+   ============================================ */
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--dialog-text);
+}
+
+::-moz-selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--dialog-text);
 }

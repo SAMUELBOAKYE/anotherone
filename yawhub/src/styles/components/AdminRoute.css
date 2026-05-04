@@ -1,7 +1,7 @@
 /* src/styles/components/AdminRoute.css */
 
 /* ========================================
-   IMPORTS & VARIABLES
+   IMPORTS & VARIABLES - Mobile First
    ======================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
@@ -18,40 +18,26 @@
   --primary-light: #818cf8;
   --primary-dark: #4f46e5;
 
-  /* Accent Colors */
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --error-dark: #dc2626;
-  --info: #3b82f6;
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
 
-  /* Neutral Colors */
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827;
-
-  /* Spacing */
+  /* Spacing - Mobile First */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
-  --spacing-3xl: 64px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 40px;
 
   /* Border Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-3xl: 28px;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -60,12 +46,13 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
 
-  /* Transitions */
+  /* Transitions - Performance optimized */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
   /* Z-Index */
   --z-base: 1;
@@ -75,19 +62,30 @@
 }
 
 /* ========================================
-   ANIMATIONS
+   DESKTOP SPACING OVERRIDES
+   ======================================== */
+@media (min-width: 768px) {
+  :root {
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 48px;
+    --spacing-4xl: 64px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
+  }
+}
+
+/* ========================================
+   ANIMATIONS - Optimized for mobile
    ======================================== */
 
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0);
   }
-  25% {
-    transform: translateY(-10px) rotate(2deg);
-  }
-  75% {
-    transform: translateY(10px) rotate(-2deg);
+  50% {
+    transform: translateY(-8px);
   }
 }
 
@@ -97,12 +95,8 @@
     transform: scale(1) translate(0, 0);
     opacity: 0.3;
   }
-  33% {
-    transform: scale(1.05) translate(2%, -2%);
-    opacity: 0.5;
-  }
-  66% {
-    transform: scale(0.95) translate(-2%, 2%);
+  50% {
+    transform: scale(1.03) translate(1%, -1%);
     opacity: 0.4;
   }
 }
@@ -132,29 +126,18 @@
     transform: scale(1);
   }
   50% {
-    opacity: 0.5;
-    transform: scale(0.95);
+    opacity: 0.6;
+    transform: scale(0.98);
   }
 }
 
 @keyframes pulseGlow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
   }
   50% {
-    box-shadow: 0 0 0 20px rgba(99, 102, 241, 0);
-  }
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(4);
-    opacity: 0;
+    box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
   }
 }
 
@@ -170,7 +153,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -181,7 +164,7 @@
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(-15px);
   }
   to {
     opacity: 1;
@@ -192,18 +175,7 @@
 @keyframes fadeInLeft {
   from {
     opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
+    transform: translateX(-20px);
   }
   to {
     opacity: 1;
@@ -214,22 +186,11 @@
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes rotateIn {
-  from {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(0) scale(1);
   }
 }
 
@@ -238,49 +199,20 @@
   100% {
     transform: translateX(0);
   }
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-5px);
+  25% {
+    transform: translateX(-4px);
   }
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(5px);
+  75% {
+    transform: translateX(4px);
   }
 }
 
 @keyframes shimmer {
   0% {
-    background-position: -1000px 0;
+    background-position: -200% 0;
   }
   100% {
-    background-position: 1000px 0;
-  }
-}
-
-@keyframes slideInUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInDown {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+    background-position: 200% 0;
   }
 }
 
@@ -290,29 +222,17 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-15px);
+    transform: translateY(-10px);
   }
 }
 
 @keyframes glow {
   0%,
   100% {
-    text-shadow: 0 0 5px rgba(99, 102, 241, 0.5);
+    text-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
   }
   50% {
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
-  }
-}
-
-@keyframes borderFlow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
   }
 }
 
@@ -328,8 +248,19 @@
   }
 }
 
+/* Conditional animations */
+@media (prefers-reduced-motion: no-preference) {
+  .loading-content {
+    animation: fadeInUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .access-denied-card {
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
 /* ========================================
-   LOADING CONTAINER
+   LOADING CONTAINER - Mobile First
    ======================================== */
 
 .loading-container {
@@ -340,10 +271,11 @@
   background: var(--primary-gradient);
   position: relative;
   overflow: hidden;
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.3s ease;
+  padding: var(--spacing-md);
 }
 
-/* Animated Background Particles */
+/* Animated Background - Hidden on mobile for performance */
 .loading-container::before {
   content: "";
   position: absolute;
@@ -353,57 +285,17 @@
   height: 200%;
   background: radial-gradient(
     circle,
-    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.08) 0%,
     transparent 50%
   );
-  animation: floatBackground 20s ease-in-out infinite;
+  display: none;
 }
 
-.loading-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.03)" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>')
-    no-repeat bottom;
-  background-size: cover;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  border-top-color: #fff;
-  border-right-color: rgba(255, 255, 255, 0.8);
-  animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-  position: relative;
-}
-
-.loading-spinner::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.loading-spinner::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
-  border: 2px dashed rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  animation: spinReverse 3s linear infinite;
+@media (min-width: 768px) {
+  .loading-container::before {
+    display: block;
+    animation: floatBackground 20s ease-in-out infinite;
+  }
 }
 
 /* Loading Content Card */
@@ -411,46 +303,92 @@
   text-align: center;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  padding: 48px;
-  border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-2xl);
-  animation: fadeInUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
   position: relative;
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 100%;
+  max-width: 340px;
 }
 
-.loading-content::before {
+@media (min-width: 480px) {
+  .loading-content {
+    max-width: 400px;
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+  }
+}
+
+@media (min-width: 768px) {
+  .loading-content {
+    max-width: 450px;
+    padding: var(--spacing-4xl) var(--spacing-3xl);
+    border-radius: var(--radius-2xl);
+  }
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 45px;
+  height: 45px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: #fff;
+  border-right-color: rgba(255, 255, 255, 0.8);
+  animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  position: relative;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 4px;
+  }
+}
+
+.loading-spinner::before {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
-  border-radius: var(--radius-2xl);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
 }
 
-.loading-content:hover::before {
-  opacity: 1;
+@media (min-width: 768px) {
+  .loading-spinner::before {
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+  }
 }
 
 .loading-content h3 {
-  margin-top: 24px;
+  margin-top: var(--spacing-xl);
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 4vw, 1.25rem);
   font-weight: 600;
   animation: glow 2s ease-in-out infinite;
 }
 
+@media (min-width: 768px) {
+  .loading-content h3 {
+    margin-top: var(--spacing-2xl);
+  }
+}
+
 /* ========================================
-   ACCESS DENIED PAGE
+   ACCESS DENIED PAGE - Mobile First
    ======================================== */
 
 .access-denied-container {
@@ -459,12 +397,12 @@
   align-items: center;
   justify-content: center;
   background: var(--primary-gradient);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   position: relative;
   overflow: hidden;
 }
 
-/* Animated Background */
+/* Animated Background - Hidden on mobile */
 .access-denied-container::before {
   content: "";
   position: absolute;
@@ -472,148 +410,197 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background:
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(255, 255, 255, 0.05) 0%,
-      transparent 50%
-    );
-  animation: floatBackground 20s ease-in-out infinite;
+  display: none;
 }
 
-.access-denied-container::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
-  pointer-events: none;
+@media (min-width: 768px) {
+  .access-denied-container::before {
+    display: block;
+    background:
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(255, 255, 255, 0.06) 0%,
+        transparent 50%
+      );
+    animation: floatBackground 20s ease-in-out infinite;
+  }
 }
 
 /* Access Denied Card */
 .access-denied-card {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
-  border-radius: var(--radius-2xl);
-  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
   text-align: center;
-  max-width: 550px;
   width: 100%;
-  box-shadow: var(--shadow-2xl);
-  animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  max-width: 380px;
+  box-shadow: var(--shadow-xl);
   position: relative;
   z-index: 1;
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all var(--transition-base);
 }
 
-.access-denied-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+@media (min-width: 480px) {
+  .access-denied-card {
+    max-width: 450px;
+    padding: var(--spacing-2xl);
+  }
 }
 
-/* Glowing Border Effect */
-.access-denied-card::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
-  background-size: 200% 200%;
-  border-radius: var(--radius-2xl);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: gradientShift 3s ease infinite;
+@media (min-width: 768px) {
+  .access-denied-card {
+    max-width: 550px;
+    padding: var(--spacing-3xl);
+    border-radius: var(--radius-2xl);
+  }
 }
 
-.access-denied-card:hover::before {
-  opacity: 1;
+@media (hover: hover) {
+  .access-denied-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-2xl);
+  }
 }
 
-/* Access Denied Icon */
+/* Touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .access-denied-card:active {
+    transform: scale(0.98);
+    transition: transform 0.05s ease;
+  }
+}
+
+/* Glowing Border Effect - Desktop only */
+@media (min-width: 1024px) {
+  .access-denied-card::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #4facfe);
+    background-size: 200% 200%;
+    border-radius: var(--radius-2xl);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    animation: gradientShift 3s ease infinite;
+  }
+
+  .access-denied-card:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Access Denied Icon - Responsive */
 .access-denied-icon {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   margin: 0 auto var(--spacing-lg);
-  background: linear-gradient(135deg, var(--error), var(--error-dark));
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation:
-    shake 0.5s ease,
-    pulseGlow 2s ease-in-out infinite;
+  animation: pulseGlow 2s ease-in-out infinite;
   position: relative;
-  box-shadow: 0 10px 30px -5px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 8px 20px -3px rgba(239, 68, 68, 0.3);
 }
 
-.access-denied-icon::before {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  background: linear-gradient(135deg, var(--error), var(--error-dark));
-  border-radius: 50%;
-  z-index: -1;
-  opacity: 0.5;
-  animation: pulse 2s ease-in-out infinite;
+@media (min-width: 480px) {
+  .access-denied-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 768px) {
+  .access-denied-icon {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--spacing-2xl);
+  }
 }
 
 .access-denied-icon svg {
-  font-size: 64px;
+  font-size: 42px;
   color: white;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  animation: bounce 1s ease-in-out infinite;
 }
 
-/* Access Denied Title */
+@media (min-width: 480px) {
+  .access-denied-icon svg {
+    font-size: 52px;
+  }
+}
+
+@media (min-width: 768px) {
+  .access-denied-icon svg {
+    font-size: 64px;
+  }
+}
+
+/* Access Denied Title - Fluid Typography */
 .access-denied-title {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
   font-weight: 800;
-  background: linear-gradient(135deg, var(--gray-800), var(--gray-600));
+  background: linear-gradient(135deg, #1f2937, #4b5563);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: var(--spacing-md);
-  animation: fadeInUp 0.6s ease 0.2s both;
+  margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  .access-denied-title {
+    margin-bottom: var(--spacing-md);
+  }
 }
 
 /* Access Denied Message */
 .access-denied-message {
   color: var(--gray-600);
   margin-bottom: var(--spacing-lg);
-  line-height: 1.6;
-  font-size: 1rem;
-  animation: fadeInUp 0.6s ease 0.3s both;
+  line-height: 1.5;
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+}
+
+@media (min-width: 768px) {
+  .access-denied-message {
+    margin-bottom: var(--spacing-xl);
+  }
 }
 
 /* Role Info */
 .access-denied-role-info {
   background: linear-gradient(135deg, #fee2e2, #fecaca);
-  border-left: 4px solid var(--error);
-  padding: var(--spacing-md) var(--spacing-lg);
+  border-left: 3px solid #ef4444;
+  padding: var(--spacing-md);
   border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-xl);
-  font-size: 0.875rem;
+  margin-bottom: var(--spacing-lg);
+  font-size: clamp(0.7rem, 2.8vw, 0.875rem);
   color: #991b1b;
   font-weight: 500;
-  animation: fadeInLeft 0.6s ease 0.4s both;
   position: relative;
   overflow: hidden;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .access-denied-role-info {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-left-width: 4px;
+    margin-bottom: var(--spacing-xl);
+  }
 }
 
 .access-denied-role-info::before {
@@ -635,17 +622,25 @@
 /* Buttons Container */
 .access-denied-buttons {
   display: flex;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-sm);
   justify-content: center;
-  animation: fadeInUp 0.6s ease 0.5s both;
 }
 
-/* Button Styles */
+@media (min-width: 480px) {
+  .access-denied-buttons {
+    flex-direction: row;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Button Styles - Touch Friendly */
 .admin-route-button {
-  padding: 12px 28px;
+  padding: 12px 20px;
+  min-height: var(--touch-target-min);
   border-radius: var(--radius-lg);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: clamp(0.8rem, 3vw, 0.875rem);
   cursor: pointer;
   transition: all var(--transition-bounce);
   border: none;
@@ -653,45 +648,50 @@
   position: relative;
   overflow: hidden;
   letter-spacing: 0.5px;
+  width: 100%;
 }
 
-.admin-route-button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.6s,
-    height 0.6s;
+@media (min-width: 480px) {
+  .admin-route-button {
+    width: auto;
+    padding: 12px 28px;
+  }
 }
 
-.admin-route-button:hover::before {
-  width: 300px;
-  height: 300px;
+@media (min-width: 768px) {
+  .admin-route-button {
+    padding: 12px 28px;
+    font-size: 0.875rem;
+  }
 }
 
+.admin-route-button:active {
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .admin-route-button:hover:active {
+    transform: scale(0.96);
+  }
+}
+
+/* Primary Button */
 .admin-route-button-primary {
   background: var(--primary-gradient);
   background-size: 200% 200%;
   color: white;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   animation: gradientShift 3s ease infinite;
 }
 
-.admin-route-button-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+@media (hover: hover) {
+  .admin-route-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  }
 }
 
-.admin-route-button-primary:active {
-  transform: translateY(0);
-}
-
+/* Secondary Button */
 .admin-route-button-secondary {
   background: white;
   color: var(--gray-700);
@@ -700,225 +700,163 @@
   z-index: 1;
 }
 
-.admin-route-button-secondary::before {
-  background: rgba(99, 102, 241, 0.1);
-}
-
-.admin-route-button-secondary:hover {
-  border-color: var(--primary-light);
-  color: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+@media (hover: hover) {
+  .admin-route-button-secondary:hover {
+    border-color: var(--primary-light);
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
+   iPhone Specific Optimizations
+   ============================================ */
 
-/* Tablet Devices */
-@media (max-width: 768px) {
-  :root {
-    --spacing-2xl: 40px;
-    --radius-2xl: 28px;
-  }
-
-  .access-denied-card {
-    padding: var(--spacing-xl);
-    max-width: 500px;
-  }
-
-  .access-denied-title {
-    font-size: 2rem;
-  }
-
-  .access-denied-icon {
-    width: 100px;
-    height: 100px;
-  }
-
-  .access-denied-icon svg {
-    font-size: 52px;
-  }
-
-  .admin-route-button {
-    padding: 10px 24px;
-  }
-
-  .loading-content {
-    padding: 36px;
-  }
-
-  .loading-spinner {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-/* Mobile Devices */
-@media (max-width: 640px) {
-  :root {
-    --spacing-xl: 24px;
-    --spacing-2xl: 32px;
-    --radius-xl: 20px;
-    --radius-2xl: 24px;
-  }
-
-  .access-denied-card {
-    padding: var(--spacing-xl);
-  }
-
-  .access-denied-title {
-    font-size: 1.75rem;
-  }
-
-  .access-denied-icon {
-    width: 85px;
-    height: 85px;
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .access-denied-icon svg {
-    font-size: 44px;
-  }
-
-  .access-denied-message {
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .access-denied-role-info {
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    font-size: 0.75rem;
-  }
-
-  .access-denied-buttons {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-
-  .admin-route-button {
-    width: 100%;
-    padding: 12px 20px;
-  }
-
-  .loading-content {
-    padding: 28px;
-  }
-
-  .loading-content h3 {
-    font-size: 1rem;
-    margin-top: 20px;
-  }
-
-  .loading-spinner {
-    width: 45px;
-    height: 45px;
-  }
-}
-
-/* Small Mobile Devices */
-@media (max-width: 480px) {
-  .access-denied-card {
-    padding: 24px 20px;
-  }
-
-  .access-denied-title {
-    font-size: 1.5rem;
-  }
-
-  .access-denied-icon {
-    width: 70px;
-    height: 70px;
-  }
-
-  .access-denied-icon svg {
-    font-size: 36px;
-  }
-
-  .loading-content {
-    padding: 24px;
-    margin: 16px;
-  }
-}
-
-/* Landscape Mode */
-@media (max-width: 768px) and (orientation: landscape) {
-  .access-denied-container {
-    padding: var(--spacing-md);
-  }
-
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
   .access-denied-card {
     padding: var(--spacing-lg);
   }
 
   .access-denied-icon {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     margin-bottom: var(--spacing-md);
   }
 
   .access-denied-icon svg {
-    font-size: 36px;
-  }
-}
-
-/* ========================================
-   DARK MODE SUPPORT
-   ======================================== */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --gray-50: #111827;
-    --gray-100: #1f2937;
-    --gray-200: #374151;
-    --gray-300: #4b5563;
-    --gray-400: #6b7280;
-    --gray-500: #9ca3af;
-    --gray-600: #d1d5db;
-    --gray-700: #e5e7eb;
-    --gray-800: #f3f4f6;
-    --gray-900: #f9fafb;
-  }
-
-  .loading-content,
-  .access-denied-card {
-    background: rgba(17, 24, 39, 0.98);
+    font-size: 34px;
   }
 
   .access-denied-title {
-    background: linear-gradient(135deg, var(--gray-200), var(--gray-400));
-    -webkit-background-clip: text;
+    font-size: 1.3rem;
   }
 
   .access-denied-message {
-    color: var(--gray-400);
+    font-size: 0.8rem;
   }
 
-  .admin-route-button-secondary {
-    background: var(--gray-800);
-    color: var(--gray-200);
-    border-color: var(--gray-700);
+  .admin-route-button {
+    padding: 10px 16px;
+    font-size: 0.75rem;
   }
 
-  .admin-route-button-secondary:hover {
-    background: var(--gray-700);
-    color: var(--gray-100);
+  .loading-content {
+    padding: var(--spacing-xl);
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  .loading-content h3 {
+    font-size: 0.9rem;
+    margin-top: var(--spacing-lg);
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) */
+@media (min-width: 381px) and (max-width: 430px) {
+  .access-denied-icon {
+    width: 80px;
+    height: 80px;
   }
 }
 
 /* ========================================
-   ACCESSIBILITY
-   ======================================== */
+   Android Phone Optimizations
+   ============================================ */
 
-/* Focus Visible */
-.admin-route-button:focus-visible,
-.access-denied-card:focus-visible {
-  outline: 3px solid var(--primary-light);
-  outline-offset: 2px;
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .access-denied-role-info {
+    font-size: 0.65rem;
+    padding: var(--spacing-sm);
+  }
+
+  .access-denied-buttons {
+    gap: var(--space-xs);
+  }
 }
 
-/* Reduced Motion */
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .access-denied-card {
+    max-width: 500px;
+  }
+
+  .loading-content {
+    max-width: 420px;
+  }
+}
+
+/* ========================================
+   Landscape Mode
+   ============================================ */
+@media (max-width: 768px) and (orientation: landscape) {
+  .access-denied-container {
+    padding: var(--spacing-sm);
+  }
+
+  .access-denied-card {
+    padding: var(--spacing-lg);
+    max-width: 450px;
+  }
+
+  .access-denied-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .access-denied-icon svg {
+    font-size: 32px;
+  }
+
+  .access-denied-title {
+    font-size: 1.3rem;
+  }
+
+  .access-denied-message {
+    font-size: 0.8rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .access-denied-buttons {
+    flex-direction: row;
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .access-denied-card:hover,
+  .admin-route-button-primary:hover,
+  .admin-route-button-secondary:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .admin-route-button:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Increase button touch targets */
+  .admin-route-button {
+    min-height: 48px;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -926,15 +864,63 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 
   .loading-container::before,
-  .loading-container::after,
-  .access-denied-container::before,
-  .access-denied-container::after {
+  .access-denied-container::before {
     animation: none !important;
   }
+
+  .admin-route-button:active {
+    transform: none;
+  }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .loading-content,
+  .access-denied-card {
+    background: rgba(17, 24, 39, 0.98);
+  }
+
+  .access-denied-title {
+    background: linear-gradient(135deg, #f3f4f6, #9ca3af);
+    -webkit-background-clip: text;
+  }
+
+  .access-denied-message {
+    color: #9ca3af;
+  }
+
+  .admin-route-button-secondary {
+    background: #1f2937;
+    color: #e5e7eb;
+    border-color: #374151;
+  }
+
+  @media (hover: hover) {
+    .admin-route-button-secondary:hover {
+      background: #374151;
+      color: #f3f4f6;
+    }
+  }
+
+  .access-denied-role-info {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.admin-route-button:focus-visible,
+.access-denied-card:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+  border-radius: var(--radius-lg);
 }
 
 /* High Contrast Mode */
@@ -942,31 +928,51 @@
   .admin-route-button-primary {
     background: #000;
     color: #fff;
+    border: 2px solid #fff;
   }
 
   .admin-route-button-secondary {
     border: 2px solid #000;
     background: transparent;
+    color: #000;
   }
 
   .access-denied-icon {
     background: #000;
+    border: 2px solid #fff;
+  }
+
+  .loading-spinner {
+    border-color: #fff;
+    border-top-color: #000;
+  }
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .loading-container {
+    padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
+  }
+
+  .access-denied-container {
+    padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
+  }
+
+  .loading-content {
+    margin-bottom: max(0px, env(safe-area-inset-bottom));
   }
 }
 
 /* ========================================
    UTILITY CLASSES
-   ======================================== */
-
+   ============================================ */
 .text-gradient {
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-.shadow-glow {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 .animate-float {
@@ -981,41 +987,47 @@
   animation: spin 1s linear infinite;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* ========================================
+   SCROLLBAR - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      135deg,
+      var(--primary-gradient-start),
+      var(--primary-gradient-end)
+    );
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      135deg,
+      var(--primary-dark),
+      var(--primary-gradient-start)
+    );
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--gray-100);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    135deg,
-    var(--primary-gradient-start),
-    var(--primary-gradient-end)
-  );
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    135deg,
-    var(--primary-dark),
-    var(--primary-gradient-start)
-  );
-}
-
-/* Selection Style */
+/* ========================================
+   SELECTION STYLE
+   ============================================ */
 ::selection {
   background: rgba(99, 102, 241, 0.3);
-  color: var(--primary-dark);
+  color: #4f46e5;
 }
 
 ::-moz-selection {
   background: rgba(99, 102, 241, 0.3);
-  color: var(--primary-dark);
+  color: #4f46e5;
 }

@@ -1,7 +1,7 @@
 // src/pages/admin/AdminDashboardPage.jsx - Plain CSS Version
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiUsers,

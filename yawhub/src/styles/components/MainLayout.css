@@ -15,6 +15,10 @@
   --layout-footer-text: #cbd5e1;
   --layout-overlay-bg: rgba(0, 0, 0, 0.5);
 
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 48px;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -24,43 +28,40 @@
   --shadow-ios: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-ios-elevated: 0 4px 16px rgba(0, 0, 0, 0.12);
 
-  /* Transitions - Native-like */
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-spring: all 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
-  --transition-native: cubic-bezier(0.25, 0.1, 0.25, 1);
-  --transition-ios: cubic-bezier(0.33, 1, 0.68, 1);
+  /* Transitions - Performance optimized */
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-spring: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  --transition-native: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-ios: 0.2s cubic-bezier(0.33, 1, 0.68, 1);
 
-  /* Layout Dimensions - Desktop Default */
-  --sidebar-width: 280px;
+  /* Layout Dimensions - Mobile First */
+  --sidebar-width: 85%;
   --sidebar-collapsed-width: 80px;
-  --header-height: 80px;
-  --header-height-mobile: 70px;
+  --header-height: 60px;
+  --header-height-mobile: 60px;
   --footer-height: auto;
-  --footer-height-mobile: 60px;
-  --content-max-width: 1400px;
+  --footer-height-mobile: auto;
+  --content-max-width: 100%;
+  --bottom-nav-height: 0px;
 
-  /* Spacing - 8px Base Unit */
+  /* Spacing - Mobile First */
   --space-xs: 4px;
   --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-  --space-2xl: 48px;
-  --layout-padding-desktop: 24px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --layout-padding-mobile: 12px;
   --layout-padding-tablet: 20px;
-  --layout-padding-mobile: 16px;
+  --layout-padding-desktop: 24px;
 
   /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
   --radius-full: 9999px;
-
-  /* Touch Targets (Apple HIG & Material Design) */
-  --touch-target-min: 44px;
-  --touch-target-comfortable: 48px;
 
   /* Z-Index Layers */
   --z-sidebar: 100;
@@ -76,6 +77,29 @@
   --safe-area-bottom: 0px;
   --safe-area-left: 0px;
   --safe-area-right: 0px;
+}
+
+/* ============================================
+   DESKTOP VARIABLES OVERRIDES
+   ============================================ */
+@media (min-width: 768px) {
+  :root {
+    --sidebar-width: 280px;
+    --header-height: 70px;
+    --content-max-width: 1400px;
+    --bottom-nav-height: 0px;
+    --layout-padding-desktop: 24px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-height: 80px;
+    --sidebar-width: 280px;
+  }
 }
 
 /* Dark Theme */
@@ -94,9 +118,9 @@
   }
 }
 
-/* ========================================
+/* ============================================
    GLOBAL RESET & BASE STYLES
-   ======================================== */
+   ============================================ */
 * {
   margin: 0;
   padding: 0;
@@ -121,16 +145,21 @@ body {
   overflow-x: hidden;
 }
 
-/* ========================================
-   MAIN LAYOUT CONTAINER
-   ======================================== */
+/* ============================================
+   MAIN LAYOUT CONTAINER - Mobile First
+   ============================================ */
 .main-layout {
   min-height: 100vh;
   background: var(--layout-bg);
   color: var(--layout-text);
   position: relative;
   overflow-x: hidden;
-  animation: fadeIn 0.5s var(--transition-native);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main-layout {
+    animation: fadeIn 0.3s var(--transition-native);
+  }
 }
 
 @keyframes fadeIn {
@@ -142,9 +171,9 @@ body {
   }
 }
 
-/* ========================================
+/* ============================================
    SKIP TO CONTENT LINK (Accessibility)
-   ======================================== */
+   ============================================ */
 .skip-to-content {
   position: fixed;
   top: -40px;
@@ -152,11 +181,12 @@ body {
   background: var(--layout-text);
   color: white;
   padding: var(--space-sm) var(--space-md);
+  min-height: var(--touch-target-min);
   z-index: var(--z-skip-link);
   text-decoration: none;
   border-radius: 0 0 var(--radius-md) 0;
   transition: top 0.2s var(--transition-native);
-  font-size: 14px;
+  font-size: clamp(0.8rem, 3vw, 0.875rem);
   font-weight: 500;
 }
 
@@ -166,9 +196,9 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-/* ========================================
+/* ============================================
    LOADING OVERLAY
-   ======================================== */
+   ============================================ */
 .page-loading-overlay {
   position: fixed;
   top: 0;
@@ -176,12 +206,18 @@ body {
   right: 0;
   bottom: 0;
   background: var(--layout-overlay-bg);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
   z-index: var(--z-loading);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: overlayFadeIn 0.3s var(--transition-native);
+  animation: overlayFadeIn 0.2s var(--transition-native);
+}
+
+@media (min-width: 768px) {
+  .page-loading-overlay {
+    backdrop-filter: blur(8px);
+  }
 }
 
 @keyframes overlayFadeIn {
@@ -191,13 +227,13 @@ body {
   }
   to {
     opacity: 1;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
   }
 }
 
-/* ========================================
+/* ============================================
    PULL TO REFRESH INDICATOR
-   ======================================== */
+   ============================================ */
 .pull-to-refresh-indicator {
   position: fixed;
   top: 0;
@@ -206,22 +242,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   padding: var(--space-md);
   background: var(--layout-header-bg);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
   z-index: var(--z-loading);
   transition: transform 0.2s var(--transition-native);
 }
 
 .pull-to-refresh-spinner {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--layout-text-muted);
   border-top-color: var(--layout-text);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
+}
+
+@media (min-width: 768px) {
+  .pull-to-refresh-spinner {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @keyframes spin {
@@ -231,13 +274,13 @@ body {
 }
 
 .pull-to-refresh-text {
-  font-size: 14px;
+  font-size: clamp(0.75rem, 3vw, 0.875rem);
   color: var(--layout-text);
 }
 
-/* ========================================
+/* ============================================
    LAYOUT CONTAINER
-   ======================================== */
+   ============================================ */
 .layout-container {
   display: flex;
   min-height: 100vh;
@@ -248,9 +291,9 @@ body {
   display: flex;
 }
 
-/* ========================================
+/* ============================================
    SIDEBAR SECTION (Desktop)
-   ======================================== */
+   ============================================ */
 .layout-sidebar {
   position: fixed;
   top: 0;
@@ -265,33 +308,42 @@ body {
   transform: translateX(0);
   overflow-y: auto;
   scrollbar-width: thin;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .layout-sidebar {
+    display: block;
+  }
 }
 
 .layout-container.sidebar-collapsed .layout-sidebar {
   width: var(--sidebar-collapsed-width);
 }
 
-/* Sidebar Scrollbar */
-.layout-sidebar::-webkit-scrollbar {
-  width: 6px;
+/* Sidebar Scrollbar - Desktop only */
+@media (min-width: 768px) {
+  .layout-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .layout-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .layout-sidebar::-webkit-scrollbar-thumb {
+    background: var(--layout-border);
+    border-radius: var(--radius-full);
+  }
+
+  .layout-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--layout-text-muted);
+  }
 }
 
-.layout-sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.layout-sidebar::-webkit-scrollbar-thumb {
-  background: var(--layout-border);
-  border-radius: var(--radius-full);
-}
-
-.layout-sidebar::-webkit-scrollbar-thumb:hover {
-  background: var(--layout-text-muted);
-}
-
-/* ========================================
+/* ============================================
    MOBILE SIDEBAR DRAWER
-   ======================================== */
+   ============================================ */
 .mobile-sidebar-overlay {
   position: fixed;
   top: 0;
@@ -303,7 +355,7 @@ body {
   z-index: calc(var(--z-sidebar) - 1);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s var(--transition-native);
+  transition: all 0.2s var(--transition-native);
 }
 
 .mobile-sidebar-overlay.open {
@@ -317,14 +369,20 @@ body {
   left: 0;
   bottom: 0;
   width: 85%;
-  max-width: 320px;
+  max-width: 300px;
   background: var(--layout-sidebar-bg);
   box-shadow: var(--shadow-2xl);
   transform: translateX(-100%);
-  transition: transform 0.3s var(--transition-spring);
+  transition: transform 0.25s var(--transition-spring);
   z-index: var(--z-sidebar);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 480px) {
+  .mobile-sidebar-drawer {
+    max-width: 320px;
+  }
 }
 
 .mobile-sidebar-drawer.open {
@@ -332,33 +390,36 @@ body {
 }
 
 .mobile-sidebar-drawer::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
-/* ========================================
+/* ============================================
    MAIN CONTENT SECTION
-   ======================================== */
+   ============================================ */
 .layout-main {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: margin-left 0.3s var(--transition-smooth);
+  transition: margin-left 0.25s var(--transition-smooth);
+  width: 100%;
 }
 
-.layout-container.has-sidebar .layout-main {
-  margin-left: var(--sidebar-width);
-  width: calc(100% - var(--sidebar-width));
+@media (min-width: 768px) {
+  .layout-container.has-sidebar .layout-main {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+  }
+
+  .layout-container.sidebar-collapsed.has-sidebar .layout-main {
+    margin-left: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
+  }
 }
 
-.layout-container.sidebar-collapsed.has-sidebar .layout-main {
-  margin-left: var(--sidebar-collapsed-width);
-  width: calc(100% - var(--sidebar-collapsed-width));
-}
-
-/* ========================================
+/* ============================================
    HEADER SECTION
-   ======================================== */
+   ============================================ */
 .layout-header {
   position: sticky;
   top: 0;
@@ -367,14 +428,16 @@ body {
   border-bottom: 1px solid var(--layout-border);
   box-shadow: var(--shadow-sm);
   z-index: var(--z-header);
-  animation: slideInDown 0.4s var(--transition-native);
   transform: translateZ(0);
   will-change: transform;
+  width: 100%;
 }
 
-.layout-header.scrolled {
-  box-shadow: var(--shadow-md);
-  border-bottom-color: transparent;
+@media (min-width: 768px) {
+  .layout-header.scrolled {
+    box-shadow: var(--shadow-md);
+    border-bottom-color: transparent;
+  }
 }
 
 @keyframes slideInDown {
@@ -388,15 +451,28 @@ body {
   }
 }
 
-/* ========================================
-   MAIN CONTENT AREA
-   ======================================== */
+/* ============================================
+   MAIN CONTENT AREA - Mobile Optimized
+   ============================================ */
 .layout-content {
   flex: 1;
-  padding: var(--layout-padding-desktop);
-  animation: fadeInUp 0.5s var(--transition-native);
+  padding: var(--layout-padding-mobile);
   position: relative;
   -webkit-overflow-scrolling: touch;
+  margin-top: 0;
+}
+
+@media (min-width: 640px) {
+  .layout-content {
+    padding: var(--layout-padding-tablet);
+  }
+}
+
+@media (min-width: 768px) {
+  .layout-content {
+    padding: var(--layout-padding-desktop);
+    margin-top: 0;
+  }
 }
 
 .layout-content.no-padding {
@@ -411,7 +487,7 @@ body {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -422,8 +498,7 @@ body {
 .content-container {
   margin: 0 auto;
   width: 100%;
-  transition: all 0.3s var(--transition-smooth);
-  animation: contentFadeIn 0.6s var(--transition-native);
+  transition: all 0.25s var(--transition-smooth);
 }
 
 @keyframes contentFadeIn {
@@ -437,20 +512,20 @@ body {
   }
 }
 
-/* ========================================
+/* ============================================
    FOOTER SECTION
-   ======================================== */
+   ============================================ */
 .layout-footer {
   background: var(--layout-footer-bg);
   color: var(--layout-footer-text);
   border-top: 1px solid var(--layout-border);
   margin-top: auto;
-  animation: fadeIn 0.5s var(--transition-native) 0.2s backwards;
+  width: 100%;
 }
 
-/* ========================================
+/* ============================================
    MOBILE BOTTOM NAVIGATION
-   ======================================== */
+   ============================================ */
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
@@ -461,104 +536,103 @@ body {
   border-top: 0.5px solid var(--layout-border);
   z-index: var(--z-bottom-nav);
   padding-bottom: var(--safe-area-bottom);
-  transition: transform 0.3s var(--transition-native);
+  transition: transform 0.25s var(--transition-native);
+  display: none;
 }
 
-/* ========================================
-   RESPONSIVE BREAKPOINTS
-   ======================================== */
-
-/* Tablet Styles (768px - 1024px) */
-@media (max-width: 1024px) {
-  :root {
-    --sidebar-width: 260px;
-    --header-height: 70px;
-    --layout-padding-desktop: var(--layout-padding-tablet);
-  }
-
-  .layout-container.has-sidebar .layout-main {
-    margin-left: var(--sidebar-width);
+@media (max-width: 767px) {
+  .mobile-bottom-nav {
+    display: block;
   }
 }
 
-/* Mobile Styles (320px - 768px) */
-@media (max-width: 768px) {
-  :root {
-    --header-height: var(--header-height-mobile);
-    --footer-height: var(--footer-height-mobile);
-    --layout-padding-desktop: var(--layout-padding-mobile);
-  }
+/* ============================================
+   iPhone Specific Optimizations
+   ============================================ */
 
-  /* Hide desktop sidebar on mobile */
-  .layout-sidebar {
-    display: none;
-  }
-
-  /* Adjust main content for mobile */
-  .layout-container.has-sidebar .layout-main {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  /* Mobile header optimizations */
-  .layout-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-  }
-
-  /* Mobile content padding */
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
   .layout-content {
-    padding: var(--layout-padding-mobile);
-    margin-top: var(--header-height-mobile);
-    margin-bottom: var(--footer-height-mobile);
-  }
-
-  .content-container {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  /* Prevent body scroll when sidebar is open */
-  body.menu-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-  }
-}
-
-/* Small Mobile Styles (320px - 480px) */
-@media (max-width: 480px) {
-  :root {
-    --layout-padding-mobile: 12px;
-    --space-lg: 20px;
-    --space-md: 12px;
-  }
-
-  .layout-content {
-    padding: var(--layout-padding-mobile);
+    padding: 8px;
   }
 
   .mobile-sidebar-drawer {
-    width: 85%;
+    width: 90%;
     max-width: 280px;
+  }
+
+  .content-container {
+    font-size: 0.875rem;
+  }
+
+  .skip-to-content {
+    font-size: 0.75rem;
+    padding: 6px 12px;
   }
 }
 
-/* Extra Small Devices (iPhone SE, 5, 5S) */
-@media (max-width: 374px) {
+/* iPhone X, XS, 11 Pro, 12, 13, 14 (375x812) */
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .layout-header {
+    padding-top: 44px;
+  }
+}
+
+/* iPhone 12 Pro Max, 13 Pro Max, 14 Plus, 15 Plus (428x926) */
+@media only screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+  .layout-header {
+    padding-top: 47px;
+  }
+}
+
+/* iPhone 15 Pro (393x852) */
+@media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
+  .layout-header {
+    padding-top: 59px;
+  }
+}
+
+/* ============================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .layout-content {
+    padding: 8px;
+  }
+
   .mobile-sidebar-drawer {
     width: 90%;
   }
+}
 
-  .content-container {
-    font-size: 14px;
+/* ============================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .layout-sidebar {
+    width: 260px;
+  }
+
+  .layout-container.sidebar-collapsed .layout-sidebar {
+    width: 70px;
+  }
+
+  .layout-container.has-sidebar .layout-main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
+
+  .layout-container.sidebar-collapsed.has-sidebar .layout-main {
+    margin-left: 70px;
+    width: calc(100% - 70px);
   }
 }
 
-/* ========================================
+/* ============================================
    LANDSCAPE MODE OPTIMIZATIONS
-   ======================================== */
+   ============================================ */
 @media (orientation: landscape) and (max-height: 500px) {
   .layout-header {
     position: relative;
@@ -577,23 +651,9 @@ body {
   }
 }
 
-/* ========================================
-   FOLDABLE & TABLET DEVICES
-   ======================================== */
-@media (min-width: 600px) and (max-width: 800px) and (orientation: landscape) {
-  .layout-sidebar {
-    position: static;
-    height: auto;
-  }
-
-  .mobile-menu-btn {
-    display: flex;
-  }
-}
-
-/* ========================================
+/* ============================================
    SAFE AREA SUPPORT (Notch & Dynamic Island)
-   ======================================== */
+   ============================================ */
 @supports (padding-top: env(safe-area-inset-top)) {
   .layout-header {
     padding-top: env(safe-area-inset-top);
@@ -608,35 +668,18 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .layout-header {
-    padding-top: env(safe-area-inset-top);
+  .skip-to-content {
+    top: env(safe-area-inset-top);
+  }
+
+  .skip-to-content:focus {
+    top: calc(env(safe-area-inset-top) + 40px);
   }
 }
 
-/* iPhone X, XS, 11 Pro, 12, 13, 14 (375x812) */
-@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-  .layout-header {
-    padding-top: 44px;
-  }
-}
-
-/* iPhone 12 Pro Max, 13 Pro Max, 14 Plus, 15 Plus (428x926) */
-@media only screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
-  .layout-header {
-    padding-top: 47px;
-  }
-}
-
-/* iPhone 15 Pro, 16, 17 (393x852) */
-@media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
-  .layout-header {
-    padding-top: 59px;
-  }
-}
-
-/* ========================================
-   TOUCH & GESTURE OPTIMIZATIONS
-   ======================================== */
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
 @media (hover: none) and (pointer: coarse) {
   /* Increase touch targets */
   button,
@@ -657,7 +700,7 @@ body {
 
   /* Active state for touch feedback */
   .touch-feedback:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
     opacity: 0.8;
     transition: all 0.05s ease;
   }
@@ -670,15 +713,17 @@ body {
   }
 }
 
-/* ========================================
-   SCROLL TO TOP BUTTON
-   ======================================== */
+/* ============================================
+   SCROLL TO TOP BUTTON - Touch Friendly
+   ============================================ */
 .scroll-to-top {
   position: fixed;
-  bottom: var(--space-xl);
-  right: var(--space-xl);
-  width: 48px;
-  height: 48px;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 44px;
+  height: 44px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   border: none;
   border-radius: 50%;
@@ -688,11 +733,20 @@ body {
   justify-content: center;
   color: white;
   box-shadow: var(--shadow-lg);
-  transition: all 0.3s var(--transition-bounce);
+  transition: all 0.2s var(--transition-bounce);
   z-index: 90;
   opacity: 0;
   visibility: hidden;
   transform: scale(0);
+}
+
+@media (min-width: 768px) {
+  .scroll-to-top {
+    bottom: var(--space-xl);
+    right: var(--space-xl);
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .scroll-to-top.visible {
@@ -701,28 +755,20 @@ body {
   transform: scale(1);
 }
 
-.scroll-to-top:hover {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-xl);
-}
-
 .scroll-to-top:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
-@media (max-width: 768px) {
-  .scroll-to-top {
-    bottom: var(--space-lg);
-    right: var(--space-lg);
-    width: 44px;
-    height: 44px;
+@media (hover: hover) {
+  .scroll-to-top:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
   }
 }
 
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-/* Reduced Motion Preference */
+/* ============================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -742,18 +788,27 @@ body {
     transition: none !important;
     transform: none !important;
   }
+
+  .scroll-to-top:active {
+    transform: none;
+  }
 }
 
-/* Focus visible for keyboard navigation */
+/* ============================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
 button:focus-visible,
 a:focus-visible,
-[role="button"]:focus-visible {
+[role="button"]:focus-visible,
+.skip-to-content:focus-visible {
   outline: 2px solid #6366f1;
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
-/* High Contrast Mode Support */
+/* ============================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================ */
 @media (prefers-contrast: high) {
   .layout-sidebar,
   .layout-header,
@@ -768,7 +823,9 @@ a:focus-visible,
   }
 }
 
-/* Reduced Transparency Preference */
+/* ============================================
+   REDUCED TRANSPARENCY PREFERENCE
+   ============================================ */
 @media (prefers-reduced-transparency: reduce) {
   .layout-header,
   .mobile-bottom-nav,
@@ -779,27 +836,9 @@ a:focus-visible,
   }
 }
 
-/* ========================================
-   DARK MODE ENHANCEMENTS
-   ======================================== */
-@media (prefers-color-scheme: dark) {
-  .layout-header,
-  .mobile-bottom-nav {
-    backdrop-filter: blur(12px);
-  }
-
-  .page-loading-overlay {
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  .scroll-to-top {
-    box-shadow: var(--shadow-lg);
-  }
-}
-
-/* ========================================
+/* ============================================
    PRINT STYLES
-   ======================================== */
+   ============================================ */
 @media print {
   .layout-sidebar,
   .layout-header,
@@ -834,9 +873,9 @@ a:focus-visible,
   }
 }
 
-/* ========================================
+/* ============================================
    PERFORMANCE OPTIMIZATIONS
-   ======================================== */
+   ============================================ */
 /* GPU Acceleration for smoother animations */
 .gpu-accelerated {
   transform: translateZ(0);
@@ -857,9 +896,9 @@ a:focus-visible,
   will-change: transform;
 }
 
-/* ========================================
+/* ============================================
    UTILITY CLASSES
-   ======================================== */
+   ============================================ */
 /* Page Transition Wrapper */
 .page-transition-wrapper {
   position: relative;
@@ -904,18 +943,37 @@ a:focus-visible,
 }
 
 .empty-state svg {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   margin-bottom: var(--space-lg);
   opacity: 0.5;
+}
+
+@media (min-width: 768px) {
+  .empty-state svg {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 /* Responsive Grid System */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: var(--space-lg);
   margin-top: var(--space-lg);
+}
+
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
 }
 
 /* Responsive Card Component */
@@ -928,9 +986,19 @@ a:focus-visible,
   transition: var(--transition-smooth);
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+@media (hover: hover) and (min-width: 768px) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* Touch feedback for cards */
+@media (hover: none) and (pointer: coarse) {
+  .card:active {
+    transform: scale(0.98);
+    transition: transform 0.05s ease;
+  }
 }
 
 /* Notification Badge */
@@ -947,7 +1015,12 @@ a:focus-visible,
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulse 2s infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .notification-badge {
+    animation: pulse 2s infinite;
+  }
 }
 
 @keyframes pulse {
@@ -968,8 +1041,13 @@ a:focus-visible,
   height: auto;
 }
 
-/* Custom Selection Color */
+/* Selection Color */
 ::selection {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--layout-text);
+}
+
+::-moz-selection {
   background: rgba(99, 102, 241, 0.2);
   color: var(--layout-text);
 }

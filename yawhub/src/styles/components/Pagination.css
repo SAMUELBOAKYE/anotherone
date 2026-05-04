@@ -1,7 +1,7 @@
 /* src/components/common/Pagination.css */
 
 /* ========================================
-   VARIABLES & THEME
+   VARIABLES & THEME - Mobile First
    ======================================== */
 :root {
   /* Colors */
@@ -16,65 +16,104 @@
   --pagination-disabled-bg: #f8fafc;
   --pagination-disabled-text: #cbd5e1;
   --pagination-focus-ring: rgba(99, 102, 241, 0.4);
-  
-  /* Sizes */
-  --pagination-btn-height-sm: 32px;
-  --pagination-btn-padding-sm: 0 12px;
-  --pagination-font-sm: 13px;
-  --pagination-gap-sm: 6px;
-  
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
+  /* Sizes - Mobile First */
+  --pagination-btn-height-sm: 36px;
+  --pagination-btn-padding-sm: 0 10px;
+  --pagination-font-sm: 12px;
+  --pagination-gap-sm: 4px;
+
   --pagination-btn-height-md: 40px;
-  --pagination-btn-padding-md: 0 16px;
-  --pagination-font-md: 14px;
-  --pagination-gap-md: 8px;
-  
+  --pagination-btn-padding-md: 0 12px;
+  --pagination-font-md: 13px;
+  --pagination-gap-md: 6px;
+
   --pagination-btn-height-lg: 48px;
-  --pagination-btn-padding-lg: 0 20px;
-  --pagination-font-lg: 16px;
-  --pagination-gap-lg: 10px;
-  
+  --pagination-btn-padding-lg: 0 14px;
+  --pagination-font-lg: 14px;
+  --pagination-gap-lg: 8px;
+
   /* Transitions */
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-spring: all 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
-  
+  --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  
-  /* Border Radius */
-  --pagination-radius: 10px;
-}
 
-[data-theme="dark"] {
-  --pagination-bg: #1e293b;
-  --pagination-text: #f1f5f9;
-  --pagination-text-muted: #94a3b8;
-  --pagination-border: #334155;
-  --pagination-hover-bg: #334155;
-  --pagination-disabled-bg: #0f172a;
-  --pagination-disabled-text: #475569;
+  /* Border Radius */
+  --pagination-radius: 8px;
 }
 
 /* ========================================
-   WRAPPER STYLES
+   DESKTOP VARIABLES OVERRIDES
+   ======================================== */
+@media (min-width: 768px) {
+  :root {
+    --pagination-btn-height-sm: 32px;
+    --pagination-btn-padding-sm: 0 12px;
+    --pagination-font-sm: 13px;
+    --pagination-gap-sm: 6px;
+
+    --pagination-btn-height-md: 40px;
+    --pagination-btn-padding-md: 0 16px;
+    --pagination-font-md: 14px;
+    --pagination-gap-md: 8px;
+
+    --pagination-btn-height-lg: 48px;
+    --pagination-btn-padding-lg: 0 20px;
+    --pagination-font-lg: 16px;
+    --pagination-gap-lg: 10px;
+
+    --pagination-radius: 10px;
+  }
+}
+
+/* Dark Theme */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pagination-bg: #1e293b;
+    --pagination-text: #f1f5f9;
+    --pagination-text-muted: #94a3b8;
+    --pagination-border: #334155;
+    --pagination-hover-bg: #334155;
+    --pagination-disabled-bg: #0f172a;
+    --pagination-disabled-text: #475569;
+  }
+}
+
+/* ========================================
+   WRAPPER STYLES - Mobile First
    ======================================== */
 .pagination-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 20px;
-  padding: 16px 0;
-  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 0;
+  animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 640px) {
+  .pagination-wrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 16px 0;
+  }
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -82,53 +121,68 @@
   }
 }
 
+/* Conditional animation */
+@media (prefers-reduced-motion: reduce) {
+  .pagination-wrapper {
+    animation: none;
+  }
+}
+
 /* ========================================
-   INFO SECTION
+   INFO SECTION - Responsive
    ======================================== */
 .pagination-info {
-  font-size: 14px;
+  font-size: clamp(0.75rem, 3.5vw, 0.875rem);
   color: var(--pagination-text-muted);
   background: var(--pagination-bg);
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: var(--pagination-radius);
   border: 1px solid var(--pagination-border);
-  animation: slideInLeft 0.4s ease-out;
+  text-align: center;
+  word-break: break-word;
+}
+
+@media (min-width: 640px) {
+  .pagination-info {
+    text-align: left;
+    padding: 8px 16px;
+  }
 }
 
 .pagination-info strong {
-  color: var(--pagination-active-bg);
+  color: var(--pagination-text);
   font-weight: 700;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: var(--pagination-active-bg);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* ========================================
-   MAIN PAGINATION CONTAINER
+   MAIN PAGINATION CONTAINER - Mobile Optimized
    ======================================== */
 .pagination {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--pagination-gap-md);
   flex-wrap: wrap;
-  background: var(--pagination-bg);
-  padding: 4px;
-  border-radius: calc(var(--pagination-radius) + 4px);
+  background: transparent;
+  padding: 0;
+  width: 100%;
 }
 
-/* Size Variants */
+@media (min-width: 640px) {
+  .pagination {
+    justify-content: flex-start;
+    width: auto;
+    background: var(--pagination-bg);
+    padding: 4px;
+    border-radius: calc(var(--pagination-radius) + 4px);
+  }
+}
+
+/* Size Variants - Mobile Responsive */
 .pagination-small {
   gap: var(--pagination-gap-sm);
 }
@@ -137,6 +191,7 @@
   height: var(--pagination-btn-height-sm);
   padding: var(--pagination-btn-padding-sm);
   font-size: var(--pagination-font-sm);
+  min-width: var(--pagination-btn-height-sm);
 }
 
 .pagination-large {
@@ -147,6 +202,7 @@
   height: var(--pagination-btn-height-lg);
   padding: var(--pagination-btn-padding-lg);
   font-size: var(--pagination-font-lg);
+  min-width: var(--pagination-btn-height-lg);
 }
 
 /* Variant Styles */
@@ -176,13 +232,14 @@
 }
 
 /* ========================================
-   BUTTON STYLES
+   BUTTON STYLES - Touch Optimized
    ======================================== */
 .pagination-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
+  min-width: var(--touch-target-min);
   height: var(--pagination-btn-height-md);
   padding: var(--pagination-btn-padding-md);
   font-size: var(--pagination-font-md);
@@ -196,18 +253,34 @@
   position: relative;
   overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* Hover Effects */
-.pagination-btn:hover:not(:disabled) {
-  background: var(--pagination-hover-bg);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  border-color: #cbd5e1;
+@media (min-width: 768px) {
+  .pagination-btn {
+    min-width: auto;
+    gap: 6px;
+  }
 }
 
+/* Touch feedback - Active state */
 .pagination-btn:active:not(:disabled) {
-  transform: translateY(0) scale(0.96);
+  transform: scale(0.96);
+  transition: transform 0.05s ease;
+}
+
+/* Hover Effects - Desktop only */
+@media (hover: hover) {
+  .pagination-btn:hover:not(:disabled) {
+    background: var(--pagination-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: #cbd5e1;
+  }
+
+  .pagination-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.96);
+  }
 }
 
 /* Active Page */
@@ -216,7 +289,13 @@
   color: var(--pagination-active-text);
   border-color: transparent;
   box-shadow: var(--pagination-active-shadow);
-  animation: pulse 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pagination-btn.active {
+    animation: pulse 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
 }
 
 @keyframes pulse {
@@ -240,15 +319,16 @@
   color: var(--pagination-disabled-text);
 }
 
-/* Focus State */
+/* Focus State for Accessibility */
 .pagination-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--pagination-focus-ring);
   z-index: 1;
+  border-radius: var(--pagination-radius);
 }
 
 /* ========================================
-   NAVIGATION BUTTONS
+   NAVIGATION BUTTONS - Mobile Optimized
    ======================================== */
 .pagination-first,
 .pagination-last,
@@ -262,63 +342,110 @@
 .pagination-prev svg,
 .pagination-next svg {
   transition: var(--transition-smooth);
+  width: 14px;
+  height: 14px;
 }
 
-.pagination-prev:hover:not(:disabled) svg,
-.pagination-first:hover:not(:disabled) svg {
-  transform: translateX(-3px);
+@media (min-width: 768px) {
+  .pagination-first svg,
+  .pagination-last svg,
+  .pagination-prev svg,
+  .pagination-next svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
-.pagination-next:hover:not(:disabled) svg,
-.pagination-last:hover:not(:disabled) svg {
-  transform: translateX(3px);
-}
-
-/* Button Text */
+/* Hide button text on small screens, show only icons */
 .pagination-btn-text {
-  margin: 0 4px;
+  margin: 0 2px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .pagination-btn-text {
     display: none;
   }
-  
+
+  .pagination-first .pagination-btn-text,
+  .pagination-last .pagination-btn-text {
+    display: none;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .pagination-prev .pagination-btn-text,
+  .pagination-next .pagination-btn-text {
+    display: none;
+  }
+
   .pagination-first .pagination-btn-text,
   .pagination-last .pagination-btn-text {
     display: inline-block;
   }
 }
 
+/* Hover animations - Desktop only */
+@media (hover: hover) {
+  .pagination-prev:hover:not(:disabled) svg,
+  .pagination-first:hover:not(:disabled) svg {
+    transform: translateX(-3px);
+  }
+
+  .pagination-next:hover:not(:disabled) svg,
+  .pagination-last:hover:not(:disabled) svg {
+    transform: translateX(3px);
+  }
+}
+
 /* ========================================
-   PAGE NUMBERS CONTAINER
+   PAGE NUMBERS CONTAINER - Responsive
    ======================================== */
 .pagination-pages {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: inherit;
   flex-wrap: wrap;
+  order: 0;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .pagination-pages {
+    width: auto;
+    order: 0;
+  }
 }
 
 /* Ellipsis styling */
-.pagination-btn:disabled {
+.pagination-btn:disabled:not(.pagination-page) {
   background: transparent;
   border-color: transparent;
   color: var(--pagination-text-muted);
   cursor: default;
+  opacity: 0.6;
 }
 
 /* ========================================
-   STATS SECTION
+   STATS SECTION - Responsive
    ======================================== */
 .pagination-stats {
-  font-size: 13px;
+  font-size: clamp(0.7rem, 3.5vw, 0.813rem);
   color: var(--pagination-text-muted);
   background: var(--pagination-bg);
   padding: 6px 12px;
   border-radius: var(--pagination-radius);
   border: 1px solid var(--pagination-border);
-  animation: slideInRight 0.4s ease-out;
+  text-align: center;
+  order: 2;
+}
+
+@media (min-width: 640px) {
+  .pagination-stats {
+    text-align: right;
+    padding: 6px 12px;
+    order: 0;
+  }
 }
 
 .pagination-stats strong {
@@ -326,48 +453,256 @@
   font-weight: 700;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
+/* ========================================
+   Responsive Layout Order for Mobile
+   ======================================== */
+@media (max-width: 480px) {
+  .pagination-pages {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+
+  .pagination-prev,
+  .pagination-next {
+    flex: 1;
+  }
+
+  .pagination-first,
+  .pagination-last {
+    display: none;
   }
 }
 
 /* ========================================
-   LOADING STATES
-   ======================================== */
-.pagination-loading {
-  position: relative;
-  pointer-events: none;
-}
+   iPhone Specific Optimizations
+   ============================================ */
 
-.pagination-loading::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(2px);
-  border-radius: var(--pagination-radius);
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .pagination-wrapper {
+    gap: 10px;
+    padding: 8px 0;
   }
-  to {
+
+  .pagination-btn {
+    min-width: 40px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .pagination-pages {
+    gap: 4px;
+  }
+
+  .pagination-info,
+  .pagination-stats {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) - Default mobile styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .pagination-pages {
+    gap: 3px;
+  }
+
+  .pagination-btn {
+    min-width: 36px;
+    height: 34px;
+    font-size: 11px;
+  }
+
+  .pagination-info {
+    font-size: 10px;
+  }
+}
+
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pagination-wrapper {
+    gap: 14px;
+  }
+
+  .pagination-pages {
+    gap: 6px;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .pagination-wrapper {
+    transition: transform var(--transition-smooth);
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .pagination-btn:hover:not(:disabled) {
+    transform: none;
+    background: var(--pagination-bg);
+  }
+
+  /* Ensure active states provide feedback */
+  .pagination-btn:active:not(:disabled) {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Disable gradient border effect on touch */
+  .pagination-btn::before {
+    display: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .pagination-btn,
+  .pagination-btn svg,
+  .pagination-info,
+  .pagination-stats,
+  .pagination-wrapper {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .pagination-btn.active {
+    animation: none;
+  }
+
+  .pagination-btn:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.pagination-btn:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: var(--pagination-radius);
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .pagination-wrapper {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .pagination-wrapper {
+    margin-top: 20px;
+    break-inside: avoid;
+  }
+
+  .pagination-btn {
+    border: 1px solid #ccc;
+    background: none;
+    color: #000;
+  }
+
+  .pagination-btn.active {
+    background: #f0f0f0;
+    font-weight: bold;
+    border: 2px solid #000;
+  }
+
+  .pagination-btn:disabled {
+    opacity: 1;
+    color: #999;
+  }
+
+  .pagination-prev,
+  .pagination-next,
+  .pagination-first,
+  .pagination-last {
+    display: none;
+  }
+}
+
+/* ========================================
+   GRADIENT BORDER EFFECT - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  .pagination-btn {
+    position: relative;
+  }
+
+  .pagination-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--pagination-radius);
+    padding: 1px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .pagination-btn:hover:not(:disabled)::before {
     opacity: 1;
   }
 }
 
-/* Skeleton Loading */
+/* ========================================
+   ACTIVE PAGE GLOW EFFECT - Desktop only
+   ============================================ */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .pagination-btn.active {
+    position: relative;
+    animation: glowPulse 2s infinite;
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0);
+  }
+}
+
+/* ========================================
+   LOADING SKELETON STATE
+   ============================================ */
 .pagination-skeleton {
   display: flex;
   gap: 8px;
@@ -392,299 +727,44 @@
 }
 
 /* ========================================
-   RIPPLE EFFECT
-   ======================================== */
-.pagination-btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.pagination-btn .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.6);
-  transform: scale(0);
-  animation: rippleAnimation 0.6s linear;
-  pointer-events: none;
-}
-
-@keyframes rippleAnimation {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+   SELECTION STYLE
+   ============================================ */
+.pagination-info::selection,
+.pagination-stats::selection {
+  background: var(--pagination-active-bg);
+  color: white;
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-  .pagination-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  
-  .pagination-info,
-  .pagination-stats {
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .pagination {
-    justify-content: center;
-  }
-  
+   SCROLLBAR FOR PAGES - Desktop only
+   ============================================ */
+@media (min-width: 768px) {
   .pagination-pages {
-    justify-content: center;
+    scrollbar-width: thin;
+    scrollbar-color: var(--pagination-border) transparent;
   }
-}
 
-@media (max-width: 640px) {
-  .pagination {
-    gap: 6px;
+  .pagination-pages::-webkit-scrollbar {
+    height: 4px;
   }
-  
-  .pagination-btn {
-    min-width: 36px;
-    padding: 0 8px;
-  }
-  
-  .pagination-first,
-  .pagination-last {
-    min-width: auto;
-  }
-  
-  .pagination-first .pagination-btn-text,
-  .pagination-last .pagination-btn-text {
-    display: none;
-  }
-}
 
-@media (max-width: 480px) {
-  .pagination-pages {
-    order: 1;
-    width: 100%;
-    justify-content: center;
+  .pagination-pages::-webkit-scrollbar-track {
+    background: transparent;
   }
-  
-  .pagination-prev,
-  .pagination-next {
-    flex: 1;
-  }
-  
-  .pagination-first,
-  .pagination-last {
-    display: none;
+
+  .pagination-pages::-webkit-scrollbar-thumb {
+    background: var(--pagination-border);
+    border-radius: 10px;
   }
 }
 
 /* ========================================
-   ACCESSIBILITY
-   ======================================== */
-@media (prefers-reduced-motion: reduce) {
-  .pagination-btn,
-  .pagination-btn svg,
-  .pagination-info,
-  .pagination-stats,
-  .pagination-wrapper {
-    animation: none !important;
-    transition: none !important;
-    transform: none !important;
-  }
-  
-  .pagination-btn.active {
-    animation: none;
-  }
-}
-
-/* ========================================
-   HOVER ENHANCEMENTS
-   ======================================== */
-.pagination-btn {
-  position: relative;
-}
-
-/* Gradient border effect on hover */
-.pagination-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: var(--pagination-radius);
-  padding: 1px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.pagination-btn:hover:not(:disabled)::before {
-  opacity: 1;
-}
-
-/* Active page glow effect */
-.pagination-btn.active {
-  position: relative;
-  animation: glowPulse 2s infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0);
-  }
-}
-
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-@media print {
-  .pagination-wrapper {
-    margin-top: 20px;
-    break-inside: avoid;
-  }
-  
-  .pagination-btn {
-    border: 1px solid #ccc;
-    background: none;
-    color: #000;
-  }
-  
-  .pagination-btn.active {
-    background: #f0f0f0;
-    font-weight: bold;
-  }
-  
-  .pagination-btn:disabled {
-    opacity: 1;
-    color: #999;
-  }
-}
-
-/* ========================================
-   DARK MODE ENHANCEMENTS
-   ======================================== */
-@media (prefers-color-scheme: dark) {
-  .pagination-btn.active {
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-  }
-  
-  .pagination-btn:hover:not(:disabled) {
-    border-color: #475569;
-  }
-  
-  .pagination-outline .pagination-btn:hover:not(:disabled) {
-    border-color: #818cf8;
-  }
-}
-
-/* ========================================
-   ANIMATION DELAYS FOR STAGGERED EFFECT
-   ======================================== */
-.pagination-btn:nth-child(1) { animation-delay: 0.05s; }
-.pagination-btn:nth-child(2) { animation-delay: 0.1s; }
-.pagination-btn:nth-child(3) { animation-delay: 0.15s; }
-.pagination-btn:nth-child(4) { animation-delay: 0.2s; }
-.pagination-btn:nth-child(5) { animation-delay: 0.25s; }
-.pagination-btn:nth-child(6) { animation-delay: 0.3s; }
-.pagination-btn:nth-child(7) { animation-delay: 0.35s; }
-.pagination-btn:nth-child(8) { animation-delay: 0.4s; }
-
-/* ========================================
-   TOOLTIP FOR BUTTONS
-   ======================================== */
-.pagination-btn[data-tooltip] {
-  position: relative;
-}
-
-.pagination-btn[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 8px;
-  padding: 4px 8px;
-  background: var(--pagination-text);
-  color: var(--pagination-bg);
-  font-size: 12px;
-  white-space: nowrap;
-  border-radius: 6px;
-  pointer-events: none;
-  z-index: 1000;
-  animation: tooltipFadeIn 0.2s ease-out;
-}
-
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* ========================================
-   SCROLLBAR STYLES
-   ======================================== */
-.pagination-pages {
-  scrollbar-width: thin;
-  scrollbar-color: var(--pagination-border) transparent;
-}
-
-.pagination-pages::-webkit-scrollbar {
-  height: 4px;
-}
-
-.pagination-pages::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.pagination-pages::-webkit-scrollbar-thumb {
-  background: var(--pagination-border);
-  border-radius: 10px;
-}
-
-/* ========================================
-   ADDITIONAL ENHANCEMENTS
-   ======================================== */
-/* Smooth text rendering */
+   SMOOTH TEXT RENDERING
+   ============================================ */
 .pagination-btn,
 .pagination-info,
 .pagination-stats {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Focus visible enhancement */
-.pagination-btn:focus-visible {
-  position: relative;
-  z-index: 2;
-}
-
-/* Active page hover effect */
-.pagination-btn.active:hover:not(:disabled) {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
-}
-
-/* Disabled button enhancement */
-.pagination-btn:disabled {
-  position: relative;
-}
-
-.pagination-btn:disabled::after {
-  display: none;
 }

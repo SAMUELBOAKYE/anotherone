@@ -4,7 +4,7 @@ import eventService from "../../services/eventService";
 import ErrorAlert from "../common/ErrorAlert";
 import SuccessAlert from "../common/SuccessAlert";
 import LoadingSpinner from "../common/LoadingSpinner";
-import "../styles/components/EventRegistration.css";
+import "../../styles/components/EventRegistration.css";
 
 const EventRegistration = ({ eventId, eventTitle, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({

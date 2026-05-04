@@ -1,7 +1,7 @@
 /* src/components/event/EventCard.css */
 
 /* ========================================
-   VARIABLES & THEME
+   VARIABLES & THEME - Mobile First
    ======================================== */
 :root {
   /* Colors */
@@ -11,7 +11,7 @@
   --event-card-text: #1e293b;
   --event-card-text-secondary: #475569;
   --event-card-text-muted: #64748b;
-  
+
   /* Event Type Colors */
   --event-academic: #3b82f6;
   --event-academic-bg: rgba(59, 130, 246, 0.1);
@@ -27,53 +27,66 @@
   --event-workshop-bg: rgba(6, 182, 212, 0.1);
   --event-seminar: #ec4899;
   --event-seminar-bg: rgba(236, 72, 153, 0.1);
-  
-  /* Status Colors */
-  --status-ongoing: #10b981;
-  --status-upcoming: #3b82f6;
-  --status-past: #94a3b8;
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
-  --shadow-hover: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
-  
-  /* Transitions */
-  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-spring: all 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
-  
-  /* Spacing */
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
+  /* Spacing - Mobile First */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 12px;
   --spacing-lg: 16px;
   --spacing-xl: 20px;
   --spacing-2xl: 24px;
-  
+
   /* Border Radius */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
+  --radius-xl: 14px;
+  --radius-2xl: 16px;
   --radius-full: 9999px;
-}
 
-[data-theme="dark"] {
-  --event-card-bg: #1e293b;
-  --event-card-bg-hover: #334155;
-  --event-card-border: #334155;
-  --event-card-text: #f1f5f9;
-  --event-card-text-secondary: #cbd5e1;
-  --event-card-text-muted: #94a3b8;
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 /* ========================================
-   EVENT CARD CONTAINER
+   DESKTOP VARIABLES OVERRIDES
+   ======================================== */
+@media (min-width: 768px) {
+  :root {
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --radius-xl: 16px;
+  }
+}
+
+/* Dark Theme */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root {
+    --event-card-bg: #1e293b;
+    --event-card-bg-hover: #334155;
+    --event-card-border: #334155;
+    --event-card-text: #f1f5f9;
+    --event-card-text-secondary: #cbd5e1;
+    --event-card-text-muted: #94a3b8;
+  }
+}
+
+/* ========================================
+   EVENT CARD CONTAINER - Mobile First
    ======================================== */
 .event-card {
   background: var(--event-card-bg);
@@ -83,13 +96,22 @@
   transition: var(--transition-spring);
   cursor: pointer;
   position: relative;
-  animation: cardFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Staggered animations for cards */
+@media (prefers-reduced-motion: no-preference) {
+  .event-card {
+    animation: cardFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: backwards;
+  }
 }
 
 @keyframes cardFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -97,26 +119,83 @@
   }
 }
 
-.event-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-  border-color: transparent;
+/* Touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .event-card:active {
+    transform: scale(0.98);
+    transition: transform 0.05s ease;
+  }
 }
 
-.event-card:active {
-  transform: translateY(-2px);
+/* Hover effects - Desktop only */
+@media (hover: hover) and (min-width: 768px) {
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: transparent;
+  }
+
+  .event-card:active {
+    transform: translateY(-2px);
+  }
 }
 
-/* Compact Variant */
+/* Gradient border on hover - Desktop only */
+@media (hover: hover) and (min-width: 768px) {
+  .event-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: var(--radius-xl);
+    padding: 1px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .event-card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   COMPACT VARIANT - Responsive
+   ======================================== */
 .event-card-compact {
   display: flex;
-  flex-direction: row;
-  align-items: stretch;
+  flex-direction: column;
+}
+
+@media (min-width: 480px) {
+  .event-card-compact {
+    flex-direction: row;
+    align-items: stretch;
+  }
 }
 
 .event-card-compact .event-card-image {
-  width: 120px;
+  width: 100%;
+  height: 160px;
   flex-shrink: 0;
+}
+
+@media (min-width: 480px) {
+  .event-card-compact .event-card-image {
+    width: 120px;
+    height: auto;
+  }
 }
 
 .event-card-compact .event-card-content {
@@ -127,40 +206,54 @@
   display: none;
 }
 
-@media (max-width: 640px) {
-  .event-card-compact {
-    flex-direction: column;
-  }
-  
-  .event-card-compact .event-card-image {
-    width: 100%;
-    height: 160px;
+@media (min-width: 640px) {
+  .event-card-compact .event-card-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 }
 
 /* ========================================
-   EVENT CARD HEADER
+   EVENT CARD HEADER - Responsive
    ======================================== */
 .event-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
   flex-wrap: wrap;
   gap: var(--spacing-sm);
+}
+
+@media (min-width: 768px) {
+  .event-card-header {
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-sm);
+  }
 }
 
 .event-type-badge,
 .event-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: 6px 12px;
+  gap: 4px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   transition: var(--transition-base);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .event-type-badge,
+  .event-status-badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    gap: var(--spacing-xs);
+  }
 }
 
 .event-type-badge {
@@ -169,13 +262,14 @@
 }
 
 .event-status-badge {
-  background: var(--status-upcoming);
+  background: #3b82f6;
   color: white;
   animation: statusPulse 2s infinite;
 }
 
 @keyframes statusPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -185,18 +279,32 @@
 
 .event-type-badge svg,
 .event-status-badge svg {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
+}
+
+@media (min-width: 768px) {
+  .event-type-badge svg,
+  .event-status-badge svg {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 /* ========================================
-   EVENT CARD IMAGE
+   EVENT CARD IMAGE - Responsive
    ======================================== */
 .event-card-image {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-  min-height: 180px;
+  min-height: 160px;
+}
+
+@media (min-width: 768px) {
+  .event-card-image {
+    min-height: 180px;
+  }
 }
 
 .event-card-image img {
@@ -206,27 +314,39 @@
   transition: var(--transition-spring);
 }
 
-.event-card:hover .event-card-image img {
-  transform: scale(1.05);
+@media (hover: hover) and (min-width: 768px) {
+  .event-card:hover .event-card-image img {
+    transform: scale(1.05);
+  }
 }
 
 .event-live-badge {
   position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.5px;
   animation: livePulse 1.5s infinite;
   z-index: 1;
 }
 
+@media (min-width: 768px) {
+  .event-live-badge {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+}
+
 @keyframes livePulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
   }
   50% {
@@ -235,17 +355,23 @@
 }
 
 /* ========================================
-   EVENT CARD CONTENT
+   EVENT CARD CONTENT - Responsive
    ======================================== */
 .event-card-content {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .event-card-content {
+    padding: var(--spacing-lg);
+  }
 }
 
 .event-card-title {
-  font-size: 18px;
+  font-size: clamp(1rem, 4vw, 1.125rem);
   font-weight: 700;
   color: var(--event-card-text);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -254,200 +380,430 @@
   transition: var(--transition-base);
 }
 
-.event-card:hover .event-card-title {
-  background: linear-gradient(135deg, #1e3a5f, #d4af37);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+@media (min-width: 768px) {
+  .event-card-title {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.125rem;
+  }
+}
+
+/* Gradient text on hover - Desktop only */
+@media (hover: hover) and (min-width: 768px) {
+  .event-card:hover .event-card-title {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 /* Event Details */
 .event-card-details {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .event-card-details {
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
 }
 
 .event-detail-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-sm);
-  font-size: 13px;
+  font-size: clamp(0.7rem, 3vw, 0.8125rem);
   color: var(--event-card-text-secondary);
   transition: var(--transition-base);
+  line-height: 1.4;
+}
+
+@media (min-width: 768px) {
+  .event-detail-item {
+    font-size: 0.875rem;
+    gap: var(--spacing-sm);
+  }
 }
 
 .event-detail-item svg {
   flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 2px;
   color: var(--event-card-text-muted);
   transition: var(--transition-base);
 }
 
-.event-card:hover .event-detail-item svg {
-  color: var(--event-academic);
-  transform: scale(1.05);
+@media (min-width: 768px) {
+  .event-detail-item svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (hover: hover) and (min-width: 768px) {
+  .event-card:hover .event-detail-item svg {
+    color: #3b82f6;
+    transform: scale(1.05);
+  }
 }
 
 .event-detail-item span {
-  line-height: 1.4;
+  flex: 1;
+  word-break: break-word;
 }
 
 /* Description */
 .event-card-description {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: clamp(0.75rem, 3.5vw, 0.875rem);
+  line-height: 1.5;
   color: var(--event-card-text-secondary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+@media (min-width: 768px) {
+  .event-card-description {
+    margin-bottom: var(--spacing-lg);
+    -webkit-line-clamp: 3;
+  }
+}
+
 /* ========================================
-   EVENT CARD FOOTER
+   EVENT CARD FOOTER - Responsive
    ======================================== */
 .event-card-footer {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--event-card-border);
 }
 
+@media (min-width: 480px) {
+  .event-card-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Register Button - Touch Friendly */
 .event-register-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-sm);
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #1e3a5f, #2c5a7a);
+  padding: 10px 16px;
+  min-height: var(--touch-target-min);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   border: none;
   border-radius: var(--radius-lg);
-  font-size: 13px;
+  font-size: clamp(0.75rem, 3vw, 0.8125rem);
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition-bounce);
+  transition: var(--transition-base);
   overflow: hidden;
   position: relative;
+  width: 100%;
 }
 
-.event-register-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
+@media (min-width: 480px) {
+  .event-register-btn {
+    width: auto;
+    padding: 8px 16px;
+    min-height: auto;
+  }
 }
 
-.event-register-btn:hover::before {
-  transform: translateX(100%);
-}
-
-.event-register-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+@media (min-width: 768px) {
+  .event-register-btn {
+    padding: 8px 16px;
+    font-size: 0.8125rem;
+  }
 }
 
 .event-register-btn:active {
-  transform: translateY(0);
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .event-register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+
+  .event-register-btn:active {
+    transform: translateY(0);
+  }
+}
+
+.event-register-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .event-register-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .event-full-badge {
-  padding: 8px 16px;
+  padding: 10px 16px;
+  min-height: var(--touch-target-min);
   background: var(--event-card-border);
   border-radius: var(--radius-lg);
-  font-size: 13px;
+  font-size: clamp(0.75rem, 3vw, 0.8125rem);
   font-weight: 600;
   color: var(--event-card-text-muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 480px) {
+  .event-full-badge {
+    padding: 8px 16px;
+    min-height: auto;
+    width: auto;
+  }
 }
 
 .event-read-more {
-  font-size: 13px;
+  font-size: clamp(0.75rem, 3vw, 0.8125rem);
   font-weight: 600;
-  color: var(--event-academic);
+  color: #3b82f6;
   transition: var(--transition-base);
   cursor: pointer;
+  text-align: center;
+  padding: 10px 0;
+  min-height: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.event-read-more:hover {
-  transform: translateX(4px);
-  color: var(--event-academic);
+@media (min-width: 480px) {
+  .event-read-more {
+    padding: 0;
+    min-height: auto;
+    text-align: right;
+  }
 }
 
-/* ========================================
-   TYPE-SPECIFIC STYLES
-   ======================================== */
-.event-card[data-type="academic"] .event-type-badge {
-  background: var(--event-academic-bg);
-  color: var(--event-academic);
+.event-read-more:active {
+  transform: scale(0.96);
 }
 
-.event-card[data-type="exam"] .event-type-badge {
-  background: var(--event-exam-bg);
-  color: var(--event-exam);
-}
-
-.event-card[data-type="registration"] .event-type-badge {
-  background: var(--event-registration-bg);
-  color: var(--event-registration);
-}
-
-.event-card[data-type="meeting"] .event-type-badge {
-  background: var(--event-meeting-bg);
-  color: var(--event-meeting);
-}
-
-.event-card[data-type="holiday"] .event-type-badge {
-  background: var(--event-holiday-bg);
-  color: var(--event-holiday);
-}
-
-.event-card[data-type="workshop"] .event-type-badge {
-  background: var(--event-workshop-bg);
-  color: var(--event-workshop);
-}
-
-.event-card[data-type="seminar"] .event-type-badge {
-  background: var(--event-seminar-bg);
-  color: var(--event-seminar);
+@media (hover: hover) {
+  .event-read-more:hover {
+    transform: translateX(4px);
+    color: #2563eb;
+  }
 }
 
 /* ========================================
-   RIPPLE EFFECT
-   ======================================== */
-.event-card {
-  position: relative;
-  overflow: hidden;
+   iPhone Specific Optimizations
+   ============================================ */
+
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .event-card-header {
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-xs);
+  }
+
+  .event-type-badge,
+  .event-status-badge {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  .event-card-title {
+    font-size: 0.9rem;
+  }
+
+  .event-card-content {
+    padding: var(--spacing-sm);
+  }
+
+  .event-detail-item {
+    font-size: 0.65rem;
+    gap: 4px;
+  }
+
+  .event-card-description {
+    font-size: 0.7rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .event-register-btn,
+  .event-full-badge,
+  .event-read-more {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
 }
 
-.event-card .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(30, 58, 95, 0.1);
-  transform: scale(0);
-  animation: rippleEffect 0.6s linear;
-  pointer-events: none;
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .event-card-footer {
+    gap: 6px;
+  }
+
+  .event-detail-item {
+    flex-wrap: wrap;
+  }
+
+  .event-detail-item span {
+    margin-left: 20px;
+  }
 }
 
-@keyframes rippleEffect {
-  to {
-    transform: scale(4);
-    opacity: 0;
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .event-card {
+    max-width: 100%;
+  }
+
+  .event-card-title {
+    font-size: 1rem;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .event-card {
+    transition:
+      transform var(--transition-spring),
+      box-shadow var(--transition-base);
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .event-card:hover,
+  .event-register-btn:hover,
+  .event-read-more:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .event-card:active,
+  .event-register-btn:active,
+  .event-read-more:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Disable gradient border on touch */
+  .event-card::after {
+    display: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .event-card,
+  .event-card-image img,
+  .event-register-btn,
+  .event-read-more,
+  .event-live-badge,
+  .event-status-badge {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .event-card {
+    animation: none;
+  }
+
+  .event-card:active {
+    transform: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.event-card:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: var(--radius-xl);
+}
+
+.event-register-btn:focus-visible,
+.event-read-more:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: var(--radius-lg);
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .event-card-content {
+    padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .event-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .event-register-btn,
+  .event-live-badge,
+  .event-status-badge {
+    display: none;
+  }
+
+  .event-card-title {
+    color: #000;
+  }
+
+  .event-card-description {
+    color: #333;
   }
 }
 
 /* ========================================
    LOADING SKELETON
-   ======================================== */
+   ============================================ */
 .event-card-skeleton {
   background: var(--event-card-bg);
   border: 1px solid var(--event-card-border);
@@ -457,7 +813,8 @@
 }
 
 @keyframes skeletonPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -466,8 +823,13 @@
 }
 
 .skeleton-image {
-  height: 180px;
-  background: linear-gradient(90deg, var(--event-card-border), var(--event-card-bg-hover), var(--event-card-border));
+  height: 160px;
+  background: linear-gradient(
+    90deg,
+    var(--event-card-border),
+    var(--event-card-bg-hover),
+    var(--event-card-border)
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -495,7 +857,7 @@
 
 .skeleton-title {
   width: 80%;
-  height: 24px;
+  height: 22px;
   background: var(--event-card-border);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
@@ -510,14 +872,14 @@
 
 .skeleton-detail-item {
   width: 60%;
-  height: 16px;
+  height: 14px;
   background: var(--event-card-border);
   border-radius: var(--radius-sm);
 }
 
 .skeleton-description {
   width: 100%;
-  height: 60px;
+  height: 50px;
   background: var(--event-card-border);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-lg);
@@ -536,163 +898,38 @@
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-  .event-card-title {
-    font-size: 16px;
-  }
-  
-  .event-card-details {
-    gap: var(--spacing-xs);
-  }
-  
-  .event-detail-item {
-    font-size: 12px;
-  }
-  
-  .event-card-description {
-    font-size: 13px;
-    -webkit-line-clamp: 2;
-  }
+   TYPE-SPECIFIC STYLES
+   ============================================ */
+.event-card[data-type="academic"] .event-type-badge {
+  background: var(--event-academic-bg);
+  color: var(--event-academic);
 }
 
-@media (max-width: 640px) {
-  .event-card-header {
-    padding: var(--spacing-md) var(--spacing-md) var(--spacing-xs);
-  }
-  
-  .event-card-content {
-    padding: var(--spacing-md);
-  }
-  
-  .event-card-image {
-    min-height: 160px;
-  }
-  
-  .event-register-btn {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
+.event-card[data-type="exam"] .event-type-badge {
+  background: var(--event-exam-bg);
+  color: var(--event-exam);
 }
 
-@media (max-width: 480px) {
-  .event-card-title {
-    font-size: 15px;
-  }
-  
-  .event-detail-item {
-    font-size: 11px;
-  }
-  
-  .event-card-footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .event-register-btn,
-  .event-full-badge,
-  .event-read-more {
-    text-align: center;
-    justify-content: center;
-  }
+.event-card[data-type="registration"] .event-type-badge {
+  background: var(--event-registration-bg);
+  color: var(--event-registration);
+}
+
+.event-card[data-type="meeting"] .event-type-badge {
+  background: var(--event-meeting-bg);
+  color: var(--event-meeting);
 }
 
 /* ========================================
-   ACCESSIBILITY
-   ======================================== */
-@media (prefers-reduced-motion: reduce) {
-  .event-card,
-  .event-card-image img,
-  .event-register-btn,
-  .event-read-more,
-  .event-live-badge {
-    animation: none !important;
-    transition: none !important;
-    transform: none !important;
-  }
-}
-
-.event-card:focus-visible {
-  outline: 2px solid var(--event-academic);
-  outline-offset: 2px;
-}
-
-.event-register-btn:focus-visible {
-  outline: 2px solid var(--event-academic);
-  outline-offset: 2px;
+   SELECTION STYLE
+   ============================================ */
+.event-card ::selection {
+  background: rgba(59, 130, 246, 0.2);
 }
 
 /* ========================================
-   DARK MODE ENHANCEMENTS
-   ======================================== */
-@media (prefers-color-scheme: dark) {
-  .event-card:hover {
-    background: var(--event-card-bg-hover);
-  }
-  
-  .event-card-image {
-    background: linear-gradient(135deg, #334155, #1e293b);
-  }
-}
-
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-@media print {
-  .event-card {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #ccc;
-  }
-  
-  .event-register-btn,
-  .event-live-badge {
-    display: none;
-  }
-}
-
-/* ========================================
-   ADDITIONAL ENHANCEMENTS
-   ======================================== */
-/* Gradient border on hover */
-.event-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: var(--radius-xl);
-  padding: 1px;
-  background: linear-gradient(135deg, #1e3a5f, #d4af37);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.event-card:hover::after {
-  opacity: 1;
-}
-
-/* Staggered animations for cards */
-.event-card {
-  animation: cardFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  animation-fill-mode: backwards;
-}
-
-.event-card:nth-child(1) { animation-delay: 0.05s; }
-.event-card:nth-child(2) { animation-delay: 0.1s; }
-.event-card:nth-child(3) { animation-delay: 0.15s; }
-.event-card:nth-child(4) { animation-delay: 0.2s; }
-.event-card:nth-child(5) { animation-delay: 0.25s; }
-.event-card:nth-child(6) { animation-delay: 0.3s; }
-
-/* Smooth text rendering */
+   SMOOTH TEXT RENDERING
+   ============================================ */
 .event-card-title,
 .event-detail-item span,
 .event-card-description,
@@ -700,17 +937,4 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Custom cursor for interactive elements */
-.event-card,
-.event-register-btn,
-.event-read-more {
-  cursor: pointer;
-}
-
-/* Focus ring enhancement */
-.event-card:focus-visible {
-  position: relative;
-  z-index: 1;
 }

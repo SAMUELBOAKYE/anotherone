@@ -1,7 +1,7 @@
 /* src/components/common/ErrorAlert.css */
 
 /* ========================================
-   VARIABLES & THEME
+   VARIABLES & THEME - Mobile First
    ======================================== */
 :root {
   /* Colors */
@@ -10,105 +10,175 @@
   --error-text: #991b1b;
   --error-icon: #dc2626;
   --error-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.15);
-  
+
   --warning-bg: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
   --warning-border: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
   --warning-text: #92400e;
   --warning-icon: #f59e0b;
   --warning-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15);
-  
+
   --info-bg: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   --info-border: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
   --info-text: #1e40af;
   --info-icon: #3b82f6;
   --info-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
-  
+
   --success-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   --success-border: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
   --success-text: #166534;
   --success-icon: #22c55e;
   --success-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.15);
-  
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
   /* Common */
-  --alert-padding: 16px 20px;
-  --alert-radius: 16px;
-  --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --alert-padding: 14px 16px;
+  --alert-radius: 12px;
+  --transition-default: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* ========================================
-   BASE ALERT STYLES
+   DESKTOP SPACING OVERRIDES
+   ======================================== */
+@media (min-width: 768px) {
+  :root {
+    --alert-padding: 16px 20px;
+    --alert-radius: 16px;
+  }
+}
+
+/* ========================================
+   BASE ALERT STYLES - Mobile First
    ======================================== */
 .error-alert {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   padding: var(--alert-padding);
   border-radius: var(--alert-radius);
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
-  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  animation: slideInRight 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
   transform-origin: top right;
-  max-width: 450px;
-  min-width: 300px;
+  width: 100%;
+  max-width: calc(100vw - 24px);
+  min-width: auto;
   pointer-events: auto;
   transition: var(--transition-default);
 }
 
+@media (min-width: 480px) {
+  .error-alert {
+    max-width: 380px;
+    min-width: 300px;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-alert {
+    max-width: 450px;
+  }
+}
+
 .error-alert.leaving {
-  animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: slideOutRight 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Alert Types */
 .error-alert-error {
   background: var(--error-bg);
-  border-left: 4px solid var(--error-icon);
+  border-left: 3px solid var(--error-icon);
   box-shadow: var(--error-shadow);
+}
+
+@media (min-width: 768px) {
+  .error-alert-error {
+    border-left-width: 4px;
+  }
 }
 
 .error-alert-warning {
   background: var(--warning-bg);
-  border-left: 4px solid var(--warning-icon);
+  border-left: 3px solid var(--warning-icon);
   box-shadow: var(--warning-shadow);
+}
+
+@media (min-width: 768px) {
+  .error-alert-warning {
+    border-left-width: 4px;
+  }
 }
 
 .error-alert-info {
   background: var(--info-bg);
-  border-left: 4px solid var(--info-icon);
+  border-left: 3px solid var(--info-icon);
   box-shadow: var(--info-shadow);
+}
+
+@media (min-width: 768px) {
+  .error-alert-info {
+    border-left-width: 4px;
+  }
 }
 
 .error-alert-success {
   background: var(--success-bg);
-  border-left: 4px solid var(--success-icon);
+  border-left: 3px solid var(--success-icon);
   box-shadow: var(--success-shadow);
 }
 
-/* Hover Effects */
-.error-alert:hover {
-  transform: translateX(-4px);
-  box-shadow: var(--shadow-xl);
+@media (min-width: 768px) {
+  .error-alert-success {
+    border-left-width: 4px;
+  }
+}
+
+/* Hover Effects - Desktop only */
+@media (hover: hover) and (min-width: 768px) {
+  .error-alert:hover {
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* Touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .error-alert:active {
+    transform: scale(0.98);
+    transition: transform 0.05s ease;
+  }
 }
 
 /* ========================================
-   ICON STYLES
+   ICON STYLES - Responsive
    ======================================== */
 .error-icon {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: iconPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: iconPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  margin-top: 1px;
+}
+
+@media (min-width: 768px) {
+  .error-icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .error-icon svg {
   width: 100%;
   height: 100%;
   transition: var(--transition-default);
+  stroke-width: 2;
 }
 
 .error-alert-error .error-icon svg {
@@ -131,26 +201,35 @@
   stroke: var(--success-icon);
 }
 
-.error-alert:hover .error-icon svg {
-  transform: scale(1.1) rotate(5deg);
+/* Icon hover animation - Desktop only */
+@media (hover: hover) and (min-width: 1024px) {
+  .error-alert:hover .error-icon svg {
+    transform: scale(1.1) rotate(5deg);
+  }
 }
 
 /* ========================================
-   CONTENT STYLES
+   CONTENT STYLES - Responsive
    ======================================== */
 .error-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+}
+
+@media (min-width: 768px) {
+  .error-content {
+    gap: 4px;
+  }
 }
 
 .error-title {
   font-weight: 700;
-  font-size: 15px;
+  font-size: clamp(0.875rem, 4vw, 0.9375rem);
   line-height: 1.4;
   letter-spacing: -0.01em;
-  animation: slideInDown 0.3s ease-out;
+  animation: slideInDown 0.25s ease-out;
 }
 
 .error-alert-error .error-title {
@@ -170,10 +249,10 @@
 }
 
 .error-message {
-  font-size: 13px;
+  font-size: clamp(0.75rem, 3.5vw, 0.8125rem);
   line-height: 1.5;
-  color: var(--text-secondary);
-  animation: slideInUp 0.3s ease-out;
+  animation: slideInUp 0.25s ease-out;
+  word-break: break-word;
 }
 
 .error-alert-error .error-message {
@@ -192,15 +271,50 @@
   color: #14532d;
 }
 
+/* Scrollable content for long messages */
+.error-content {
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 768px) {
+  .error-content {
+    max-height: 200px;
+  }
+}
+
+.error-content::-webkit-scrollbar {
+  width: 3px;
+}
+
+@media (min-width: 768px) {
+  .error-content::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+.error-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.error-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
 /* ========================================
-   CLOSE BUTTON
+   CLOSE BUTTON - Touch Optimized
    ======================================== */
 .error-close {
   flex-shrink: 0;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -208,36 +322,62 @@
   transition: var(--transition-default);
   color: currentColor;
   opacity: 0.6;
+  margin: -4px -4px -4px 0;
+}
+
+@media (min-width: 768px) {
+  .error-close {
+    padding: 4px;
+    min-width: auto;
+    min-height: auto;
+  }
 }
 
 .error-close svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   stroke-width: 2.5;
 }
 
-.error-close:hover {
-  opacity: 1;
-  transform: rotate(90deg);
-  background: rgba(0, 0, 0, 0.05);
+@media (min-width: 768px) {
+  .error-close svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .error-close:active {
-  transform: rotate(90deg) scale(0.9);
+  opacity: 1;
+  transform: rotate(90deg) scale(0.92);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (hover: hover) {
+  .error-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+    background: rgba(0, 0, 0, 0.05);
+  }
 }
 
 /* ========================================
-   PROGRESS BAR
+   PROGRESS BAR - Responsive
    ======================================== */
 .error-progress-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: rgba(0, 0, 0, 0.1);
+  height: 2px;
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 0 0 var(--alert-radius) var(--alert-radius);
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .error-progress-bar {
+    height: 3px;
+  }
 }
 
 .error-progress-fill {
@@ -264,12 +404,12 @@
 }
 
 /* ========================================
-   ANIMATIONS
+   ANIMATIONS - Optimized for mobile
    ======================================== */
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translateX(100%) scale(0.9);
+    transform: translateX(100%) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -284,14 +424,36 @@
   }
   100% {
     opacity: 0;
-    transform: translateX(100%) scale(0.9);
+    transform: translateX(100%) scale(0.95);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideOutLeft {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%) scale(0.95);
   }
 }
 
 @keyframes slideInDown {
   0% {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   100% {
     opacity: 1;
@@ -302,7 +464,7 @@
 @keyframes slideInUp {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   100% {
     opacity: 1;
@@ -315,8 +477,8 @@
     opacity: 0;
     transform: scale(0);
   }
-  50% {
-    transform: scale(1.2);
+  60% {
+    transform: scale(1.1);
   }
   100% {
     opacity: 1;
@@ -333,45 +495,58 @@
   }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
+/* Conditional shake animation - Only on error type and if motion allowed */
+@media (prefers-reduced-motion: no-preference) {
+  .error-alert-error.error-alert {
+    animation:
+      slideInRight 0.3s cubic-bezier(0.34, 1.2, 0.64, 1),
+      shake 0.4s ease-out 0.25s;
   }
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
-    transform: translateX(-5px);
+    transform: translateX(-4px);
   }
   75% {
-    transform: translateX(5px);
+    transform: translateX(4px);
   }
-}
-
-/* Shake animation for error type */
-.error-alert-error.error-alert {
-  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1), shake 0.5s ease-out 0.3s;
 }
 
 /* ========================================
-   POSITIONING VARIANTS
+   POSITIONING VARIANTS - Mobile First
    ======================================== */
+
 /* Top Right (default) */
 .error-alert-container-top-right {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 12px;
+  right: 12px;
+  left: 12px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   pointer-events: none;
+}
+
+@media (min-width: 480px) {
+  .error-alert-container-top-right {
+    top: 16px;
+    right: 16px;
+    left: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-alert-container-top-right {
+    top: 20px;
+    right: 20px;
+  }
 }
 
 .error-alert-container-top-right .error-alert {
@@ -381,68 +556,78 @@
 /* Top Left */
 .error-alert-container-top-left {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   pointer-events: none;
+}
+
+@media (min-width: 480px) {
+  .error-alert-container-top-left {
+    top: 16px;
+    left: 16px;
+    right: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-alert-container-top-left {
+    top: 20px;
+    left: 20px;
+  }
 }
 
 .error-alert-container-top-left .error-alert {
   pointer-events: auto;
-  animation: slideInLeft 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  animation: slideInLeft 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 .error-alert-container-top-left .error-alert.leaving {
-  animation: slideOutLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideInLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-@keyframes slideOutLeft {
-  0% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-100%) scale(0.9);
-  }
+  animation: slideOutLeft 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Bottom Center */
 .error-alert-container-bottom-center {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   pointer-events: none;
+}
+
+@media (min-width: 480px) {
+  .error-alert-container-bottom-center {
+    bottom: 16px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .error-alert-container-bottom-center {
+    bottom: 20px;
+  }
 }
 
 .error-alert-container-bottom-center .error-alert {
   pointer-events: auto;
-  animation: slideInUp 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+  animation: slideInUp 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
 @keyframes slideInUp {
   0% {
     opacity: 0;
-    transform: translateY(100%) scale(0.9);
+    transform: translateY(100%) scale(0.95);
   }
   100% {
     opacity: 1;
@@ -451,93 +636,108 @@
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 640px) {
+   iPhone Specific Optimizations
+   ============================================ */
+
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
   .error-alert {
-    max-width: calc(100vw - 32px);
-    min-width: auto;
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
-  
-  .error-alert-container-top-right,
-  .error-alert-container-top-left {
-    top: 12px;
-    right: 12px;
-    left: 12px;
+
+  .error-icon {
+    width: 18px;
+    height: 18px;
   }
-  
-  .error-alert-container-top-left {
-    left: 12px;
-    right: auto;
+
+  .error-title {
+    font-size: 0.8rem;
   }
-  
-  .error-alert-container-bottom-center {
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
+
+  .error-message {
+    font-size: 0.7rem;
+  }
+
+  .error-close {
+    padding: 6px;
+  }
+
+  .error-close svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) - Default mobile styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .error-alert {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .error-content {
+    gap: 2px;
+  }
+}
+
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .error-alert {
+    max-width: 400px;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .error-alert {
+    transition:
+      transform var(--transition-default),
+      box-shadow var(--transition-default);
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .error-alert:hover {
     transform: none;
   }
-  
-  .error-alert-container-bottom-center .error-alert {
-    width: 100%;
+
+  /* Ensure active states provide feedback */
+  .error-close:active {
+    transform: rotate(90deg) scale(0.92);
   }
-  
-  .error-title {
-    font-size: 14px;
-  }
-  
-  .error-message {
-    font-size: 12px;
+
+  /* Disable shake animation on touch */
+  .error-alert-error.error-alert {
+    animation: slideInRight 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
   }
 }
 
 /* ========================================
-   TOAST NOTIFICATION STYLES
-   ======================================== */
-.error-alert-toast {
-  position: relative;
-  overflow: hidden;
-}
-
-.error-alert-toast::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.error-alert-toast:hover::before {
-  opacity: 1;
-}
-
-/* Stacked notifications */
-.error-alert + .error-alert {
-  margin-top: 12px;
-  animation: slideInRight 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-.error-close:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-  opacity: 1;
-}
-
-.error-alert:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
+   REDUCED MOTION - Accessibility
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .error-alert,
   .error-alert.leaving,
   .error-icon svg,
@@ -547,69 +747,144 @@
     transition: none !important;
     transform: none !important;
   }
-  
+
   .error-alert-error.error-alert {
     animation: none;
   }
 }
 
 /* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.error-close:focus-visible,
+.error-alert:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 8px;
+  opacity: 1;
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .error-alert-container-top-right {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+    left: auto;
+  }
+
+  .error-alert-container-top-left {
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+    right: auto;
+  }
+
+  .error-alert-container-bottom-center {
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 480px) {
+    .error-alert-container-top-right {
+      top: max(16px, env(safe-area-inset-top));
+      right: max(16px, env(safe-area-inset-right));
+    }
+
+    .error-alert-container-top-left {
+      top: max(16px, env(safe-area-inset-top));
+      left: max(16px, env(safe-area-inset-left));
+    }
+
+    .error-alert-container-bottom-center {
+      bottom: max(16px, env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ========================================
    PRINT STYLES
-   ======================================== */
+   ============================================ */
 @media print {
   .error-alert {
     position: static;
     break-inside: avoid;
     border: 1px solid #ccc;
     box-shadow: none;
+    max-width: 100%;
   }
-  
+
   .error-progress-bar,
   .error-close {
     display: none;
+  }
+
+  .error-icon svg {
+    stroke: #000;
   }
 }
 
 /* ========================================
    DARK MODE SUPPORT
-   ======================================== */
+   ============================================ */
 @media (prefers-color-scheme: dark) {
   :root {
     --error-bg: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
     --error-text: #fecaca;
     --error-message: #fca5a5;
-    
+
     --warning-bg: linear-gradient(135deg, #78350f 0%, #92400e 100%);
     --warning-text: #fef3c7;
     --warning-message: #fde68a;
-    
+
     --info-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     --info-text: #dbeafe;
     --info-message: #bfdbfe;
-    
+
     --success-bg: linear-gradient(135deg, #14532d 0%, #166534 100%);
     --success-text: #dcfce7;
     --success-message: #bbf7d0;
   }
-  
+
   .error-message {
     opacity: 0.9;
   }
-  
-  .error-close:hover {
+
+  .error-close:active {
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  @media (hover: hover) {
+    .error-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 
 /* ========================================
-   ADDITIONAL ENHANCEMENTS
-   ======================================== */
-/* Glow effect on hover */
-.error-alert:hover {
-  filter: brightness(1.02);
+   STACKED NOTIFICATIONS
+   ============================================ */
+.error-alert + .error-alert {
+  margin-top: 10px;
+  animation: slideInRight 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
-/* Smooth text rendering */
+@media (min-width: 768px) {
+  .error-alert + .error-alert {
+    margin-top: 12px;
+  }
+}
+
+/* ========================================
+   GLASS MORPHISM ENHANCEMENT
+   ============================================ */
+.error-alert {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ========================================
+   SMOOTH TEXT RENDERING
+   ============================================ */
 .error-title,
 .error-message {
   text-rendering: optimizeLegibility;
@@ -617,32 +892,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for long messages */
-.error-content {
-  max-height: 200px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
-
-.error-content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.error-content::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-}
-
-.error-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
-
-/* Loading state skeleton */
+/* ========================================
+   LOADING SKELETON STATE
+   ============================================ */
 .error-alert-skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
+  border: none;
 }
 
 @keyframes loading {
@@ -652,4 +909,15 @@
   100% {
     background-position: -200% 0;
   }
+}
+
+/* ========================================
+   SELECTION STYLE
+   ============================================ */
+::selection {
+  background: rgba(99, 102, 241, 0.2);
+}
+
+::-moz-selection {
+  background: rgba(99, 102, 241, 0.2);
 }

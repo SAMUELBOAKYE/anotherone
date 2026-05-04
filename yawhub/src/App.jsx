@@ -94,6 +94,16 @@ const EventDetailPage = lazyWithRetry(
   "EventDetailPage",
 );
 
+// ── Auth Pages ────────────────────────────────────────────────
+const ForgotPasswordPage = lazyWithRetry(
+  () => import("./pages/ForgotPasswordPage"),
+  "ForgotPasswordPage",
+);
+const ResetPasswordPage = lazyWithRetry(
+  () => import("./pages/ResetPasswordPage"),
+  "ResetPasswordPage",
+);
+
 // ── Info Pages ────────────────────────────────────────────────
 const HelpCenterPage = lazyWithRetry(
   () => import("./pages/HelpCenterPage"),
@@ -168,11 +178,11 @@ const RegisterForEventPage = lazyWithRetry(
 
 // ── Admin Pages ────────────────────────────────────────────────
 const AdminDashboardPage = lazyWithRetry(
-  () => import("./components/admin/AdminDashboard"),
-  "AdminDashboard",
+  () => import("./pages/AdminDashboardPage"),
+  "AdminDashboardPage",
 );
 const AdminSettingsPage = lazyWithRetry(
-  () => import("./components/admin/AdminSettings"),
+  () => import("./components/admin/AdminSettings"), // ✅ Fixed: points to AdminSettings component
   "AdminSettings",
 );
 const AdminRegistrationPage = lazyWithRetry(
@@ -352,6 +362,22 @@ const AppContent = () => {
             element={
               <RequireGuest>
                 <RegisterForm />
+              </RequireGuest>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <RequireGuest>
+                <ForgotPasswordPage />
+              </RequireGuest>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <RequireGuest>
+                <ResetPasswordPage />
               </RequireGuest>
             }
           />
@@ -541,7 +567,7 @@ function App() {
   useEffect(() => {
     console.log(
       "%c🚀 KAAF University Noticeboard",
-      "color:#4CAF50;font-size:16px;font-weight:bold;",
+      "color:#D4AF37;font-size:16px;font-weight:bold;",
     );
     console.log(
       `%c📡 API: ${import.meta.env.VITE_API_URL || "/api"}`,
@@ -568,7 +594,7 @@ function App() {
                   },
                   success: {
                     duration: 3000,
-                    iconTheme: { primary: "#4caf50", secondary: "#fff" },
+                    iconTheme: { primary: "#D4AF37", secondary: "#fff" },
                   },
                   error: {
                     duration: 4000,

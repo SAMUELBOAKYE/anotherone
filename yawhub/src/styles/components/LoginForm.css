@@ -1,7 +1,7 @@
 /* src/styles/components/LoginForm.css */
 
 /* ============================================
-   CSS VARIABLES (Design System)
+   CSS VARIABLES (Mobile-First Design System)
    ============================================ */
 :root {
   /* Colors */
@@ -24,7 +24,10 @@
   --bg-gray: #f8fafc;
   --bg-hover: #f1f5f9;
 
-  /* Spacing */
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
+  /* Spacing - Mobile First */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 0.75rem;
@@ -34,15 +37,15 @@
   --space-3xl: 2rem;
   --space-4xl: 2.5rem;
 
-  /* Typography */
+  /* Typography - Fluid */
   --font-family:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", sans-serif;
-  --font-xs: 0.75rem;
-  --font-sm: 0.875rem;
-  --font-base: 0.9375rem;
-  --font-lg: 1rem;
-  --font-xl: 1.125rem;
+  --font-xs: clamp(0.7rem, 2.5vw, 0.75rem);
+  --font-sm: clamp(0.75rem, 3vw, 0.875rem);
+  --font-base: clamp(0.875rem, 3.5vw, 0.9375rem);
+  --font-lg: clamp(0.9375rem, 4vw, 1rem);
+  --font-xl: clamp(1rem, 4.5vw, 1.125rem);
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -67,20 +70,51 @@
 }
 
 /* ============================================
-   MAIN COMPONENT
+   DESKTOP SPACING OVERRIDES
+   ============================================ */
+@media (min-width: 768px) {
+  :root {
+    --space-3xl: 3rem;
+    --space-4xl: 4rem;
+  }
+}
+
+/* ============================================
+   MAIN COMPONENT - Mobile First
    ============================================ */
 .login-form-component {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   margin: 0 auto;
   background: var(--bg-white);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-4xl);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
   position: relative;
   animation: fadeInUp 0.5s ease-out;
 }
 
-/* Glass morphism variant (optional) */
+@media (min-width: 480px) {
+  .login-form-component {
+    max-width: 440px;
+    padding: var(--space-3xl);
+  }
+}
+
+@media (min-width: 640px) {
+  .login-form-component {
+    max-width: 460px;
+  }
+}
+
+@media (min-width: 768px) {
+  .login-form-component {
+    max-width: 480px;
+    padding: var(--space-4xl);
+    border-radius: var(--radius-2xl);
+  }
+}
+
+/* Glass morphism variant */
 .login-form-component.glass {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -88,22 +122,34 @@
 }
 
 /* ============================================
-   ERROR ALERT
+   ERROR ALERT - Responsive
    ============================================ */
 .error-alert {
   background: var(--error-light);
-  border-left: 4px solid var(--error);
+  border-left: 3px solid var(--error);
   border-radius: var(--radius-lg);
-  padding: var(--space-lg) var(--space-xl);
-  margin-bottom: var(--space-2xl);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-xl);
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   font-size: var(--font-sm);
   color: var(--error-dark);
   font-weight: 500;
   animation: slideInDown 0.3s ease-out;
   box-shadow: var(--shadow-sm);
+  position: relative;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 480px) {
+  .error-alert {
+    border-left-width: 4px;
+    padding: var(--space-lg) var(--space-xl);
+    margin-bottom: var(--space-2xl);
+    gap: var(--space-md);
+    flex-wrap: nowrap;
+  }
 }
 
 .error-icon {
@@ -112,29 +158,54 @@
   animation: pulse 0.5s ease-out;
 }
 
+.error-alert span:not(.error-icon) {
+  flex: 1;
+  word-break: break-word;
+}
+
 .error-alert button {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
   color: var(--error-dark);
   font-weight: bold;
   margin-left: auto;
-  padding: 0 var(--space-xs);
-  transition: opacity var(--transition-fast);
+  padding: 8px 12px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
   opacity: 0.7;
 }
 
-.error-alert button:hover {
-  opacity: 1;
+.error-alert button:active {
+  transform: scale(0.9);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (hover: hover) {
+  .error-alert button:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+  }
 }
 
 /* ============================================
-   FORM GROUPS
+   FORM GROUPS - Responsive
    ============================================ */
 .form-group {
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-xl);
+}
+
+@media (min-width: 480px) {
+  .form-group {
+    margin-bottom: var(--space-2xl);
+  }
 }
 
 .form-group label {
@@ -152,7 +223,7 @@
 }
 
 /* ============================================
-   INPUT WRAPPER & FIELDS
+   INPUT WRAPPER & FIELDS - Touch Friendly
    ============================================ */
 .input-wrapper {
   position: relative;
@@ -162,15 +233,24 @@
 
 .input-wrapper input {
   width: 100%;
-  padding: var(--space-xl) var(--space-lg);
+  padding: 12px var(--space-lg);
+  min-height: var(--touch-target-min);
   font-size: var(--font-base);
   border: 2px solid var(--border-light);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   transition: all var(--transition-base);
   background: var(--bg-white);
   font-family: var(--font-family);
   color: var(--text-primary);
   letter-spacing: 0.3px;
+  -webkit-appearance: none;
+}
+
+@media (min-width: 480px) {
+  .input-wrapper input {
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--radius-xl);
+  }
 }
 
 .input-wrapper input::placeholder {
@@ -179,13 +259,12 @@
   font-weight: 400;
 }
 
-/* Input Hover State */
+/* Input States */
 .input-wrapper input:hover {
   border-color: var(--border-medium);
   background: var(--bg-white);
 }
 
-/* Input Focus State */
 .input-wrapper input:focus {
   outline: none;
   border-color: var(--accent-primary);
@@ -193,7 +272,10 @@
   transform: translateY(-1px);
 }
 
-/* Input Error State */
+.input-wrapper input:active {
+  transform: scale(0.99);
+}
+
 .input-wrapper input.error {
   border-color: var(--error);
 }
@@ -202,7 +284,6 @@
   box-shadow: var(--shadow-error);
 }
 
-/* Input Disabled State */
 .input-wrapper input:disabled {
   background: var(--bg-gray);
   cursor: not-allowed;
@@ -210,39 +291,70 @@
 }
 
 /* ============================================
-   PASSWORD TOGGLE BUTTON
+   PASSWORD TOGGLE BUTTON - Touch Optimized
    ============================================ */
 .password-toggle-btn {
   position: absolute;
-  right: var(--space-lg);
+  right: var(--space-md);
   background: none;
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
   font-size: var(--font-xs);
   font-weight: 600;
-  padding: var(--space-sm) var(--space-md);
+  padding: 8px 12px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: var(--radius-full);
   transition: all var(--transition-fast);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.password-toggle-btn:hover {
+@media (min-width: 480px) {
+  .password-toggle-btn {
+    right: var(--space-lg);
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+.password-toggle-btn:active {
+  transform: scale(0.92);
   background: var(--bg-hover);
   color: var(--accent-primary);
-  transform: scale(0.95);
+}
+
+@media (hover: hover) {
+  .password-toggle-btn:hover {
+    background: var(--bg-hover);
+    color: var(--accent-primary);
+    transform: scale(0.95);
+  }
+}
+
+.password-toggle-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ============================================
-   FORM OPTIONS (Checkbox)
+   FORM OPTIONS (Checkbox) - Touch Friendly
    ============================================ */
 .form-options {
-  margin: var(--space-2xl) 0;
+  margin: var(--space-xl) 0;
+}
+
+@media (min-width: 480px) {
+  .form-options {
+    margin: var(--space-2xl) 0;
+  }
 }
 
 .checkbox-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
   cursor: pointer;
@@ -250,27 +362,41 @@
   color: var(--text-secondary);
   transition: color var(--transition-fast);
   user-select: none;
-  width: fit-content;
+  min-height: var(--touch-target-min);
+  padding: 4px 0;
 }
 
-.checkbox-label:hover {
-  color: var(--text-primary);
+.checkbox-label:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .checkbox-label:hover {
+    color: var(--text-primary);
+  }
 }
 
 .checkbox-label input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
   cursor: pointer;
   accent-color: var(--accent-primary);
   transition: transform var(--transition-fast);
 }
 
-.checkbox-label input:hover {
+.checkbox-label input:active {
   transform: scale(1.1);
 }
 
+@media (hover: hover) {
+  .checkbox-label input:hover {
+    transform: scale(1.05);
+  }
+}
+
 /* ============================================
-   SUBMIT BUTTON
+   SUBMIT BUTTON - Touch Optimized
    ============================================ */
 .submit-btn {
   width: 100%;
@@ -280,17 +406,26 @@
     var(--primary-dark) 100%
   );
   border: none;
-  padding: var(--space-xl) var(--space-3xl);
-  border-radius: var(--radius-xl);
+  padding: 12px var(--space-2xl);
+  min-height: var(--touch-target-min);
+  border-radius: var(--radius-lg);
   font-weight: 700;
   font-size: var(--font-lg);
   color: var(--bg-white);
   cursor: pointer;
   transition: all var(--transition-base);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-xl);
   position: relative;
   overflow: hidden;
   letter-spacing: 0.5px;
+}
+
+@media (min-width: 480px) {
+  .submit-btn {
+    padding: var(--space-xl) var(--space-3xl);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-2xl);
+  }
 }
 
 /* Button Ripple Effect */
@@ -305,27 +440,34 @@
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
   transition:
-    width 0.6s,
-    height 0.6s;
+    width 0.5s,
+    height 0.5s;
 }
 
-.submit-btn:hover:not(:disabled)::before {
+.submit-btn:active::before {
   width: 300px;
   height: 300px;
 }
 
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(15, 47, 58, 0.3);
-  background: linear-gradient(
-    135deg,
-    var(--primary-light) 0%,
-    var(--primary-main) 100%
-  );
+.submit-btn:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
-.submit-btn:active:not(:disabled) {
-  transform: translateY(0);
+@media (hover: hover) {
+  .submit-btn:hover:not(:disabled)::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(15, 47, 58, 0.3);
+    background: linear-gradient(
+      135deg,
+      var(--primary-light) 0%,
+      var(--primary-main) 100%
+    );
+  }
 }
 
 .submit-btn:disabled {
@@ -356,12 +498,12 @@
 }
 
 /* ============================================
-   HELP SECTION
+   HELP SECTION - Responsive
    ============================================ */
 .help-section {
   background: linear-gradient(135deg, var(--bg-gray) 0%, var(--bg-white) 100%);
-  padding: var(--space-xl);
-  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
   text-align: center;
   border: 1px solid var(--border-light);
   transition: all var(--transition-base);
@@ -369,26 +511,49 @@
   overflow: hidden;
 }
 
+@media (min-width: 480px) {
+  .help-section {
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+  }
+}
+
 .help-section::before {
   content: "💡";
   position: absolute;
   top: -10px;
   right: -10px;
-  font-size: 3rem;
+  font-size: 2.5rem;
   opacity: 0.05;
   pointer-events: none;
 }
 
-.help-section:hover {
-  border-color: var(--accent-light);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+@media (min-width: 480px) {
+  .help-section::before {
+    font-size: 3rem;
+  }
+}
+
+@media (hover: hover) {
+  .help-section:hover {
+    border-color: var(--accent-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+/* Touch feedback */
+@media (hover: none) and (pointer: coarse) {
+  .help-section:active {
+    transform: scale(0.98);
+    transition: transform 0.05s ease;
+  }
 }
 
 .help-text {
   font-size: var(--font-xs);
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 500;
   margin: 0;
 }
@@ -398,13 +563,19 @@
   margin: var(--space-xs) 0;
 }
 
+@media (min-width: 480px) {
+  .help-text br {
+    margin: var(--space-sm) 0;
+  }
+}
+
 /* ============================================
-   ANIMATIONS
+   ANIMATIONS - Optimized for mobile
    ============================================ */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -439,74 +610,168 @@
   }
 }
 
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
+/* Conditional animations */
+@media (prefers-reduced-motion: no-preference) {
+  .login-form-component {
+    animation: fadeInUp 0.5s ease-out;
   }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-}
-
-/* Error shake animation */
-.error-alert {
-  animation: slideInDown 0.3s ease-out;
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
+   iPhone Specific Optimizations
    ============================================ */
-/* Tablet */
-@media (max-width: 768px) {
-  .login-form-component {
-    max-width: 100%;
-    padding: var(--space-3xl);
-  }
-}
 
-/* Mobile */
-@media (max-width: 640px) {
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
   .login-form-component {
-    padding: var(--space-2xl);
-    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
   }
 
   .input-wrapper input {
-    padding: var(--space-lg);
-    font-size: var(--font-sm);
-  }
-
-  .submit-btn {
-    padding: var(--space-lg) var(--space-2xl);
-  }
-
-  .help-section {
-    padding: var(--space-lg);
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .login-form-component {
-    padding: var(--space-xl);
-  }
-
-  .form-group {
-    margin-bottom: var(--space-xl);
+    padding: 10px var(--space-lg);
+    font-size: 0.85rem;
   }
 
   .password-toggle-btn {
-    right: var(--space-md);
-    padding: var(--space-xs) var(--space-sm);
+    right: var(--space-sm);
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .submit-btn {
+    padding: 10px var(--space-xl);
+    font-size: 0.9rem;
+  }
+
+  .help-text {
+    font-size: 0.65rem;
+  }
+
+  .error-alert {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.75rem;
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) */
+@media (min-width: 381px) and (max-width: 430px) {
+  .login-form-component {
+    padding: var(--space-2xl);
+  }
+}
+
+/* iPhone Pro Max (428px) */
+@media (min-width: 431px) and (max-width: 500px) {
+  .login-form-component {
+    max-width: 90%;
   }
 }
 
 /* ============================================
-   DARK MODE SUPPORT
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .login-form-component {
+    padding: var(--space-lg);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-lg);
+  }
+
+  .checkbox-label {
+    font-size: 0.75rem;
+  }
+
+  .help-section {
+    padding: var(--space-md);
+  }
+}
+
+/* ============================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .login-form-component {
+    max-width: 440px;
+  }
+}
+
+/* ============================================
+   Desktop & Laptop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .login-form-component {
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
+  }
+
+  .login-form-component:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .checkbox-label:hover,
+  .help-section:hover,
+  .submit-btn:hover,
+  .password-toggle-btn:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .submit-btn:active:not(:disabled),
+  .password-toggle-btn:active,
+  .checkbox-label:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Increase tap target sizes */
+  .password-toggle-btn {
+    min-width: 48px;
+    min-height: 48px;
+  }
+
+  .error-alert button {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .submit-btn:active,
+  .password-toggle-btn:active {
+    transform: none;
+  }
+
+  .login-form-component {
+    animation: none;
+  }
+}
+
+/* ============================================
+   DARK MODE SUPPORT - Fully Responsive
    ============================================ */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -527,18 +792,9 @@
   .help-section {
     background: var(--bg-gray);
   }
-}
 
-/* ============================================
-   ACCESSIBILITY - Reduced Motion
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .error-alert {
+    background: rgba(239, 68, 68, 0.15);
   }
 }
 
@@ -549,11 +805,59 @@
   .login-form-component {
     box-shadow: none;
     padding: 0;
+    max-width: 100%;
   }
 
   .submit-btn,
-  .password-toggle-btn {
+  .password-toggle-btn,
+  .help-section,
+  .error-alert {
     display: none;
+  }
+
+  .form-group {
+    margin-bottom: 0.5rem;
+  }
+
+  .input-wrapper input {
+    border: 1px solid #000;
+    padding: 0.25rem;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.input-wrapper input:focus-visible,
+.submit-btn:focus-visible,
+.password-toggle-btn:focus-visible,
+.checkbox-label input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .login-form-component {
+    padding-left: max(var(--space-2xl), env(safe-area-inset-left));
+    padding-right: max(var(--space-2xl), env(safe-area-inset-right));
+  }
+
+  @media (min-width: 480px) {
+    .login-form-component {
+      padding-left: max(var(--space-3xl), env(safe-area-inset-left));
+      padding-right: max(var(--space-3xl), env(safe-area-inset-right));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .login-form-component {
+      padding-left: max(var(--space-4xl), env(safe-area-inset-left));
+      padding-right: max(var(--space-4xl), env(safe-area-inset-right));
+    }
   }
 }
 
@@ -576,10 +880,27 @@
   width: 100%;
 }
 
-/* Focus visible for accessibility */
-.input-wrapper input:focus-visible,
-.submit-btn:focus-visible,
-.password-toggle-btn:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+/* ============================================
+   SCROLLBAR - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-gray);
+    border-radius: var(--radius-full);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
 }

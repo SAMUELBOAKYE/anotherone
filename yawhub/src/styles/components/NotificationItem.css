@@ -1,33 +1,37 @@
+/* src/styles/components/NotificationItem.css */
+
 /* ============================================
-   NOTIFICATION ITEM - PROFESSIONAL CSS v1.0
-   Premium Component Styling with Micro-interactions
+   NOTIFICATION ITEM - PROFESSIONAL CSS v2.0
+   Mobile-First Premium Component with Advanced Responsiveness
    ============================================ */
 
-/* ===== CSS Custom Properties ===== */
+/* ===== CSS Custom Properties (Design Tokens) ===== */
 :root {
   /* Colors - Light Theme */
   --item-bg: #ffffff;
   --item-bg-hover: #f8fafc;
   --item-border: #e2e8f0;
   --item-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  
+
   /* Text Colors */
   --text-title: #0f172a;
   --text-message: #475569;
   --text-time: #64748b;
   --text-metadata: #64748b;
-  
+
   /* Unread State */
   --unread-bg: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   --unread-border-left: #3b82f6;
   --unread-dot: #3b82f6;
-  
+
   /* Priority Colors */
   --priority-low: #10b981;
+  --priority-low-bg: rgba(16, 185, 129, 0.1);
   --priority-medium: #f59e0b;
+  --priority-medium-bg: rgba(245, 158, 11, 0.1);
   --priority-high: #ef4444;
   --priority-high-bg: rgba(239, 68, 68, 0.1);
-  
+
   /* Type Colors */
   --type-notice: #3b82f6;
   --type-event: #8b5cf6;
@@ -35,7 +39,7 @@
   --type-success: #10b981;
   --type-warning: #f59e0b;
   --type-error: #ef4444;
-  
+
   /* Icon Backgrounds */
   --icon-bg-notice: rgba(59, 130, 246, 0.1);
   --icon-bg-event: rgba(139, 92, 246, 0.1);
@@ -43,43 +47,70 @@
   --icon-bg-success: rgba(16, 185, 129, 0.1);
   --icon-bg-warning: rgba(245, 158, 11, 0.1);
   --icon-bg-error: rgba(239, 68, 68, 0.1);
-  
-  /* Spacing */
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-5: 1.25rem;
-  --spacing-6: 1.5rem;
-  
+
+  /* Spacing - Mobile First */
+  --spacing-0_5: 0.125rem; /* 2px */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-1_5: 0.375rem; /* 6px */
+  --spacing-2: 0.5rem; /* 8px */
+  --spacing-2_5: 0.625rem; /* 10px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-3_5: 0.875rem; /* 14px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-7: 1.75rem; /* 28px */
+  --spacing-8: 2rem; /* 32px */
+
   /* Border Radius */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-2xl: 1.25rem; /* 20px */
   --radius-full: 9999px;
-  
-  /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 
-                 'Helvetica Neue', Arial, sans-serif;
-  --font-xs: 0.75rem;
-  --font-sm: 0.875rem;
-  --font-base: 1rem;
-  --font-lg: 1.125rem;
-  
+
+  /* Typography - Mobile First */
+  --font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Roboto",
+    "Helvetica Neue", Arial, sans-serif;
+  --font-xs: 0.688rem; /* 11px */
+  --font-sm: 0.75rem; /* 12px */
+  --font-base: 0.813rem; /* 13px */
+  --font-lg: 0.875rem; /* 14px */
+  --font-xl: 1rem; /* 16px */
+  --font-2xl: 1.125rem; /* 18px */
+
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  
+  --transition-spring: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.4);
-  
+  --shadow-focus-ring: 0 0 0 2px var(--item-bg), 0 0 0 4px #3b82f6;
+
   /* Z-index */
+  --z-below: -1;
+  --z-normal: 1;
   --z-overlay: 10;
   --z-spinner: 11;
+  --z-tooltip: 20;
+
+  /* Touch Targets - Minimum 44px */
+  --touch-target-min: 2.75rem;
 }
 
 /* Dark Theme */
@@ -93,6 +124,8 @@
     --text-time: #94a3b8;
     --text-metadata: #94a3b8;
     --unread-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    --unread-border-left: #60a5fa;
+    --unread-dot: #60a5fa;
     --icon-bg-notice: rgba(59, 130, 246, 0.2);
     --icon-bg-event: rgba(139, 92, 246, 0.2);
     --icon-bg-system: rgba(100, 116, 139, 0.2);
@@ -103,15 +136,26 @@
 }
 
 /* ============================================================================
-   BASE NOTIFICATION ITEM
+   RESET & BASE STYLES - MOBILE FIRST
+   ============================================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================================
+   BASE NOTIFICATION ITEM - MOBILE OPTIMIZED
    ============================================================================ */
 
 .notification-item {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-4);
-  padding: var(--spacing-4) var(--spacing-6);
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
   background: var(--item-bg);
   border-bottom: 1px solid var(--item-border);
   cursor: pointer;
@@ -120,38 +164,43 @@
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 72px;
+  touch-action: manipulation;
 }
 
-/* Hover Effect */
-.notification-item:hover {
-  background: var(--item-bg-hover);
-  transform: translateX(4px);
-}
-
-.notification-item:hover .notification-icon {
-  transform: scale(1.1) rotate(5deg);
-}
-
-.notification-item:hover .notification-title {
-  color: var(--type-notice);
-}
-
-/* Active/Pressed Effect */
+/* Touch Feedback for Mobile */
 .notification-item:active {
-  transform: translateX(2px);
+  transform: scale(0.98);
   transition: transform var(--transition-fast);
+}
+
+/* Hover Effect - Desktop Only */
+@media (hover: hover) and (pointer: fine) {
+  .notification-item:hover {
+    background: var(--item-bg-hover);
+    transform: translateX(4px);
+  }
+
+  .notification-item:hover .notification-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .notification-item:hover .notification-title {
+    color: var(--type-notice);
+  }
 }
 
 /* Focus Visible for Accessibility */
 .notification-item:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 2px var(--type-notice);
+  box-shadow: var(--shadow-focus-ring);
   background: var(--item-bg-hover);
   transform: translateX(2px);
+  z-index: var(--z-normal);
 }
 
 /* ============================================================================
-   UNREAD STATE
+   UNREAD STATE - WITH ANIMATIONS
    ============================================================================ */
 
 .notification-item.unread {
@@ -161,7 +210,7 @@
 
 /* Animated Left Border */
 .notification-item.unread::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 0;
@@ -195,12 +244,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.2);
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0);
   }
 }
@@ -218,8 +268,10 @@
   background: var(--priority-high);
 }
 
-.notification-item.high-priority:hover {
-  background: rgba(239, 68, 68, 0.15);
+@media (hover: hover) and (pointer: fine) {
+  .notification-item.high-priority:hover {
+    background: rgba(239, 68, 68, 0.15);
+  }
 }
 
 /* ============================================================================
@@ -278,12 +330,13 @@
 }
 
 /* ============================================================================
-   COMPACT MODE
+   COMPACT MODE - MOBILE OPTIMIZED
    ============================================================================ */
 
 .notification-item.compact {
-  padding: var(--spacing-3) var(--spacing-4);
-  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  gap: var(--spacing-2);
+  min-height: 56px;
 }
 
 .notification-item.compact .notification-icon-wrapper {
@@ -291,7 +344,7 @@
   height: 2rem;
 }
 
-.notification-item.compact .notification-icon {
+.notification-item.compact .notification-icon svg {
   width: 1rem;
   height: 1rem;
 }
@@ -305,14 +358,25 @@
   margin-bottom: 0;
 }
 
+.notification-item.compact .notification-message {
+  display: none;
+}
+
 /* ============================================================================
-   ICON SECTION
+   ICON SECTION - RESPONSIVE
    ============================================================================ */
 
 .notification-icon-wrapper {
   flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
+}
+
+@media (min-width: 769px) {
+  .notification-icon-wrapper {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
 }
 
 .notification-icon {
@@ -363,55 +427,92 @@
   transition: transform var(--transition-fast);
 }
 
-.notification-item:hover .notification-icon svg {
-  transform: scale(1.05);
+@media (min-width: 769px) {
+  .notification-icon svg {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}
+
+.notification-item:active .notification-icon svg {
+  transform: scale(0.95);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .notification-item:hover .notification-icon svg {
+    transform: scale(1.05);
+  }
 }
 
 /* ============================================================================
-   CONTENT SECTION
+   CONTENT SECTION - RESPONSIVE
    ============================================================================ */
 
 .notification-content {
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* Prevents overflow */
 }
 
 .notification-header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-2);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-1_5);
+}
+
+@media (min-width: 481px) {
+  .notification-header {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+  }
 }
 
 .notification-title-wrapper {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--spacing-1_5);
   flex-wrap: wrap;
 }
 
 .notification-title {
   margin: 0;
   font-size: var(--font-base);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--text-title);
   transition: color var(--transition-fast);
   letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+@media (min-width: 769px) {
+  .notification-title {
+    font-size: var(--font-lg);
+  }
 }
 
 .notification-message {
-  margin: var(--spacing-2) 0 0;
+  margin: var(--spacing-1) 0 0;
   font-size: var(--font-sm);
   color: var(--text-message);
   line-height: 1.5;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .notification-message {
+    -webkit-line-clamp: 3;
+  }
 }
 
 /* ============================================================================
-   TIME AGO
+   TIME AGO - RESPONSIVE
    ============================================================================ */
 
 .notification-time {
@@ -421,8 +522,17 @@
   transition: color var(--transition-fast);
 }
 
-.notification-item:hover .notification-time {
-  color: var(--type-notice);
+@media (max-width: 480px) {
+  .notification-time {
+    white-space: normal;
+    font-size: 0.625rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .notification-item:hover .notification-time {
+    color: var(--type-notice);
+  }
 }
 
 /* ============================================================================
@@ -435,11 +545,19 @@
   justify-content: center;
   padding: 0.125rem 0.5rem;
   font-size: var(--font-xs);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   animation: fadeIn 0.3s ease;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .priority-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.375rem;
+  }
 }
 
 @keyframes fadeIn {
@@ -454,20 +572,24 @@
 }
 
 .priority-medium {
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--priority-medium-bg);
   color: var(--priority-medium);
   border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .priority-high {
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--priority-high-bg);
   color: var(--priority-high);
   border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.priority-high {
   animation: shake 0.5s ease;
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
@@ -479,16 +601,22 @@
 }
 
 /* ============================================================================
-   METADATA SECTION
+   METADATA SECTION - RESPONSIVE
    ============================================================================ */
 
 .notification-metadata {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-3);
+  gap: var(--spacing-2);
   margin-top: var(--spacing-2);
   padding-top: var(--spacing-2);
   border-top: 1px solid var(--item-border);
+}
+
+@media (min-width: 769px) {
+  .notification-metadata {
+    gap: var(--spacing-3);
+  }
 }
 
 .metadata-item {
@@ -497,16 +625,17 @@
   background: rgba(100, 116, 139, 0.05);
   padding: 0.125rem 0.5rem;
   border-radius: var(--radius-sm);
+  word-break: break-word;
 }
 
 .metadata-item strong {
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--text-title);
   margin-right: var(--spacing-1);
 }
 
 /* ============================================================================
-   RIPPLE EFFECT
+   RIPPLE EFFECT - TOUCH FEEDBACK
    ============================================================================ */
 
 .notification-item {
@@ -515,22 +644,121 @@
 }
 
 .notification-item::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.15);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.4s,
+    height 0.4s;
   pointer-events: none;
 }
 
 .notification-item:active::after {
   width: 300px;
   height: 300px;
+}
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+/* Small Phones (320px - 375px) - iPhone SE */
+@media (max-width: 375px) {
+  .notification-item {
+    padding: var(--spacing-2_5) var(--spacing-3);
+    gap: var(--spacing-2);
+    min-height: 64px;
+  }
+
+  .notification-icon-wrapper {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .notification-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .notification-title {
+    font-size: var(--font-sm);
+  }
+
+  .notification-message {
+    font-size: 0.688rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .notification-title-wrapper {
+    gap: var(--spacing-1);
+  }
+}
+
+/* Standard Phones (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .notification-header {
+    margin-bottom: var(--spacing-1);
+  }
+
+  .notification-message {
+    font-size: var(--font-sm);
+  }
+}
+
+/* Large Phones (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .notification-item {
+    padding: var(--spacing-3_5) var(--spacing-5);
+  }
+
+  .notification-title {
+    font-size: var(--font-base);
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .notification-item {
+    padding: var(--spacing-4) var(--spacing-6);
+  }
+
+  .notification-item:hover {
+    transform: translateX(6px);
+  }
+}
+
+/* Desktops (1025px+) */
+@media (min-width: 1025px) {
+  .notification-item {
+    padding: var(--spacing-4) var(--spacing-7);
+    min-height: 80px;
+  }
+
+  .notification-item:hover {
+    transform: translateX(8px);
+  }
+}
+
+/* Landscape Mode for Mobiles */
+@media (max-width: 768px) and (orientation: landscape) {
+  .notification-item {
+    padding: var(--spacing-2) var(--spacing-4);
+    min-height: 56px;
+  }
+
+  .notification-message {
+    -webkit-line-clamp: 1;
+  }
+
+  .notification-header {
+    margin-bottom: var(--spacing-0_5);
+  }
 }
 
 /* ============================================================================
@@ -560,11 +788,23 @@
 }
 
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
   50% {
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -574,20 +814,40 @@
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .notification-item,
-  .notification-icon,
-  .unread-dot,
-  .priority-high {
-    animation: none !important;
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    scroll-behavior: auto !important;
   }
-  
-  .notification-item:hover {
+
+  .notification-item:active {
     transform: none;
   }
-  
+
+  @media (hover: hover) and (pointer: fine) {
+    .notification-item:hover {
+      transform: none;
+    }
+  }
+
   .notification-item.unread::before {
     animation: none;
+  }
+
+  .unread-dot {
+    animation: none;
+  }
+
+  .priority-high {
+    animation: none;
+  }
+
+  .notification-item::after {
+    transition: none;
   }
 }
 
@@ -595,6 +855,8 @@
 .notification-item:focus-visible {
   outline: 2px solid var(--type-notice);
   outline-offset: 2px;
+  position: relative;
+  z-index: var(--z-normal);
 }
 
 /* High Contrast Mode */
@@ -602,18 +864,23 @@
   .notification-item.unread {
     border-left: 4px solid var(--unread-border-left);
   }
-  
+
   .notification-item.unread::before {
     display: none;
   }
-  
+
   .priority-badge {
     border: 1px solid currentColor;
+  }
+
+  .notification-item:focus-visible {
+    outline: 3px solid currentColor;
   }
 }
 
 /* Screen Reader Only */
-.visually-hidden {
+.visually-hidden,
+.sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -625,41 +892,14 @@
   border-width: 0;
 }
 
-/* ============================================================================
-   RESPONSIVE DESIGN
-   ============================================================================ */
-
-@media (max-width: 640px) {
+/* Touch Device Optimizations */
+@media (max-width: 768px) {
   .notification-item {
-    padding: var(--spacing-3) var(--spacing-4);
-    gap: var(--spacing-3);
+    cursor: default;
   }
-  
-  .notification-icon-wrapper {
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  .notification-icon svg {
-    width: 1rem;
-    height: 1rem;
-  }
-  
-  .notification-title {
-    font-size: var(--font-sm);
-  }
-  
-  .notification-message {
-    font-size: var(--font-xs);
-  }
-  
-  .notification-header {
-    flex-direction: column;
-    gap: var(--spacing-1);
-  }
-  
-  .notification-time {
-    white-space: normal;
+
+  .notification-item:active {
+    transform: scale(0.98);
   }
 }
 
@@ -673,14 +913,22 @@
     page-break-inside: avoid;
     border: 1px solid #ddd;
     margin-bottom: var(--spacing-2);
+    box-shadow: none;
   }
-  
-  .notification-item:hover {
-    transform: none;
+
+  @media (hover: hover) and (pointer: fine) {
+    .notification-item:hover {
+      transform: none;
+    }
   }
-  
+
   .processing-overlay,
-  .unread-dot {
+  .unread-dot,
+  .notification-item::after {
+    display: none;
+  }
+
+  .notification-item.unread::before {
     display: none;
   }
 }
@@ -691,7 +939,8 @@
 
 .notification-item,
 .notification-icon,
-.notification-title {
+.notification-title,
+.notification-icon svg {
   will-change: transform;
 }
 
@@ -699,30 +948,150 @@
 @supports (display: grid) {
   .notification-header {
     display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: baseline;
-    gap: var(--spacing-2);
+    grid-template-columns: 1fr;
+    gap: var(--spacing-1);
   }
-  
+
+  @media (min-width: 481px) {
+    .notification-header {
+      grid-template-columns: 1fr auto;
+      gap: var(--spacing-2);
+    }
+  }
+
   .notification-title-wrapper {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--spacing-1_5);
     justify-content: start;
   }
-  
+
   .notification-metadata {
     display: grid;
     grid-auto-flow: column;
-    gap: var(--spacing-3);
+    gap: var(--spacing-2);
     justify-content: start;
+  }
+
+  @media (max-width: 480px) {
+    .notification-metadata {
+      grid-auto-flow: row;
+    }
   }
 }
 
 /* Backdrop Filter Support */
-@supports (backdrop-filter: blur(2px)) {
+@supports (backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px)) {
   .processing-overlay {
     backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
+}
+
+/* Safe Area Insets for Notch Devices */
+@supports (padding: max(0px)) {
+  @media (max-width: 768px) {
+    .notification-item {
+      padding-left: max(var(--spacing-4), env(safe-area-inset-left));
+      padding-right: max(var(--spacing-4), env(safe-area-inset-right));
+    }
+  }
+}
+
+/* ============================================================================
+   DARK MODE TRANSITIONS
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  .notification-item,
+  .notification-icon,
+  .priority-badge {
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      color var(--transition-base);
+  }
+}
+
+/* ============================================================================
+   LOADING SKELETON
+   ============================================================================ */
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.skeleton-notification-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--item-bg);
+  border-bottom: 1px solid var(--item-border);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--item-border);
+  border-radius: var(--radius-full);
+}
+
+.skeleton-content {
+  flex: 1;
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 1rem;
+  background: var(--item-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-2);
+}
+
+.skeleton-message {
+  width: 80%;
+  height: 0.75rem;
+  background: var(--item-border);
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================================
+   ERROR STATE
+   ============================================================================ */
+
+.notification-item.error {
+  background: rgba(239, 68, 68, 0.05);
+  border-left: 3px solid var(--type-error);
+}
+
+.notification-item.error .notification-title {
+  color: var(--type-error);
+}
+
+/* Success State Animation */
+@keyframes successCheck {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.notification-item.success-animation .notification-icon svg {
+  animation: successCheck 0.4s var(--transition-bounce);
 }

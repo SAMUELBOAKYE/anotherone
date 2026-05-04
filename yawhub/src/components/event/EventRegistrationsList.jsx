@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import eventService from "../../services/eventService";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ErrorAlert from "../common/ErrorAlert";
-import "../styles/components/EventRegistrationsList.css";
+import "../../styles/components/EventRegistrationsList.css";
 
 const EventRegistrationsList = ({ eventId, eventTitle }) => {
   const [registrations, setRegistrations] = useState([]);

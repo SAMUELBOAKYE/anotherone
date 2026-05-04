@@ -11,7 +11,7 @@ import { AuthProvider } from "./context/AuthContext";
 import "./styles/variables.css"; // ✅ CRITICAL FIX: CSS variables must load first
 import "./index.css";
 import "./styles/global.css";
-import "./styles/mobile-fixes.css"; // ✅ Mobile responsive fixes
+//import "./styles/mobile-fixes.css"; // ✅ Mobile responsive fixes
 
 const isDevelopment = import.meta.env.DEV;
 const appName = import.meta.env.VITE_APP_NAME || "KAAF Noticeboard";

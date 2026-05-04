@@ -1,0 +1,453 @@
+/* src/styles/components/OfflineBanner.css */
+
+/* ========================================
+   CSS VARIABLES - Mobile First
+   ======================================== */
+:root {
+  /* Colors */
+  --offline-bg: #f59e0b;
+  --offline-bg-dark: #d97706;
+  --offline-bg-online: #10b981;
+  --offline-bg-online-dark: #059669;
+  --offline-text: #ffffff;
+  --offline-text-muted: rgba(255, 255, 255, 0.8);
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
+  /* Spacing - Mobile First */
+  --banner-padding: 10px 12px;
+  --banner-gap-sm: 8px;
+  --banner-gap-md: 12px;
+  --banner-font-size: 12px;
+  --banner-font-size-sm: 11px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-index */
+  --z-banner: 9999;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ========================================
+   DESKTOP VARIABLES OVERRIDES
+   ======================================== */
+@media (min-width: 640px) {
+  :root {
+    --banner-padding: 12px 20px;
+    --banner-gap-md: 16px;
+    --banner-font-size: 14px;
+  }
+}
+
+/* ========================================
+   BANNER CONTAINER - Mobile First
+   ======================================== */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--offline-bg);
+  color: var(--offline-text);
+  z-index: var(--z-banner);
+  box-shadow: var(--shadow-sm);
+  animation: slideDown 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  transform-origin: top;
+}
+
+/* Back online state */
+.offline-banner.back-online {
+  background-color: var(--offline-bg-online);
+  animation:
+    slideDown 0.3s cubic-bezier(0.34, 1.2, 0.64, 1),
+    successPulse 0.5s ease-in-out;
+}
+
+@keyframes successPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    background-color: var(--offline-bg-online-dark);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   BANNER CONTENT - Responsive
+   ======================================== */
+.offline-banner-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--banner-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--banner-gap-sm);
+}
+
+@media (min-width: 640px) {
+  .offline-banner-content {
+    flex-direction: row;
+    gap: var(--banner-gap-md);
+  }
+}
+
+/* Left Section */
+.offline-banner-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--banner-gap-sm);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .offline-banner-left {
+    width: auto;
+    justify-content: flex-start;
+  }
+}
+
+/* Icon */
+.offline-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@media (min-width: 640px) {
+  .offline-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@keyframes iconPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Message Text */
+.offline-message {
+  font-size: var(--banner-font-size);
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (min-width: 640px) {
+  .offline-message {
+    text-align: left;
+  }
+}
+
+.offline-message strong {
+  font-weight: 700;
+}
+
+/* Queue Badge */
+.offline-queue-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: var(--banner-font-size-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .offline-queue-badge {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Right Section */
+.offline-banner-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--banner-gap-sm);
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .offline-banner-right {
+    width: auto;
+    justify-content: flex-end;
+  }
+}
+
+/* Sync Message */
+.offline-sync-message {
+  font-size: var(--banner-font-size-sm);
+  opacity: 0.9;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .offline-sync-message {
+    text-align: left;
+  }
+}
+
+/* Dismiss Button - Touch Optimized */
+.offline-dismiss-btn {
+  background: none;
+  border: none;
+  color: var(--offline-text);
+  cursor: pointer;
+  padding: 8px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.offline-dismiss-btn:active {
+  transform: scale(0.9);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (hover: hover) {
+  .offline-dismiss-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+  }
+}
+
+.offline-dismiss-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+/* ========================================
+   iPhone Specific Optimizations
+   ============================================ */
+
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .offline-banner-content {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .offline-message {
+    font-size: 11px;
+  }
+
+  .offline-queue-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .offline-sync-message {
+    font-size: 10px;
+  }
+
+  .offline-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .offline-dismiss-btn {
+    padding: 6px;
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) - Default styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .offline-banner-left {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .offline-message {
+    width: 100%;
+    text-align: center;
+  }
+
+  .offline-banner-right {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .offline-banner-content {
+    max-width: 90%;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .offline-banner-content {
+    transition: transform var(--transition-base);
+  }
+
+  .offline-dismiss-btn {
+    transition:
+      transform var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Ensure active states provide feedback */
+  .offline-dismiss-btn:active {
+    transform: scale(0.92);
+    transition: transform 0.05s ease;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .offline-banner,
+  .offline-banner.back-online,
+  .offline-icon,
+  .offline-dismiss-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .offline-banner {
+    transform: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.offline-dismiss-btn:focus-visible {
+  outline: 2px solid var(--offline-text);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .offline-banner-content {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-top: max(10px, env(safe-area-inset-top));
+  }
+
+  @media (min-width: 640px) {
+    .offline-banner-content {
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .offline-banner {
+    display: none;
+  }
+}
+
+/* ========================================
+   ANIMATION FOR QUEUE BADGE UPDATE
+   ============================================ */
+.offline-queue-badge {
+  transition: transform var(--transition-fast);
+  will-change: transform;
+}
+
+.offline-queue-badge:active {
+  transform: scale(0.95);
+}
+
+/* ========================================
+   PROGRESS BAR (Optional - for auto-dismiss countdown)
+   ============================================ */
+.offline-banner.back-online::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.4);
+  animation: progressShrink 2s linear forwards;
+}
+
+@keyframes progressShrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* ========================================
+   SMOOTH TEXT RENDERING
+   ============================================ */
+.offline-message,
+.offline-sync-message,
+.offline-queue-badge {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   SELECTION STYLE
+   ============================================ */
+.offline-banner ::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--offline-text);
+}

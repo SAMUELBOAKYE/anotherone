@@ -1,7 +1,7 @@
 /* src/components/common/Sidebar.css */
 
 /* ========================================
-   VARIABLES & THEME
+   VARIABLES & THEME - Mobile First
    ======================================== */
 :root {
   /* Light theme */
@@ -21,37 +21,62 @@
   --overlay-bg: rgba(0, 0, 0, 0.5);
   --tooltip-bg: #1e293b;
   --tooltip-text: #ffffff;
-  --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
+  /* Spacing */
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 70px;
+
+  /* Transitions */
+  --transition-default: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] {
-  --sidebar-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --sidebar-border: rgba(51, 65, 85, 0.4);
-  --sidebar-text: #e2e8f0;
-  --sidebar-text-muted: #94a3b8;
-  --sidebar-icon: #cbd5e1;
-  --sidebar-hover-bg: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-  --sidebar-hover-text: #f1f5f9;
-  --sidebar-active-bg: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
-  --avatar-bg: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
-  --tooltip-bg: #334155;
-  --overlay-bg: rgba(0, 0, 0, 0.7);
+/* ========================================
+   DESKTOP VARIABLES OVERRIDES
+   ======================================== */
+@media (min-width: 768px) {
+  :root {
+    --sidebar-width: 280px;
+    --sidebar-width-collapsed: 80px;
+  }
+}
+
+/* Dark Theme */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sidebar-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --sidebar-border: rgba(51, 65, 85, 0.4);
+    --sidebar-text: #e2e8f0;
+    --sidebar-text-muted: #94a3b8;
+    --sidebar-icon: #cbd5e1;
+    --sidebar-hover-bg: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    --sidebar-hover-text: #f1f5f9;
+    --sidebar-active-bg: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+    --avatar-bg: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+    --tooltip-bg: #334155;
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+  }
 }
 
 /* ========================================
-   BASE SIDEBAR STYLES
+   BASE SIDEBAR STYLES - Mobile First
    ======================================== */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  width: 280px;
+  width: var(--sidebar-width);
   background: var(--sidebar-bg);
   backdrop-filter: blur(10px);
   border-right: 1px solid var(--sidebar-border);
@@ -62,30 +87,64 @@
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--sidebar-text-muted) transparent;
+  transform: translateX(-100%);
 }
 
+@media (min-width: 768px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+}
+
+.sidebar.mobile-open {
+  transform: translateX(0);
+}
+
+/* Collapsed state - Desktop only */
+@media (min-width: 768px) {
+  .sidebar.collapsed {
+    width: var(--sidebar-width-collapsed);
+  }
+
+  .sidebar.collapsed.mobile-open {
+    transform: translateX(0);
+  }
+}
+
+/* For mobile, collapsed state doesn't collapse width, just shows menu */
+@media (max-width: 767px) {
+  .sidebar.collapsed {
+    width: var(--sidebar-width);
+  }
+}
+
+/* Scrollbar Styling */
 .sidebar::-webkit-scrollbar {
-  width: 5px;
+  width: 4px;
 }
 
 .sidebar::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 10px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
   background: var(--sidebar-text-muted);
   border-radius: 10px;
+  transition: var(--transition-default);
 }
 
-.sidebar.collapsed {
-  width: 80px;
+@media (hover: hover) {
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--sidebar-active-bg);
+  }
 }
 
 /* ========================================
-   SIDEBAR HEADER
+   SIDEBAR HEADER - Responsive
    ======================================== */
 .sidebar-header {
-  padding: 24px 20px;
+  padding: 20px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -94,21 +153,34 @@
   position: relative;
 }
 
-.sidebar.collapsed .sidebar-header {
-  justify-content: center;
-  padding: 24px 12px;
+@media (min-width: 768px) {
+  .sidebar-header {
+    padding: 24px 20px;
+    gap: 12px;
+  }
 }
 
+/* Collapsed header - Desktop only */
+@media (min-width: 768px) {
+  .sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    padding: 24px 12px;
+  }
+}
+
+/* User Avatar - Touch Friendly */
 .user-avatar {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 50%;
   background: var(--avatar-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   color: var(--avatar-text);
   text-transform: uppercase;
   box-shadow: var(--shadow-md);
@@ -116,17 +188,35 @@
   flex-shrink: 0;
 }
 
-.sidebar.collapsed .user-avatar {
-  width: 40px;
-  height: 40px;
-  font-size: 16px;
+@media (min-width: 768px) {
+  .user-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
 }
 
-.user-avatar:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-lg);
+.user-avatar:active {
+  transform: scale(0.95);
 }
 
+@media (hover: hover) {
+  .user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* Collapsed avatar - Desktop only */
+@media (min-width: 768px) {
+  .sidebar.collapsed .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/* User Info */
 .user-info {
   flex: 1;
   overflow: hidden;
@@ -134,24 +224,39 @@
 
 .user-name {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--sidebar-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+@media (min-width: 768px) {
+  .user-name {
+    font-size: 14px;
+  }
+}
+
 .user-role {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--sidebar-text-muted);
   margin-top: 4px;
 }
 
+@media (min-width: 768px) {
+  .user-role {
+    font-size: 12px;
+  }
+}
+
+/* Sidebar Toggle Button - Touch Friendly */
 .sidebar-toggle {
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 8px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -161,18 +266,27 @@
   flex-shrink: 0;
 }
 
-.sidebar-toggle:hover {
-  background: var(--sidebar-hover-bg);
-  color: var(--sidebar-hover-text);
-  transform: rotate(180deg);
+.sidebar-toggle:active {
+  transform: rotate(180deg) scale(0.92);
 }
 
-.sidebar-toggle:active {
-  transform: rotate(180deg) scale(0.95);
+@media (hover: hover) {
+  .sidebar-toggle:hover {
+    background: var(--sidebar-hover-bg);
+    color: var(--sidebar-hover-text);
+    transform: rotate(180deg);
+  }
+}
+
+/* Hide toggle on mobile */
+@media (max-width: 767px) {
+  .sidebar-toggle {
+    display: none;
+  }
 }
 
 /* ========================================
-   NAVIGATION LINKS
+   NAVIGATION LINKS - Touch Optimized
    ======================================== */
 .sidebar-nav {
   padding: 0 12px;
@@ -186,63 +300,77 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
+  min-height: var(--touch-target-min);
   border-radius: 12px;
   text-decoration: none;
   color: var(--sidebar-text);
   transition: var(--transition-default);
   position: relative;
   overflow: hidden;
-  animation: slideIn 0.4s ease-out forwards;
-  opacity: 0;
-  transform: translateX(-20px);
 }
 
-.sidebar-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sidebar-active-bg);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
-  opacity: 0;
+@media (min-width: 768px) {
+  .sidebar-link {
+    padding: 12px 16px;
+    animation: slideIn 0.3s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-20px);
+  }
 }
 
-.sidebar-link:hover::before,
-.sidebar-link.active::before {
-  transform: scaleX(1);
-  opacity: 0.1;
+/* Link animations - Desktop only */
+@media (min-width: 768px) {
+  .sidebar-link {
+    animation: slideIn 0.3s ease-out forwards;
+  }
 }
 
-.sidebar-link:hover {
-  background: var(--sidebar-hover-bg);
-  transform: translateX(4px);
-  color: var(--sidebar-hover-text);
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Active and hover states */
+.sidebar-link:active {
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .sidebar-link:hover {
+    background: var(--sidebar-hover-bg);
+    transform: translateX(4px);
+    color: var(--sidebar-hover-text);
+  }
 }
 
 .sidebar-link.active {
   background: var(--sidebar-active-bg);
   color: var(--sidebar-active-text);
   box-shadow: var(--sidebar-active-shadow);
-  transform: translateX(0);
 }
 
-.sidebar.collapsed .sidebar-link {
-  justify-content: center;
-  padding: 12px;
+/* Collapsed link styles - Desktop only */
+@media (min-width: 768px) {
+  .sidebar.collapsed .sidebar-link {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .sidebar.collapsed .sidebar-link:hover {
+    transform: translateX(0) scale(1.05);
+  }
 }
 
-.sidebar.collapsed .sidebar-link:hover {
-  transform: translateX(0) scale(1.05);
-}
-
+/* Sidebar Icon */
 .sidebar-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -250,56 +378,108 @@
   transition: var(--transition-default);
 }
 
-.sidebar-link:hover .sidebar-icon {
-  transform: scale(1.1);
+@media (min-width: 768px) {
+  .sidebar-icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 
+.sidebar-link:active .sidebar-icon {
+  transform: scale(0.9);
+}
+
+@media (hover: hover) {
+  .sidebar-link:hover .sidebar-icon {
+    transform: scale(1.1);
+  }
+}
+
+/* Sidebar Label */
 .sidebar-label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   transition: var(--transition-default);
 }
 
-/* Tooltip for collapsed mode */
-.sidebar.collapsed .sidebar-link[data-tooltip] {
-  position: relative;
+@media (min-width: 768px) {
+  .sidebar-label {
+    font-size: 14px;
+  }
 }
 
-.sidebar.collapsed .sidebar-link[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: 12px;
-  padding: 6px 12px;
-  background: var(--tooltip-bg);
-  color: var(--tooltip-text);
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-  border-radius: 8px;
-  box-shadow: var(--shadow-lg);
-  z-index: 1000;
-  animation: tooltipFadeIn 0.2s ease-out;
-  pointer-events: none;
+/* Hide label on collapsed sidebar - Desktop only */
+@media (min-width: 768px) {
+  .sidebar.collapsed .sidebar-label {
+    display: none;
+  }
+}
+
+/* Ensure labels are visible on mobile */
+@media (max-width: 767px) {
+  .sidebar-label {
+    display: inline-block;
+  }
 }
 
 /* ========================================
-   MOBILE MENU
+   TOOLTIP FOR COLLAPSED MODE - Desktop only
+   ======================================== */
+@media (min-width: 768px) {
+  .sidebar.collapsed .sidebar-link[data-tooltip] {
+    position: relative;
+  }
+
+  .sidebar.collapsed .sidebar-link[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 12px;
+    padding: 6px 12px;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+    animation: tooltipFadeIn 0.2s ease-out;
+    pointer-events: none;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* ========================================
+   MOBILE MENU TOGGLE BUTTON
    ======================================== */
 .mobile-menu-toggle {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
   z-index: 1100;
   background: var(--sidebar-active-bg);
   border: none;
   cursor: pointer;
-  padding: 12px;
+  width: 44px;
+  height: 44px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 12px;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   color: white;
@@ -307,15 +487,26 @@
   transition: var(--transition-default);
 }
 
-.mobile-menu-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-xl);
+@media (min-width: 768px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
 }
 
 .mobile-menu-toggle:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
+@media (hover: hover) {
+  .mobile-menu-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+/* ========================================
+   SIDEBAR OVERLAY - Mobile only
+   ======================================== */
 .sidebar-overlay {
   position: fixed;
   top: 0;
@@ -336,74 +527,271 @@
 }
 
 /* ========================================
-   ANIMATIONS
-   ======================================== */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
+   iPhone Specific Optimizations
+   ============================================ */
+
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .sidebar {
+    width: 85%;
+    max-width: 280px;
   }
-  to {
+
+  .sidebar-header {
+    padding: 16px 12px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .user-name {
+    font-size: 12px;
+  }
+
+  .user-role {
+    font-size: 10px;
+  }
+
+  .sidebar-nav {
+    padding: 0 8px;
+    gap: 2px;
+  }
+
+  .sidebar-link {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .sidebar-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-label {
+    font-size: 12px;
+  }
+
+  .mobile-menu-toggle {
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* iPhone 12/13/14/15 (390px) - Default mobile styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .sidebar {
+    width: 90%;
+  }
+
+  .sidebar-link {
+    padding: 8px 12px;
+  }
+
+  .sidebar-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ========================================
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .sidebar.collapsed {
+    width: 70px;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px;
+  }
+
+  .user-avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .sidebar.collapsed .user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .sidebar {
+    transition:
+      transform var(--transition-default),
+      width var(--transition-default);
+  }
+
+  .sidebar-link {
+    transition:
+      transform var(--transition-default),
+      background var(--transition-default),
+      color var(--transition-default);
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .sidebar-link:hover,
+  .user-avatar:hover,
+  .sidebar-toggle:hover,
+  .mobile-menu-toggle:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .sidebar-link:active,
+  .user-avatar:active,
+  .sidebar-toggle:active,
+  .mobile-menu-toggle:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Disable animations on touch */
+  .sidebar-link {
+    animation: none;
     opacity: 1;
-    transform: translateX(0);
+    transform: none;
   }
 }
 
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) translateX(-10px);
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
   }
-  to {
+
+  .sidebar-link:active,
+  .user-avatar:active {
+    transform: none;
+  }
+
+  .sidebar-link {
+    animation: none;
     opacity: 1;
-    transform: translateY(-50%) translateX(0);
+    transform: none;
   }
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
+.sidebar-link:focus-visible,
+.sidebar-toggle:focus-visible,
+.mobile-menu-toggle:focus-visible {
+  outline: 2px solid var(--sidebar-active-bg);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ========================================
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .sidebar {
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
   }
-  50% {
-    transform: scale(1.05);
+
+  .mobile-menu-toggle {
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
+/* ========================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .sidebar,
+  .mobile-menu-toggle,
+  .sidebar-overlay {
+    display: none !important;
   }
-  100% {
-    background-position: 1000px 0;
+}
+
+/* ========================================
+   ACTIVE LINK GLOW EFFECT - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  .sidebar-link.active {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sidebar-link.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: glow 2s infinite;
   }
 }
 
 @keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+  0%,
+  100% {
+    opacity: 0.5;
   }
   50% {
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+    opacity: 1;
   }
 }
 
-/* Loading animation for sidebar items */
-.sidebar-link.loading {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
-}
-
-/* Hover effect for active link */
-.sidebar-link.active:hover {
-  transform: translateX(2px);
-  filter: brightness(1.05);
-}
-
-/* Ripple effect */
-.sidebar-link {
-  position: relative;
-  overflow: hidden;
+/* ========================================
+   RIPPLE EFFECT - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  .sidebar-link {
+    position: relative;
+    overflow: hidden;
+  }
 }
 
 .sidebar-link .ripple {
@@ -423,143 +811,62 @@
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    width: 280px;
-  }
+   LOADING STATE
+   ============================================ */
+.sidebar-link.loading {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
 
-  .sidebar.mobile-open {
-    transform: translateX(0);
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
   }
-
-  .sidebar.collapsed {
-    width: 280px;
-    transform: translateX(-100%);
-  }
-
-  .sidebar.collapsed.mobile-open {
-    transform: translateX(0);
-  }
-
-  .mobile-menu-toggle {
-    display: flex;
-  }
-
-  .sidebar.collapsed .sidebar-header {
-    justify-content: flex-start;
-    padding: 24px 20px;
-  }
-
-  .sidebar.collapsed .user-avatar {
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
-  }
-
-  .sidebar.collapsed .sidebar-link {
-    justify-content: flex-start;
-    padding: 12px 16px;
-  }
-
-  .sidebar.collapsed .sidebar-label {
-    display: inline-block;
-  }
-
-  .sidebar.collapsed .sidebar-link[data-tooltip]:hover::after {
-    display: none;
+  100% {
+    background-position: 1000px 0;
   }
 }
 
 /* ========================================
-   SCROLLBAR STYLES
-   ======================================== */
-.sidebar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--sidebar-text-muted) transparent;
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 10px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-  background: var(--sidebar-text-muted);
-  border-radius: 10px;
-  transition: var(--transition-default);
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
+   SELECTION STYLE
+   ============================================ */
+.sidebar ::selection {
   background: var(--sidebar-active-bg);
+  color: white;
 }
 
 /* ========================================
-   ADDITIONAL ENHANCEMENTS
-   ======================================== */
-/* Glass morphism effect on hover */
-.sidebar:hover {
-  backdrop-filter: blur(12px);
+   SMOOTH TEXT RENDERING
+   ============================================ */
+.user-name,
+.user-role,
+.sidebar-label {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Gradient border animation for active link */
-.sidebar-link.active {
-  position: relative;
-  overflow: hidden;
-}
-
-.sidebar-link.active::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  padding: 1px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: glow 2s infinite;
-}
-
-/* Focus styles for accessibility */
-.sidebar-link:focus-visible {
-  outline: 2px solid var(--sidebar-active-bg);
-  outline-offset: 2px;
-}
-
-.sidebar-toggle:focus-visible {
-  outline: 2px solid var(--sidebar-active-bg);
-  outline-offset: 2px;
-}
-
-/* Reduced motion preference */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+/* ========================================
+   ACTIVE LINK HOVER ENHANCEMENT - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  .sidebar-link.active:hover {
+    transform: translateX(2px);
+    filter: brightness(1.05);
   }
 }
 
-/* Print styles */
-@media print {
-  .sidebar,
-  .mobile-menu-toggle,
-  .sidebar-overlay {
-    display: none !important;
+/* ========================================
+   GLASS MORPHISM EFFECT ON HOVER - Desktop only
+   ============================================ */
+@media (min-width: 1024px) {
+  .sidebar:hover {
+    backdrop-filter: blur(12px);
   }
 }

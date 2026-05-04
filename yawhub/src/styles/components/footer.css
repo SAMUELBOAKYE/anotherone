@@ -1,7 +1,7 @@
 /* src/styles/components/footer.css */
 
 /* ========================================
-   FOOTER VARIABLES & RESET
+   FOOTER VARIABLES & RESET - Mobile First
    ======================================== */
 .footer {
   --footer-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -10,32 +10,46 @@
   --footer-border: #334155;
   --footer-accent: #3b82f6;
   --footer-accent-hover: #60a5fa;
-  --footer-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+  --footer-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Touch Target Minimum Size */
+  --touch-target-min: 44px;
+
   background: var(--footer-bg);
   color: var(--footer-text);
   margin-top: auto;
   position: relative;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* Animated border top */
-.footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, 
-    var(--footer-accent) 0%, 
-    #8b5cf6 25%, 
-    #ec4899 50%, 
-    #8b5cf6 75%, 
-    var(--footer-accent) 100%);
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: slideBorder 0.8s ease-out forwards;
+/* Animated border top - Desktop only for performance */
+@media (min-width: 768px) {
+  .footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--footer-accent) 0%,
+      #8b5cf6 25%,
+      #ec4899 50%,
+      #8b5cf6 75%,
+      var(--footer-accent) 100%
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: slideBorder 0.6s ease-out forwards;
+  }
 }
 
 @keyframes slideBorder {
@@ -45,35 +59,82 @@
 }
 
 /* ========================================
-   MAIN CONTAINER
+   MAIN CONTAINER - Mobile First
    ======================================== */
 .footer-container {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 4rem 2rem 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2.5rem;
+  padding: 2rem 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   position: relative;
   z-index: 1;
 }
 
-/* ========================================
-   FOOTER SECTIONS
-   ======================================== */
-.footer-section {
-  animation: fadeInUp 0.6s ease-out backwards;
+@media (min-width: 640px) {
+  .footer-container {
+    padding: 2.5rem 1.5rem 1.5rem;
+    gap: 2rem;
+  }
 }
 
-.footer-section:nth-child(1) { animation-delay: 0.1s; }
-.footer-section:nth-child(2) { animation-delay: 0.2s; }
-.footer-section:nth-child(3) { animation-delay: 0.3s; }
-.footer-section:nth-child(4) { animation-delay: 0.4s; }
+@media (min-width: 768px) {
+  .footer-container {
+    padding: 3rem 2rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-container {
+    padding: 4rem 2rem 2rem;
+    gap: 2.5rem;
+  }
+}
+
+/* ========================================
+   FOOTER SECTIONS - Responsive
+   ======================================== */
+.footer-section {
+  animation: fadeInUp 0.4s ease-out backwards;
+  text-align: center;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .footer-section {
+    text-align: left;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-section {
+    text-align: left;
+    padding: 0 0.5rem;
+  }
+}
+
+.footer-section:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.footer-section:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.footer-section:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.footer-section:nth-child(4) {
+  animation-delay: 0.2s;
+}
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -83,9 +144,9 @@
 
 /* Section Titles */
 .footer-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 5vw, 1.5rem);
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -95,367 +156,316 @@
   display: inline-block;
 }
 
+@media (min-width: 768px) {
+  .footer-title {
+    margin-bottom: 1rem;
+  }
+}
+
 .footer-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 40px;
-  height: 3px;
-  background: var(--footer-accent);
-  border-radius: 2px;
-  transition: var(--footer-transition);
-}
-
-.footer-section:hover .footer-title::after {
-  width: 60px;
-}
-
-.footer-heading {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-  color: var(--footer-text);
-  position: relative;
-  display: inline-block;
-}
-
-.footer-heading::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -6px;
-  left: 0;
-  width: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
   height: 2px;
   background: var(--footer-accent);
   border-radius: 2px;
   transition: var(--footer-transition);
 }
 
-.footer-section:hover .footer-heading::before {
-  width: 50px;
+@media (min-width: 640px) {
+  .footer-title::after {
+    left: 0;
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-title::after {
+    width: 40px;
+    height: 3px;
+    bottom: -8px;
+  }
+}
+
+@media (hover: hover) {
+  .footer-section:hover .footer-title::after {
+    width: 50px;
+  }
+}
+
+.footer-heading {
+  font-size: clamp(1rem, 4vw, 1.125rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--footer-text);
+  position: relative;
+  display: inline-block;
+}
+
+@media (min-width: 768px) {
+  .footer-heading {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.footer-heading::before {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 2px;
+  background: var(--footer-accent);
+  border-radius: 2px;
+  transition: var(--footer-transition);
+}
+
+@media (min-width: 640px) {
+  .footer-heading::before {
+    left: 0;
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-heading::before {
+    width: 30px;
+    bottom: -6px;
+  }
+}
+
+@media (hover: hover) {
+  .footer-section:hover .footer-heading::before {
+    width: 45px;
+  }
 }
 
 .footer-description {
   color: var(--footer-text-muted);
-  line-height: 1.6;
-  margin-top: 1rem;
-  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 0.75rem;
+  font-size: clamp(0.75rem, 3vw, 0.875rem);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .footer-description {
+    text-align: left;
+  }
 }
 
 /* ========================================
-   LINKS STYLES
+   LINKS STYLES - Touch Friendly
    ======================================== */
 .footer-links {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .footer-links {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
 }
 
 .footer-links li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
+  width: 100%;
 }
 
 .footer-links a {
   color: var(--footer-text-muted);
   text-decoration: none;
   transition: var(--footer-transition);
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 3.5vw, 0.875rem);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   position: relative;
-  padding-left: 0;
+  padding: 8px 0;
+  min-height: var(--touch-target-min);
+  width: auto;
 }
 
-.footer-links a::before {
-  content: '→';
-  position: absolute;
-  left: -20px;
-  opacity: 0;
-  transition: var(--footer-transition);
-  color: var(--footer-accent);
+@media (min-width: 640px) {
+  .footer-links a {
+    justify-content: flex-start;
+    padding: 4px 0;
+    min-height: auto;
+  }
 }
 
-.footer-links a:hover {
-  color: var(--footer-accent-hover);
-  transform: translateX(5px);
-  padding-left: 0;
+@media (hover: hover) {
+  .footer-links a::before {
+    content: "→";
+    position: absolute;
+    left: -20px;
+    opacity: 0;
+    transition: var(--footer-transition);
+    color: var(--footer-accent);
+  }
 }
 
-.footer-links a:hover::before {
-  opacity: 1;
-  transform: translateX(0);
+.footer-links a:active {
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .footer-links a:hover {
+    color: var(--footer-accent-hover);
+    transform: translateX(5px);
+  }
+
+  .footer-links a:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ========================================
-   CONTACT INFO WITH ICONS
+   CONTACT INFO WITH ICONS - Touch Friendly
    ======================================== */
 .footer-contact {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .footer-contact {
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }
 
 .footer-contact li {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
+  justify-content: center;
+  font-size: clamp(0.75rem, 3.5vw, 0.875rem);
   color: var(--footer-text-muted);
-  line-height: 1.5;
+  line-height: 1.4;
   transition: var(--footer-transition);
   cursor: pointer;
+  width: 100%;
+  padding: 6px 0;
+  min-height: var(--touch-target-min);
 }
 
-.footer-contact li:hover {
-  color: var(--footer-text);
-  transform: translateX(5px);
+@media (min-width: 640px) {
+  .footer-contact li {
+    justify-content: flex-start;
+    padding: 4px 0;
+    min-height: auto;
+  }
+}
+
+.footer-contact li:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .footer-contact li:hover {
+    color: var(--footer-text);
+    transform: translateX(5px);
+  }
 }
 
 .footer-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 12px;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
   margin-top: 2px;
   flex-shrink: 0;
   transition: var(--footer-transition);
   color: var(--footer-accent);
 }
 
-.footer-contact li:hover .footer-icon {
-  transform: scale(1.1);
-  color: var(--footer-accent-hover);
-}
-
-/* ========================================
-   FOOTER BOTTOM
-   ======================================== */
-.footer-bottom {
-  border-top: 1px solid var(--footer-border);
-  padding: 1.5rem 2rem;
-  text-align: center;
-  position: relative;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.footer-bottom p {
-  color: var(--footer-text-muted);
-  font-size: 0.875rem;
-  margin: 0;
-  transition: var(--footer-transition);
-}
-
-.footer-bottom p:hover {
-  color: var(--footer-text);
-}
-
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
-@media (max-width: 768px) {
-  .footer-container {
-    padding: 3rem 1.5rem 1.5rem;
-    gap: 2rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-  
-  .footer-title {
-    font-size: 1.25rem;
-  }
-  
-  .footer-heading {
-    font-size: 1rem;
-  }
-  
-  .footer-section {
-    text-align: center;
-  }
-  
-  .footer-title::after,
-  .footer-heading::before {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .footer-links a::before {
-    display: none;
-  }
-  
-  .footer-links a:hover {
-    transform: translateX(0);
-  }
-  
-  .footer-contact li {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer-container {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  
-  .footer-contact li {
-    justify-content: flex-start;
-  }
-  
-  .footer-bottom {
-    padding: 1rem;
-  }
-}
-
-/* ========================================
-   DARK MODE SUPPORT (if needed)
-   ======================================== */
-@media (prefers-color-scheme: light) {
-  .footer {
-    --footer-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    --footer-text: #0f172a;
-    --footer-text-muted: #475569;
-    --footer-border: #cbd5e1;
-  }
-}
-
-/* ========================================
-   SCROLL REVEAL ANIMATION
-   ======================================== */
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.footer {
-  animation: fadeInScale 0.5s ease-out;
-}
-
-/* ========================================
-   HOVER EFFECTS FOR SECTIONS
-   ======================================== */
-.footer-section {
-  transition: var(--footer-transition);
-  padding: 0.5rem;
-  border-radius: 12px;
-}
-
-.footer-section:hover {
-  transform: translateY(-5px);
-}
-
-/* ========================================
-   SOCIAL MEDIA LINKS (Optional)
-   ======================================== */
-.footer-social {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.footer-social-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  transition: var(--footer-transition);
-  color: var(--footer-text-muted);
-}
-
-.footer-social-link:hover {
-  background: var(--footer-accent);
-  color: white;
-  transform: translateY(-3px);
-}
-
-/* ========================================
-   BACK TO TOP BUTTON (Optional)
-   ======================================== */
-.back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: var(--footer-accent);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transition: var(--footer-transition);
-  z-index: 1000;
-}
-
-.back-to-top.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.back-to-top:hover {
-  background: var(--footer-accent-hover);
-  transform: translateY(-5px);
-}
-
-/* ========================================
-   PRINT STYLES
-   ======================================== */
-@media print {
-  .footer {
-    background: #f8f9fa;
-    color: #000;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  
+@media (min-width: 768px) {
   .footer-icon {
-    print-color-adjust: exact;
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
   }
 }
-/* Add to existing footer.css */
 
-/* ========================================
-   EMAIL & PHONE LINKS
-   ======================================== */
+@media (hover: hover) {
+  .footer-contact li:hover .footer-icon {
+    transform: scale(1.1);
+    color: var(--footer-accent-hover);
+  }
+}
+
+/* Email & Phone Links */
 .footer-contact a {
   color: var(--footer-text-muted);
   text-decoration: none;
   transition: var(--footer-transition);
+  display: inline-block;
+  word-break: break-all;
 }
 
-.footer-contact a:hover {
-  color: var(--footer-accent-hover);
-  transform: translateX(5px);
-  display: inline-block;
+.footer-contact a:active {
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .footer-contact a:hover {
+    color: var(--footer-accent-hover);
+    transform: translateX(3px);
+  }
 }
 
 /* ========================================
-   SOCIAL MEDIA LINKS - Enhanced
+   SOCIAL MEDIA LINKS - Touch Friendly
    ======================================== */
 .footer-social {
   display: flex;
+  justify-content: center;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--footer-border);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 640px) {
+  .footer-social {
+    justify-content: flex-start;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-social {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
 }
 
 .footer-social-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.05);
   transition: var(--footer-transition);
@@ -463,21 +473,80 @@
   text-decoration: none;
 }
 
-.footer-social-link:hover {
-  background: var(--footer-accent);
-  color: white;
-  transform: translateY(-3px) rotate(360deg);
+@media (min-width: 768px) {
+  .footer-social-link {
+    width: 36px;
+    height: 36px;
+    min-width: auto;
+    min-height: auto;
+  }
+}
+
+.footer-social-link:active {
+  transform: scale(0.92);
+}
+
+@media (hover: hover) {
+  .footer-social-link:hover {
+    background: var(--footer-accent);
+    color: white;
+    transform: translateY(-3px);
+  }
+}
+
+.footer-social-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (min-width: 768px) {
+  .footer-social-link svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 /* ========================================
-   BACK TO TOP BUTTON - Enhanced
+   FOOTER BOTTOM
+   ======================================== */
+.footer-bottom {
+  border-top: 1px solid var(--footer-border);
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 768px) {
+  .footer-bottom {
+    padding: 1.5rem 2rem;
+  }
+}
+
+.footer-bottom p {
+  color: var(--footer-text-muted);
+  font-size: clamp(0.7rem, 3vw, 0.875rem);
+  margin: 0;
+  transition: var(--footer-transition);
+}
+
+@media (hover: hover) {
+  .footer-bottom p:hover {
+    color: var(--footer-text);
+  }
+}
+
+/* ========================================
+   BACK TO TOP BUTTON - Touch Optimized
    ======================================== */
 .back-to-top {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 48px;
-  height: 48px;
+  bottom: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   border-radius: 50%;
   background: var(--footer-accent);
   color: white;
@@ -493,20 +562,38 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+@media (min-width: 768px) {
+  .back-to-top {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .back-to-top {
+    bottom: 2rem;
+    right: 2rem;
+  }
+}
+
 .back-to-top.show {
   opacity: 1;
   visibility: visible;
-  animation: bounceIn 0.5s ease-out;
-}
-
-.back-to-top:hover {
-  background: var(--footer-accent-hover);
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  animation: bounceIn 0.4s ease-out;
 }
 
 .back-to-top:active {
-  transform: translateY(-2px);
+  transform: scale(0.92);
+}
+
+@media (hover: hover) {
+  .back-to-top:hover {
+    background: var(--footer-accent-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  }
 }
 
 @keyframes bounceIn {
@@ -519,7 +606,7 @@
     transform: scale(1.05);
   }
   70% {
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   100% {
     opacity: 1;
@@ -528,40 +615,182 @@
 }
 
 /* ========================================
-   RESPONSIVE ADJUSTMENTS
-   ======================================== */
-@media (max-width: 768px) {
-  .footer-social {
-    justify-content: center;
+   iPhone Specific Optimizations
+   ============================================ */
+
+/* iPhone SE (375px) */
+@media (max-width: 380px) {
+  .footer-container {
+    padding: 1.5rem 0.75rem 1rem;
+    gap: 1.25rem;
   }
-  
+
+  .footer-title {
+    font-size: 1.1rem;
+  }
+
+  .footer-heading {
+    font-size: 0.9rem;
+  }
+
+  .footer-links a,
+  .footer-contact li {
+    font-size: 0.7rem;
+  }
+
+  .footer-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+  }
+
+  .footer-social-link {
+    width: 36px;
+    height: 36px;
+  }
+
+  .footer-social-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .back-to-top {
-    bottom: 1rem;
-    right: 1rem;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+    bottom: 0.75rem;
+    right: 0.75rem;
   }
 }
 
-@media (max-width: 480px) {
+/* iPhone 12/13/14/15 (390px) - Default mobile styles work well */
+
+/* ========================================
+   Android Phone Optimizations
+   ============================================ */
+
+/* Small Android (360px) */
+@media (max-width: 370px) {
+  .footer-container {
+    padding: 1.25rem 0.75rem 1rem;
+  }
+
+  .footer-title {
+    font-size: 1rem;
+  }
+
+  .footer-description {
+    font-size: 0.7rem;
+  }
+
+  .footer-links a {
+    font-size: 0.7rem;
+    padding: 6px 0;
+  }
+
   .footer-contact li {
-    flex-wrap: wrap;
+    font-size: 0.7rem;
   }
-  
-  .footer-social-link {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .back-to-top {
-    width: 40px;
-    height: 40px;
+
+  .footer-bottom p {
+    font-size: 0.65rem;
   }
 }
 
 /* ========================================
-   FOCUS STATES FOR ACCESSIBILITY
-   ======================================== */
+   Tablet Optimizations
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  .footer-section:first-child {
+    grid-column: span 2;
+  }
+}
+
+/* ========================================
+   Desktop Optimizations
+   ============================================ */
+@media (min-width: 1024px) {
+  .footer-section {
+    transition: transform var(--footer-transition);
+  }
+
+  @media (hover: hover) {
+    .footer-section:hover {
+      transform: translateY(-3px);
+    }
+  }
+}
+
+/* ========================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable hover effects on touch devices */
+  .footer-links a:hover,
+  .footer-contact li:hover,
+  .footer-social-link:hover,
+  .back-to-top:hover {
+    transform: none;
+  }
+
+  /* Ensure active states provide feedback */
+  .footer-links a:active,
+  .footer-contact li:active,
+  .footer-social-link:active,
+  .back-to-top:active {
+    transform: scale(0.96);
+    transition: transform 0.05s ease;
+  }
+
+  /* Disable arrow animation on touch */
+  .footer-links a::before {
+    display: none;
+  }
+
+  /* Disable border animation on touch */
+  .footer::before {
+    animation: none;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION - Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .footer::before {
+    animation: none;
+  }
+
+  .footer-section {
+    animation: none;
+    opacity: 1;
+  }
+
+  .back-to-top.show {
+    animation: none;
+  }
+
+  .footer-links a:active,
+  .back-to-top:active {
+    transform: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - Focus Styles
+   ============================================ */
 .footer-links a:focus,
 .footer-contact a:focus,
 .footer-social-link:focus,
@@ -572,39 +801,152 @@
 }
 
 /* ========================================
-   PERFORMANCE OPTIMIZATIONS
-   ======================================== */
-@media (prefers-reduced-motion: reduce) {
-  .footer *,
-  .footer *::before,
-  .footer *::after,
-  .back-to-top {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+   DARK MODE SUPPORT (Light theme)
+   ============================================ */
+@media (prefers-color-scheme: light) {
+  .footer {
+    --footer-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --footer-text: #0f172a;
+    --footer-text-muted: #475569;
+    --footer-border: #cbd5e1;
+  }
+
+  .footer-title {
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .footer-social-link {
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 
 /* ========================================
-   LOADING ANIMATION FOR SOCIAL ICONS
-   ======================================== */
-.footer-social-link {
-  animation: fadeInScale 0.4s ease-out backwards;
+   SAFE AREA INSETS for Notched Devices
+   ============================================ */
+@supports (padding: max(0px)) {
+  .footer-container {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .back-to-top {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    right: max(1rem, env(safe-area-inset-right));
+  }
+
+  @media (min-width: 768px) {
+    .back-to-top {
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+      right: max(1.5rem, env(safe-area-inset-right));
+    }
+  }
 }
 
-.footer-social-link:nth-child(1) { animation-delay: 0.1s; }
-.footer-social-link:nth-child(2) { animation-delay: 0.2s; }
-.footer-social-link:nth-child(3) { animation-delay: 0.3s; }
-.footer-social-link:nth-child(4) { animation-delay: 0.4s; }
+/* ========================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  .footer {
+    background: #f8f9fa;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    position: static;
+  }
+
+  .footer-icon {
+    print-color-adjust: exact;
+  }
+
+  .back-to-top,
+  .footer-social {
+    display: none;
+  }
+
+  .footer-container {
+    padding: 1rem;
+  }
+
+  .footer-section {
+    break-inside: avoid;
+  }
+}
+
+/* ========================================
+   SCROLL REVEAL ANIMATION - Reduced on mobile
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .footer {
+    animation: fadeInScale 0.4s ease-out;
+  }
+}
 
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0);
+    transform: scale(0.98);
   }
   to {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ========================================
+   SOCIAL ICON STAGGER ANIMATIONS - Desktop only
+   ============================================ */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  .footer-social-link {
+    animation: fadeInScale 0.3s ease-out backwards;
+  }
+
+  .footer-social-link:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+  .footer-social-link:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .footer-social-link:nth-child(3) {
+    animation-delay: 0.15s;
+  }
+  .footer-social-link:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+}
+
+/* ========================================
+   SELECTION STYLE
+   ============================================ */
+.footer ::selection {
+  background: var(--footer-accent);
+  color: white;
+}
+
+.footer ::-moz-selection {
+  background: var(--footer-accent);
+  color: white;
+}
+
+/* ========================================
+   SMOOTH TEXT RENDERING
+   ============================================ */
+.footer,
+.footer-links a,
+.footer-contact li,
+.footer-bottom p {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   PERFORMANCE - will-change
+   ============================================ */
+.back-to-top {
+  will-change: transform, opacity;
+}
+
+.footer-social-link {
+  will-change: transform;
 }

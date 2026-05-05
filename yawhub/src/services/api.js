@@ -14,7 +14,11 @@ const ENABLE_LOGGING =
   import.meta.env.VITE_ENABLE_LOGGING === "true" || IS_DEVELOPMENT;
 
 // ─── URLs that should never trigger a session-expired redirect ───────────────
-const SILENT_401_PATTERNS = ["/notifications"];
+const SILENT_401_PATTERNS = [
+  "/notifications",
+  "/admin/notifications",
+  "/admin/notifications/stats",
+];
 
 // ─── Grace period after login ────────────────────────────────────────────────
 let lastLoginAt = 0;
@@ -253,11 +257,421 @@ api.interceptors.response.use(
 );
 
 // ============================================================================
-// EXPORTS
+// HELPER FUNCTIONS
 // ============================================================================
 
+/**
+ * Handle API response and extract data
+ */
+const handleResponse = (response) => {
+  if (response.data && response.data.success !== undefined) {
+    return response.data;
+  }
+  return response.data || response;
+};
+
+/**
+ * Handle API error with custom messaging
+ */
+const handleError = (error, customMessage = null) => {
+  if (customMessage) {
+    toast.error(customMessage);
+  }
+  throw error.response?.data || error;
+};
+
+// ============================================================================
+// AUTHENTICATION APIS
+// ============================================================================
+
+export const login = async (email, password) => {
+  try {
+    const response = await api.post("/auth/login", { email, password });
+    const { token, user } = response.data;
+    if (token) {
+      TOKEN_KEYS.forEach((k) => {
+        localStorage.setItem(k, token);
+        sessionStorage.setItem(k, token);
+      });
+      if (user) {
+        USER_KEYS.forEach((k) => {
+          localStorage.setItem(k, JSON.stringify(user));
+          sessionStorage.setItem(k, JSON.stringify(user));
+        });
+      }
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("auth:login"));
+      }
+    }
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+};
+
+export const register = async (userData) => {
+  const response = await api.post("/auth/register", userData);
+  return response.data;
+};
+
+export const logout = async () => {
+  try {
+    await api.post("/auth/logout");
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    clearAuthStorage();
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
+  }
+};
+
+export const forgotPassword = async (email) => {
+  const response = await api.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
+export const resetPassword = async (token, password) => {
+  const response = await api.post("/auth/reset-password", { token, password });
+  return response.data;
+};
+
+export const verifyEmail = async (token) => {
+  const response = await api.post("/auth/verify-email", { token });
+  return response.data;
+};
+
+export const refreshToken = async () => {
+  const refreshTokenValue = getRefreshToken();
+  if (!refreshTokenValue) throw new Error("No refresh token");
+  const response = await api.post("/auth/refresh-token", {
+    refreshToken: refreshTokenValue,
+  });
+  const { token } = response.data;
+  if (token) {
+    TOKEN_KEYS.forEach((k) => {
+      localStorage.setItem(k, token);
+      sessionStorage.setItem(k, token);
+    });
+  }
+  return response.data;
+};
+
+// ============================================================================
+// USER APIS
+// ============================================================================
+
+export const getCurrentUser = async () => {
+  const response = await api.get("/users/me");
+  return response.data;
+};
+
+export const updateProfile = async (data) => {
+  const response = await api.put("/users/profile", data);
+  return response.data;
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+  const response = await api.post("/users/change-password", {
+    currentPassword,
+    newPassword,
+  });
+  return response.data;
+};
+
+export const getAllUsers = async (params = {}) => {
+  const response = await api.get("/users", { params });
+  return response.data;
+};
+
+export const updateUserRole = async (userId, role) => {
+  const response = await api.put(`/users/${userId}/role`, { role });
+  return response.data;
+};
+
+export const deleteUser = async (userId) => {
+  const response = await api.delete(`/users/${userId}`);
+  return response.data;
+};
+
+// ============================================================================
+// NOTICE APIS
+// ============================================================================
+
+export const getNotices = async (params = {}) => {
+  const response = await api.get("/notices", { params });
+  return response.data;
+};
+
+export const getNotice = async (id) => {
+  const response = await api.get(`/notices/${id}`);
+  return response.data;
+};
+
+export const createNotice = async (data) => {
+  const response = await api.post("/notices", data);
+  return response.data;
+};
+
+export const updateNotice = async (id, data) => {
+  const response = await api.put(`/notices/${id}`, data);
+  return response.data;
+};
+
+export const deleteNotice = async (id) => {
+  const response = await api.delete(`/notices/${id}`);
+  return response.data;
+};
+
+export const archiveNotice = async (id) => {
+  const response = await api.patch(`/notices/${id}/archive`);
+  return response.data;
+};
+
+// ============================================================================
+// EVENT APIS
+// ============================================================================
+
+export const getEvents = async (params = {}) => {
+  const response = await api.get("/events", { params });
+  return response.data;
+};
+
+export const getEvent = async (id) => {
+  const response = await api.get(`/events/${id}`);
+  return response.data;
+};
+
+export const createEvent = async (data) => {
+  const response = await api.post("/events", data);
+  return response.data;
+};
+
+export const updateEvent = async (id, data) => {
+  const response = await api.put(`/events/${id}`, data);
+  return response.data;
+};
+
+export const deleteEvent = async (id) => {
+  const response = await api.delete(`/events/${id}`);
+  return response.data;
+};
+
+export const registerForEvent = async (eventId) => {
+  const response = await api.post(`/events/${eventId}/register`);
+  return response.data;
+};
+
+export const cancelEventRegistration = async (eventId) => {
+  const response = await api.delete(`/events/${eventId}/register`);
+  return response.data;
+};
+
+// ============================================================================
+// NOTIFICATION APIS (User)
+// ============================================================================
+
+export const getUserNotifications = async (params = {}) => {
+  const response = await api.get("/notifications", { params });
+  return response.data;
+};
+
+export const markNotificationAsRead = async (id) => {
+  const response = await api.patch(`/notifications/${id}/read`);
+  return response.data;
+};
+
+export const markAllNotificationsAsRead = async () => {
+  const response = await api.patch("/notifications/read-all");
+  return response.data;
+};
+
+export const deleteNotification = async (id) => {
+  const response = await api.delete(`/notifications/${id}`);
+  return response.data;
+};
+
+export const getUnreadCount = async () => {
+  const response = await api.get("/notifications/unread/count");
+  return response.data;
+};
+
+// ============================================================================
+// ADMIN NOTIFICATION APIS
+// ============================================================================
+
+/**
+ * Get all admin notifications with filtering and pagination
+ * @param {Object} params - Query parameters
+ * @param {number} params.page - Page number
+ * @param {number} params.limit - Items per page
+ * @param {string} params.type - Filter by type
+ * @param {string} params.priority - Filter by priority
+ * @param {string} params.audience - Filter by audience
+ * @param {string} params.status - Filter by status
+ * @param {string} params.startDate - Filter by start date
+ * @param {string} params.endDate - Filter by end date
+ * @param {string} params.search - Search in title and message
+ * @param {string} params.sortBy - Sort field
+ * @param {string} params.sortOrder - Sort order (asc/desc)
+ */
+export const getAdminNotifications = async (params = {}) => {
+  try {
+    const response = await api.get("/admin/notifications", { params });
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to fetch admin notifications");
+  }
+};
+
+/**
+ * Send a new notification to users
+ * @param {Object} data - Notification data
+ */
+export const sendAdminNotification = async (data) => {
+  try {
+    const response = await api.post("/admin/notifications/send", data);
+    toast.success(response.data.message || "Notification sent successfully");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to send notification");
+  }
+};
+
+/**
+ * Get a single notification by ID
+ * @param {string} id - Notification ID
+ */
+export const getAdminNotification = async (id) => {
+  try {
+    const response = await api.get(`/admin/notifications/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to fetch notification");
+  }
+};
+
+/**
+ * Delete a notification (soft delete)
+ * @param {string} id - Notification ID
+ */
+export const deleteAdminNotification = async (id) => {
+  try {
+    const response = await api.delete(`/admin/notifications/${id}`);
+    toast.success(response.data.message || "Notification deleted successfully");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to delete notification");
+  }
+};
+
+/**
+ * Get comprehensive notification statistics
+ * @param {number} days - Number of days for timeline data
+ */
+export const getNotificationStats = async (days = 30) => {
+  try {
+    const response = await api.get("/admin/notifications/stats/overview", {
+      params: { days },
+    });
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to fetch notification statistics");
+  }
+};
+
+/**
+ * Bulk delete multiple notifications
+ * @param {Array} notificationIds - Array of notification IDs
+ */
+export const bulkDeleteNotifications = async (notificationIds) => {
+  try {
+    const response = await api.delete("/admin/notifications/bulk", {
+      data: { notificationIds },
+    });
+    toast.success(
+      response.data.message ||
+        `${notificationIds.length} notification(s) deleted`,
+    );
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to delete notifications");
+  }
+};
+
+/**
+ * Resend a failed notification
+ * @param {string} id - Notification ID
+ * @param {Array} channels - Channels to resend
+ */
+export const resendNotification = async (id, channels = ["inApp"]) => {
+  try {
+    const response = await api.post(`/admin/notifications/${id}/resend`, {
+      channels,
+    });
+    toast.success(response.data.message || "Notification queued for resend");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to resend notification");
+  }
+};
+
+/**
+ * Get delivery statistics for notifications
+ */
+export const getDeliveryStats = async () => {
+  try {
+    const response = await api.get("/admin/notifications/delivery-stats");
+    return handleResponse(response);
+  } catch (error) {
+    return handleError(error, "Failed to fetch delivery statistics");
+  }
+};
+
+// ============================================================================
+// AVATAR APIS
+// ============================================================================
+
+export const uploadAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+  const response = await api.post("/avatar/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+
+export const deleteAvatar = async () => {
+  const response = await api.delete("/avatar");
+  return response.data;
+};
+
+// ============================================================================
+// HEALTH APIS
+// ============================================================================
+
+export const checkHealth = async () => {
+  const response = await api.get("/health");
+  return response.data;
+};
+
+export const getDetailedHealth = async () => {
+  const response = await api.get("/health/detailed");
+  return response.data;
+};
+
+// ============================================================================
+// EXPORTS - BOTH DEFAULT AND NAMED EXPORTS
+// ============================================================================
+
+// Default export of the axios instance
 export default api;
+
+// Named export of the axios instance (for compatibility)
 export { api };
+
+// Convenience exports for common operations
 export const get = (url, params, config) => api.get(url, { params, ...config });
 export const post = (url, data, config) => api.post(url, data, config);
 export const put = (url, data, config) => api.put(url, data, config);

@@ -1,6 +1,6 @@
 // backend/server.js
 // PRODUCTION-READY SERVER - COMPLETE INTEGRATION
-// @version 3.0.0 - PROFESSIONAL GRADE
+// @version 3.1.0 - PROFESSIONAL GRADE WITH NOTIFICATION SYSTEM
 
 require("dotenv").config();
 
@@ -69,6 +69,22 @@ const noticeController = require("./controllers/noticeController");
 const eventController = require("./controllers/eventController");
 
 // ============================================================
+// ROUTE IMPORTS
+// ============================================================
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/userRoutes");
+const noticeRoutes = require("./routes/noticeRoutes");
+const eventRoutes = require("./routes/eventRoutes");
+const avatarRoutes = require("./routes/avatarRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const adminNotificationRoutes = require("./routes/adminNotificationRoutes"); // NEW
+
+// Optional route imports with error handling
+let smsRoutes = null;
+let backupRoutes = null;
+
+// ============================================================
 // SENTRY SDK (Conditional Import)
 // ============================================================
 
@@ -103,6 +119,7 @@ let auditLogger = null;
 let databaseUtils = null;
 let systemUtils = null;
 let groqClient = null;
+let notificationService = null;
 
 const isDevelopment = process.env.NODE_ENV === "development";
 const isProduction = process.env.NODE_ENV === "production";
@@ -578,6 +595,7 @@ if (process.env.BACKUP_ENABLED === "true") {
 // API ROUTES
 // ============================================================
 
+// Health check endpoints (no auth required)
 app.get("/health", (req, res) => {
   res.json({
     success: true,
@@ -586,21 +604,28 @@ app.get("/health", (req, res) => {
     requestId: req.requestId,
     uptime: Math.floor(process.uptime()),
     environment: process.env.NODE_ENV || "development",
-    version: process.env.APP_VERSION || "2.2.0",
+    version: process.env.APP_VERSION || "3.1.0",
   });
 });
 
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/notices", require("./routes/noticeRoutes"));
-app.use("/api/events", require("./routes/eventRoutes"));
-app.use("/api/avatar", require("./routes/avatarRoutes"));
-app.use("/api/notifications", require("./routes/notificationRoutes"));
-app.use("/api/admin", require("./routes/adminRoutes"));
+// Main API routes
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/notices", noticeRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/avatar", avatarRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/admin", adminRoutes);
 
+// ADMIN NOTIFICATION ROUTES - INTEGRATED
+// Mount admin notification routes under /api/admin
+app.use("/api/admin", adminNotificationRoutes);
+
+// Optional routes with error handling
 if (process.env.SMS_ENABLED === "true") {
   try {
-    app.use("/api/sms", require("./routes/smsRoutes"));
+    smsRoutes = require("./routes/smsRoutes");
+    app.use("/api/sms", smsRoutes);
     logger.info("✅ SMS routes enabled");
   } catch (error) {
     logger.error(`Failed to load SMS routes: ${error.message}`);
@@ -609,7 +634,8 @@ if (process.env.SMS_ENABLED === "true") {
 
 if (process.env.BACKUP_ENABLED === "true") {
   try {
-    app.use("/api/backup", require("./routes/backupRoutes"));
+    backupRoutes = require("./routes/backupRoutes");
+    app.use("/api/backup", backupRoutes);
     logger.info("✅ Backup routes enabled");
   } catch (error) {
     logger.error(`Failed to load Backup routes: ${error.message}`);
@@ -635,6 +661,8 @@ app.get("/api/health", (req, res) => {
     cache: cacheManager ? "enabled" : "disabled",
     email: transporter ? "configured" : "not configured",
     sms: smsService ? "enabled" : "disabled",
+    notificationService: notificationService ? "enabled" : "disabled",
+    version: "3.1.0",
   });
 });
 
@@ -663,6 +691,7 @@ app.get("/api/health/detailed", async (req, res) => {
       monitor: performanceMonitor ? "running" : "stopped",
       sms: smsService ? "running" : "stopped",
       groq: groqClient ? "running" : "stopped",
+      notifications: notificationService ? "running" : "stopped",
     },
     memory: {
       rss: Math.round(process.memoryUsage().rss / 1024 / 1024) + " MB",
@@ -673,7 +702,7 @@ app.get("/api/health/detailed", async (req, res) => {
     },
     environment: {
       nodeEnv: process.env.NODE_ENV || "development",
-      version: process.env.APP_VERSION || "2.2.0",
+      version: process.env.APP_VERSION || "3.1.0",
       appName: process.env.APP_NAME || "kaaf-noticeboard-backend",
     },
     system: {
@@ -697,6 +726,16 @@ app.get("/metrics", async (req, res) => {
       cpu: os.loadavg(),
       connections: io ? io.engine?.clientsCount || 0 : 0,
       database: mongoose.connection.readyState === 1 ? 1 : 0,
+      notifications: {
+        total: await (async () => {
+          try {
+            const Notification = require("./models/Notification");
+            return await Notification.countDocuments({ isDeleted: false });
+          } catch {
+            return 0;
+          }
+        })(),
+      },
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -721,6 +760,68 @@ if (isDevelopment && process.env.SWAGGER_ENABLED === "true") {
     logger.warn("⚠️  Swagger documentation not available:", error.message);
   }
 }
+
+// ============================================================
+// NOTIFICATION SCHEDULER SERVICE
+// ============================================================
+
+let notificationScheduler = null;
+
+const startNotificationScheduler = () => {
+  if (!notificationService) {
+    logger.warn("⚠️  Notification service not available for scheduling");
+    return;
+  }
+
+  // Check for scheduled notifications every minute
+  notificationScheduler = setInterval(async () => {
+    try {
+      const Notification = require("./models/Notification");
+      const now = new Date();
+
+      // Find and send scheduled notifications
+      const scheduledNotifications = await Notification.find({
+        scheduledFor: { $lte: now },
+        isSent: false,
+        isDeleted: false,
+      }).populate("user", "email name");
+
+      for (const notification of scheduledNotifications) {
+        try {
+          // Update notification as sent
+          notification.isSent = true;
+          notification.sentAt = now;
+          await notification.save();
+
+          // Emit real-time notification if socket.io is available
+          if (io && notification.user) {
+            io.to(`user-${notification.user._id}`).emit("new_notification", {
+              notificationId: notification._id,
+              title: notification.title,
+              message: notification.message,
+              type: notification.type,
+              priority: notification.priority,
+            });
+          }
+
+          logger.info(`Scheduled notification sent: ${notification._id}`);
+        } catch (err) {
+          logger.error(`Failed to send scheduled notification: ${err.message}`);
+        }
+      }
+
+      if (scheduledNotifications.length > 0) {
+        logger.info(
+          `Sent ${scheduledNotifications.length} scheduled notifications`,
+        );
+      }
+    } catch (error) {
+      logger.error(`Notification scheduler error: ${error.message}`);
+    }
+  }, 60000); // Check every minute
+
+  logger.info("✅ Notification scheduler started (checking every minute)");
+};
 
 // ============================================================
 // ERROR HANDLERS
@@ -784,6 +885,12 @@ const gracefulShutdown = async (signal) => {
   }, 30000);
 
   try {
+    // Clear notification scheduler
+    if (notificationScheduler) {
+      clearInterval(notificationScheduler);
+      logger.info("⏰ Notification scheduler stopped");
+    }
+
     if (io) {
       await new Promise((resolve) => {
         io.close(() => {
@@ -885,7 +992,7 @@ const initializeAllServices = async () => {
         maxHttpBufferSize: parseInt(process.env.WEBSOCKET_MAX_PAYLOAD) || 1e6,
       });
 
-      const notificationService = new NotificationService();
+      notificationService = new NotificationService();
       notificationService.initSocket(io);
       setNotificationService(notificationService);
       setSocketIO(io);
@@ -953,6 +1060,9 @@ const initializeAllServices = async () => {
           );
         });
       });
+
+      // Start notification scheduler after socket.io is ready
+      startNotificationScheduler();
     }
 
     if (process.env.BACKUP_ENABLED === "true") {
@@ -995,7 +1105,7 @@ const initializeAllServices = async () => {
   server.listen(PORT, "0.0.0.0", () => {
     logger.info("=".repeat(50));
     logger.info(
-      `🚀 ${process.env.APP_NAME || "KAAF Noticeboard"} v${process.env.APP_VERSION || "2.2.0"}`,
+      `🚀 ${process.env.APP_NAME || "KAAF Noticeboard"} v${process.env.APP_VERSION || "3.1.0"}`,
     );
     logger.info(`🌍 Server running on http://0.0.0.0:${PORT}`);
     logger.info(`📧 Email: ${transporter ? "CONFIGURED" : "NOT CONFIGURED"}`);
@@ -1013,7 +1123,24 @@ const initializeAllServices = async () => {
     logger.info(`💾 Backup: ${backupService ? "ENABLED" : "DISABLED"}`);
     logger.info(`📈 Monitor: ${performanceMonitor ? "ENABLED" : "DISABLED"}`);
     logger.info(`📱 SMS: ${smsService ? "ENABLED" : "DISABLED"}`);
+    logger.info(
+      `🔔 Notification Service: ${notificationService ? "ENABLED" : "DISABLED"}`,
+    );
+    logger.info(`📬 Admin Notification Routes: ENABLED`);
     logger.info(`🖥️  Host: ${os.hostname()} (PID: ${process.pid})`);
+    logger.info("=".repeat(50));
+    logger.info("");
+    logger.info("📌 AVAILABLE ENDPOINTS:");
+    logger.info(`   GET  /api/admin/notifications - Get all notifications`);
+    logger.info(`   POST /api/admin/notifications/send - Send notifications`);
+    logger.info(`   GET  /api/admin/notifications/:id - Get notification`);
+    logger.info(`   DELETE /api/admin/notifications/:id - Delete notification`);
+    logger.info(`   GET  /api/admin/notifications/stats/overview - Get stats`);
+    logger.info(
+      `   POST /api/admin/notifications/:id/resend - Resend notification`,
+    );
+    logger.info(`   DELETE /api/admin/notifications/bulk - Bulk delete`);
+    logger.info("");
     logger.info("=".repeat(50));
   });
 
@@ -1052,4 +1179,5 @@ module.exports = {
   groqClient,
   databaseUtils,
   systemUtils,
+  notificationService,
 };

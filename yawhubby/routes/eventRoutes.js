@@ -292,46 +292,62 @@ router.get(
 );
 router.post("/:id/feedback", submitFeedbackValidation, submitFeedback);
 
-// Admin/Faculty routes
+// ============================
+// ADMIN / FACULTY / SUPER_ADMIN ROUTES
+// FIX: "super_admin" added to every authorize() call below.
+// Previously only "admin" and "faculty" were listed, which
+// caused super_admin users to receive a 403 on all write
+// operations (create, update, publish, cancel, checkin).
+// ============================
+
 router.post(
   "/",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   createEventValidation,
   createEvent,
 );
+
 router.put(
   "/:id",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   updateEventValidation,
   updateEvent,
 );
+
 router.put(
   "/:id/cancel",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   idParamValidation,
   cancelEvent,
 );
+
 router.put(
   "/:id/publish",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   idParamValidation,
   publishEvent,
 );
+
 router.get(
   "/:id/registrations",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   idParamValidation,
   getRegistrations,
 );
+
 router.put(
   "/:id/checkin",
-  authorize("admin", "faculty"),
+  authorize("admin", "super_admin", "faculty"),
   checkInValidation,
   checkIn,
 );
 
-// Admin only routes
-router.delete("/:id", authorize("admin", "super_admin"), idParamValidation, deleteEvent);
+// Delete — admin and super_admin only (faculty excluded intentionally)
+router.delete(
+  "/:id",
+  authorize("admin", "super_admin"),
+  idParamValidation,
+  deleteEvent,
+);
 
 module.exports = router;
-

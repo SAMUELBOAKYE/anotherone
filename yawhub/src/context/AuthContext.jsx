@@ -1,4 +1,4 @@
-// src/context/AuthContext.jsx - FINAL FIXED VERSION
+// src/context/AuthContext.jsx - FINAL FIXED VERSION WITH SUPER_ADMIN BYPASS
 // Uses authService.login() correctly — matches its actual return shape
 
 import React, {
@@ -106,6 +106,10 @@ export const AuthProvider = ({ children }) => {
         username: userData.username || "",
         department: userData.department || null,
         isVerified: userData.isVerified || false,
+        // ✅ Ensure super_admin is properly flagged
+        isSuperAdmin:
+          userData.role === "super_admin" ||
+          userData.user_type === "super_admin",
       };
 
       setUser(normalizedUser);
@@ -155,14 +159,6 @@ export const AuthProvider = ({ children }) => {
   }, [doRefreshToken]);
 
   // ── PUBLIC login ───────────────────────────────────────────────────────
-  //
-  // authService.login(identifier, password, rememberMe):
-  //   ✅ Success → returns { user, token, rememberMe }
-  //   ❌ Failure → throws Error with message from backend
-  //
-  // We ONLY call _applyAuthState on success.
-  // On failure the error bubbles to LoginForm which shows it to the user.
-  // ──────────────────────────────────────────────────────────────────────
   const login = useCallback(
     async (identifier, password, rememberMe = false) => {
       if (!identifier || !password) {
@@ -171,16 +167,12 @@ export const AuthProvider = ({ children }) => {
         throw err;
       }
 
-      // authService.login handles the fetch, token storage, and throws on any
-      // failure — network error, 401, 403, missing data, etc.
       const result = await authService.login(identifier, password, rememberMe);
 
-      // authService.login returns { user, token, rememberMe }
       if (!result?.token || !result?.user) {
         throw new Error("Incomplete response from server. Please try again.");
       }
 
-      // Commit to context — only reached on genuine success
       _applyAuthState(result.user, result.token);
 
       if (rememberMe) {
@@ -250,46 +242,74 @@ export const AuthProvider = ({ children }) => {
     };
   }, [initializeAuth]);
 
-  // ── Permission / role helpers ──────────────────────────────────────────
+  // ── ✅ UPDATED: Permission / role helpers with SUPER_ADMIN bypass ─────
+
+  const isSuperAdmin = useMemo(() => {
+    return user?.role === "super_admin" || user?.isSuperAdmin === true;
+  }, [user]);
+
+  // ✅ UPDATED: hasPermission - SUPER_ADMIN always returns true
   const hasPermission = useCallback(
     (permission) => {
       if (!isAuthenticated) return false;
+      // SUPER_ADMIN bypass - has all permissions
+      if (isSuperAdmin) return true;
       if (permissions.includes("*")) return true;
       return permissions.includes(permission);
     },
-    [isAuthenticated, permissions],
+    [isAuthenticated, permissions, isSuperAdmin],
   );
 
+  // ✅ UPDATED: hasRole - SUPER_ADMIN bypass
   const hasRole = useCallback(
     (role) => {
       if (!isAuthenticated) return false;
+      // SUPER_ADMIN bypass - has all roles
+      if (isSuperAdmin) return true;
       return roles.includes(role) || user?.role === role;
     },
-    [isAuthenticated, roles, user],
+    [isAuthenticated, roles, user, isSuperAdmin],
   );
 
+  // ✅ UPDATED: hasAnyRole - SUPER_ADMIN bypass
   const hasAnyRole = useCallback(
     (roleList) => {
       if (!isAuthenticated || !Array.isArray(roleList)) return false;
+      // SUPER_ADMIN bypass
+      if (isSuperAdmin) return true;
       return roleList.some((r) => hasRole(r));
     },
-    [isAuthenticated, hasRole],
+    [isAuthenticated, hasRole, isSuperAdmin],
   );
 
+  // ✅ UPDATED: hasAllRoles - SUPER_ADMIN bypass
   const hasAllRoles = useCallback(
     (roleList) => {
       if (!isAuthenticated || !Array.isArray(roleList)) return false;
+      // SUPER_ADMIN bypass
+      if (isSuperAdmin) return true;
       return roleList.every((r) => hasRole(r));
     },
-    [isAuthenticated, hasRole],
+    [isAuthenticated, hasRole, isSuperAdmin],
   );
 
   const getAuthHeaders = useCallback(() => {
     const authToken = token || authService.getToken();
-    return authToken ? { Authorization: `Bearer ${authToken}` } : {};
-  }, [token]);
+    const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
 
-  const isAdmin = useMemo(() => user?.role === "admin", [user]);
+    // ✅ Add super_admin header for backend to recognize
+    if (isSuperAdmin) {
+      headers["X-User-Role"] = "super_admin";
+      headers["X-Bypass-Permissions"] = "true";
+    }
+
+    return headers;
+  }, [token, isSuperAdmin]);
+
+  const isAdmin = useMemo(
+    () => user?.role === "admin" || isSuperAdmin,
+    [user, isSuperAdmin],
+  );
 
   // ── Context value ──────────────────────────────────────────────────────
   const contextValue = useMemo(
@@ -312,7 +332,7 @@ export const AuthProvider = ({ children }) => {
       hasAllRoles,
       getAuthHeaders,
       isAdmin,
-      isSuperAdmin: user?.role === "super_admin",
+      isSuperAdmin, // ✅ Now available and used in all checks
       isFaculty: user?.role === "faculty",
       isStudent: user?.role === "student",
       userName: user?.firstName
@@ -341,6 +361,7 @@ export const AuthProvider = ({ children }) => {
       hasAllRoles,
       getAuthHeaders,
       isAdmin,
+      isSuperAdmin,
     ],
   );
 

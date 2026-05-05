@@ -43,7 +43,7 @@ const CreateEventPage = () => {
     time: "",
     location: "",
     venue: "",
-    category: "",
+    category: "general", // ✅ FIXED: Set default category instead of empty string
     capacity: "",
     price: "",
     isFree: true,
@@ -155,6 +155,8 @@ const CreateEventPage = () => {
           setFormData((prev) => ({
             ...prev,
             ...parsedDraft.data,
+            // Ensure category has a value if draft doesn't have one
+            category: parsedDraft.data.category || "general",
             imagePreview: parsedDraft.data.imagePreview || null,
           }));
           setDirty(true);
@@ -179,7 +181,7 @@ const CreateEventPage = () => {
         time: "",
         location: "",
         venue: "",
-        category: "",
+        category: "general", // ✅ FIXED: Use default category
         capacity: "",
         price: "",
         isFree: true,
@@ -216,14 +218,20 @@ const CreateEventPage = () => {
       setError(null);
 
       try {
-        const validation = validateEventData(eventData);
+        // ✅ FIXED: Ensure category has a value before validation
+        const dataToValidate = {
+          ...eventData,
+          category: eventData.category || "general",
+        };
+
+        const validation = validateEventData(dataToValidate);
         if (!validation.isValid) {
           setError(validation.errors.join(", "));
           setLoading(false);
           return;
         }
 
-        const sanitizedData = sanitizeEventData(eventData);
+        const sanitizedData = sanitizeEventData(dataToValidate);
 
         if (eventData.image) {
           try {

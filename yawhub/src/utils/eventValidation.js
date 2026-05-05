@@ -64,7 +64,7 @@ export const validateEventData = (eventData) => {
     errors.push("Location cannot exceed 255 characters");
   }
 
-  // Category validation
+  // Category validation - IMPROVED VERSION
   const validCategories = [
     "conference",
     "workshop",
@@ -75,12 +75,14 @@ export const validateEventData = (eventData) => {
     "career",
     "academic",
     "cultural",
+    "general",
     "other",
   ];
 
-  if (!eventData.category) {
+  // Check if category exists AND is not empty string
+  if (!eventData.category || eventData.category.trim() === "") {
     errors.push("Event category is required");
-  } else if (!validCategories.includes(eventData.category)) {
+  } else if (!validCategories.includes(eventData.category.toLowerCase())) {
     errors.push(`Invalid category. Allowed: ${validCategories.join(", ")}`);
   }
 
@@ -258,7 +260,7 @@ export const sanitizeEventData = (eventData) => {
       .map((t) => t.trim().toLowerCase().substring(0, 30));
   }
 
-  // Category
+  // Category - IMPROVED VERSION with "general" as default
   const validCategories = [
     "conference",
     "workshop",
@@ -269,11 +271,20 @@ export const sanitizeEventData = (eventData) => {
     "career",
     "academic",
     "cultural",
+    "general",
     "other",
   ];
 
-  if (eventData.category && validCategories.includes(eventData.category)) {
-    sanitized.category = eventData.category;
+  if (
+    eventData.category &&
+    validCategories.includes(eventData.category.toLowerCase())
+  ) {
+    sanitized.category = eventData.category.toLowerCase();
+  } else if (!eventData.category || eventData.category.trim() === "") {
+    // Set default category if none provided
+    sanitized.category = "general";
+  } else {
+    sanitized.category = "general"; // Default fallback
   }
 
   // Status
@@ -490,6 +501,7 @@ export const getValidationRules = () => {
     },
     category: {
       required: true,
+      defaultValue: "general",
       message: "Category is required",
     },
     capacity: {
@@ -499,6 +511,26 @@ export const getValidationRules = () => {
       message: "Capacity must be between 1 and 10,000",
     },
   };
+};
+
+/**
+ * Get list of valid categories
+ * @returns {Array} List of valid categories
+ */
+export const getValidCategories = () => {
+  return [
+    { value: "conference", label: "Conference" },
+    { value: "workshop", label: "Workshop" },
+    { value: "seminar", label: "Seminar" },
+    { value: "webinar", label: "Webinar" },
+    { value: "social", label: "Social Event" },
+    { value: "sports", label: "Sports" },
+    { value: "career", label: "Career Fair" },
+    { value: "academic", label: "Academic" },
+    { value: "cultural", label: "Cultural" },
+    { value: "general", label: "General" },
+    { value: "other", label: "Other" },
+  ];
 };
 
 // ============================================================
@@ -513,6 +545,7 @@ const eventValidation = {
   validateEventCapacity,
   validateRegistration,
   getValidationRules,
+  getValidCategories,
 };
 
 export default eventValidation;

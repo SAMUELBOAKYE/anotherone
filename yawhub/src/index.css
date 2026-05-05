@@ -1,8 +1,6 @@
 /* ============================================================
    responsive.css
    Full responsive support: iPhone, Android, Tablet, Desktop
-   Import this in your main index.css or App.css:
-     @import './responsive.css';
    ============================================================ */
 
 /* ── Breakpoints used:
@@ -11,10 +9,10 @@
    md  : 768–1023px   (tablets)
    lg  : 1024–1279px  (small laptops)
    xl  : 1280px+      (desktop/large)
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 /* ============================================================
-   1. GLOBAL BASE — applies to ALL screen sizes
+   1. GLOBAL BASE
    ============================================================ */
 
 *,
@@ -39,6 +37,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   overflow-x: hidden;
+  padding-top: 60px;
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-top: 70px;
+  }
 }
 
 img,
@@ -212,9 +217,73 @@ a,
   text-transform: uppercase;
 }
 
-/* HAMBURGER BUTTON - ALWAYS VISIBLE ON MOBILE */
+/* ============================================================
+   DESKTOP NAVIGATION - ONLY visible on desktop
+   ============================================================ */
+.navbar-desktop-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .navbar-desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.navbar-desktop-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #1f2937;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+[data-theme="dark"] .navbar-desktop-link {
+  color: #f3f4f6;
+}
+
+.navbar-desktop-link:hover {
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.08);
+}
+
+.navbar-desktop-link.active {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.navbar-desktop-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 2px;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 2px;
+}
+
+.navbar-desktop-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+/* ============================================================
+   MOBILE MENU BUTTON - ONLY visible on mobile
+   ============================================================ */
 .mobile-menu-btn {
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
@@ -251,7 +320,9 @@ a,
   stroke: currentColor;
 }
 
-/* MOBILE MENU PANEL */
+/* ============================================================
+   MOBILE MENU PANEL - ONLY visible on mobile when open
+   ============================================================ */
 .navbar-menu {
   position: fixed;
   top: 60px;
@@ -265,28 +336,17 @@ a,
   overflow-y: auto;
   border-right: 1px solid #e5e7eb;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
-  display: block !important;
-  visibility: visible !important;
+  display: block;
 }
 
 @media (min-width: 768px) {
   .navbar-menu {
-    position: static;
-    top: auto;
-    left: auto;
-    bottom: auto;
-    width: auto;
-    max-width: none;
-    background: transparent;
-    border-right: none;
-    box-shadow: none;
-    overflow-y: visible;
-    display: flex !important;
+    display: none !important;
   }
 }
 
 .navbar-menu.active {
-  left: 0 !important;
+  left: 0;
 }
 
 [data-theme="dark"] .navbar-menu {
@@ -294,7 +354,22 @@ a,
   border-right-color: #374151;
 }
 
-/* Menu Inner Content - MUST BE VISIBLE */
+.navbar-menu::before {
+  content: "MENU";
+  display: none;
+  padding: 1.25rem 1.5rem 0.75rem;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: #4f46e5;
+  border-bottom: 2px solid #4f46e5;
+  width: fit-content;
+}
+
+.navbar-menu.active::before {
+  display: block;
+}
+
 .navbar-menu-inner {
   display: flex;
   flex-direction: column;
@@ -302,31 +377,12 @@ a,
   gap: 20px;
 }
 
-@media (min-width: 768px) {
-  .navbar-menu-inner {
-    flex-direction: row;
-    align-items: center;
-    padding: 0;
-    gap: 24px;
-  }
-}
-
-/* Navigation Links Container */
 .navbar-nav {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-@media (min-width: 768px) {
-  .navbar-nav {
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-  }
-}
-
-/* Nav Links - VISIBLE AND TAPPABLE */
 .navbar-link {
   display: flex;
   align-items: center;
@@ -340,13 +396,7 @@ a,
   border-radius: 12px;
   transition: all 0.2s ease;
   background: transparent;
-}
-
-@media (min-width: 768px) {
-  .navbar-link {
-    padding: 8px 16px;
-    font-size: 0.95rem;
-  }
+  border-left: 3px solid transparent;
 }
 
 [data-theme="dark"] .navbar-link {
@@ -362,13 +412,7 @@ a,
   background: rgba(79, 70, 229, 0.1);
   color: #4f46e5;
   font-weight: 600;
-  border-left: 3px solid #4f46e5;
-}
-
-@media (min-width: 768px) {
-  .navbar-link.active {
-    border-left: none;
-  }
+  border-left-color: #4f46e5;
 }
 
 [data-theme="dark"] .navbar-link.active {
@@ -376,32 +420,7 @@ a,
   color: #818cf8;
 }
 
-/* Link Icons */
-.navbar-link-icon {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.navbar-link-icon svg {
-  width: 20px;
-  height: 20px;
-  stroke: #6b7280;
-}
-
-.navbar-link.active .navbar-link-icon svg {
-  stroke: #4f46e5;
-}
-
-[data-theme="dark"] .navbar-link-icon svg {
-  stroke: #9ca3af;
-}
-
-.navbar-link-text {
-  flex: 1;
-}
-
-/* Auth Section */
+/* Mobile Auth Section */
 .navbar-auth-section {
   display: flex;
   flex-direction: column;
@@ -411,19 +430,19 @@ a,
   margin-top: 8px;
 }
 
-@media (min-width: 768px) {
-  .navbar-auth-section {
-    flex-direction: row;
-    align-items: center;
-    border-top: none;
-    padding-top: 0;
-    margin-top: 0;
-    gap: 16px;
-  }
-}
-
 [data-theme="dark"] .navbar-auth-section {
   border-top-color: #374151;
+}
+
+.navbar-auth-section .navbar-link {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  justify-content: center;
+  border-left: none;
+}
+
+.navbar-auth-section .navbar-link svg {
+  stroke: white;
 }
 
 /* Mobile Overlay */
@@ -455,7 +474,9 @@ a,
   }
 }
 
-/* User Dropdown on Mobile */
+/* ============================================================
+   User Dropdown (Shared)
+   ============================================================ */
 .navbar-dropdown {
   position: relative;
   width: 100%;
@@ -541,7 +562,6 @@ a,
   transform: rotate(180deg);
 }
 
-/* Dropdown Menu */
 .dropdown-menu {
   position: static;
   width: 100%;
@@ -662,9 +682,22 @@ a,
   flex-shrink: 0;
 }
 
+/* Notification Bell */
+.navbar-notification-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .navbar-notification-wrapper {
+    justify-content: flex-start;
+  }
+}
+
 /* ============================================================
    4. ADMIN DASHBOARD
    ============================================================ */
+/* ... (keep your existing admin dashboard styles) ... */
 
 .admin-dashboard {
   min-height: 100vh;
@@ -1302,7 +1335,7 @@ a,
 }
 
 /* ============================================================
-   7. TABLES — make them scrollable on mobile
+   7. TABLES
    ============================================================ */
 
 .table-container {
@@ -1574,7 +1607,20 @@ td {
 }
 
 /* ============================================================
-   13. PRINT STYLES
+   13. ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   14. PRINT STYLES
    ============================================================ */
 
 @media print {
@@ -1584,11 +1630,13 @@ td {
   .quick-actions,
   .toast,
   .offline-banner,
-  .mobile-menu-btn {
+  .mobile-menu-btn,
+  .navbar-menu {
     display: none !important;
   }
 
   body {
     font-size: 12pt;
+    padding-top: 0;
   }
 }

@@ -182,7 +182,7 @@ const AdminDashboardPage = lazyWithRetry(
   "AdminDashboardPage",
 );
 const AdminSettingsPage = lazyWithRetry(
-  () => import("./components/admin/AdminSettings"), // ✅ Fixed: points to AdminSettings component
+  () => import("./components/admin/AdminSettings"),
   "AdminSettings",
 );
 const AdminRegistrationPage = lazyWithRetry(
@@ -221,6 +221,13 @@ const EditEventPage = lazyWithRetry(
   () => import("./pages/EditEventPage"),
   "EditEventPage",
 );
+
+// ── NEW: Admin Notifications Page ─────────────────────────────
+const AdminNotificationsPage = lazyWithRetry(
+  () => import("./pages/AdminNotificationsPage"),
+  "AdminNotificationsPage",
+);
+
 const NotFoundPage = lazyWithRetry(
   () => import("./pages/NotFoundPage"),
   "NotFoundPage",
@@ -548,6 +555,15 @@ const AppContent = () => {
             element={
               <RequireAdmin>
                 <EditEventPage />
+              </RequireAdmin>
+            }
+          />
+          {/* NEW: Admin Notifications Route */}
+          <Route
+            path="/admin/notifications"
+            element={
+              <RequireAdmin>
+                <AdminNotificationsPage />
               </RequireAdmin>
             }
           />

@@ -1,9 +1,3 @@
-// controllers/adminController.js
-// Enterprise-Grade Admin Controller for KAAF Noticeboard System
-// Handles all admin operations: system management, user management, analytics, security, and configurations
-// @version 3.0.0 - Redis Disabled
-// @author Boakye Samuel Yiadom
-
 const mongoose = require("mongoose");
 const fs = require("fs-extra");
 const path = require("path");

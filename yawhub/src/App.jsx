@@ -1,7 +1,15 @@
 // src/App.jsx
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, {
+  Suspense,
+  lazy,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+  createContext,
+  useRef,
+} from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 import { ErrorBoundary } from "react-error-boundary";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import NotificationProvider from "./context/NotificationContext";
@@ -15,8 +23,121 @@ import RegisterForm from "./components/auth/RegisterForm";
 import OfflineBanner from "./components/common/OfflineBanner";
 import TestLogin from "./components/auth/TestLogin";
 import StandaloneAdminRegistration from "./components/admin/StandaloneAdminRegistration";
+import Alert from "./components/common/Alert"; // ← World-class Alert
 import "./styles/components/App.css";
 import "./styles/components/responsive.css";
+
+// ============================================================
+// ALERT SYSTEM  (replaces react-hot-toast entirely)
+// ============================================================
+
+/**
+ * AlertContext — provides showAlert() and showToast() app-wide.
+ *
+ * showAlert(options)  → renders an Alert inside the page flow
+ * showToast(options)  → renders a floating toast in the top-right corner
+ *
+ * Both accept:
+ *   { type, message, title, duration, dismissible, icon }
+ *
+ * Convenience wrappers available on the returned object:
+ *   showAlert.success / .error / .warning / .info
+ *   showToast.success / .error / .warning / .info
+ */
+const AlertContext = createContext(null);
+
+let _alertId = 0;
+const nextId = () => ++_alertId;
+
+const AlertProvider = ({ children }) => {
+  const [alerts, setAlerts] = useState([]); // inline alerts
+  const [toasts, setToasts] = useState([]); // floating toasts
+
+  const removeAlert = useCallback((id) => {
+    setAlerts((prev) => prev.filter((a) => a.id !== id));
+  }, []);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const showAlert = useCallback((opts = {}) => {
+    const id = nextId();
+    setAlerts((prev) => [
+      ...prev,
+      { id, duration: 6000, dismissible: true, ...opts },
+    ]);
+    return id;
+  }, []);
+
+  const showToast = useCallback((opts = {}) => {
+    const id = nextId();
+    setToasts((prev) => [
+      ...prev,
+      { id, duration: 4000, dismissible: true, ...opts },
+    ]);
+    return id;
+  }, []);
+
+  // Convenience methods
+  ["success", "error", "warning", "info"].forEach((type) => {
+    showAlert[type] = (message, extra = {}) =>
+      showAlert({ type, message, ...extra });
+    showToast[type] = (message, extra = {}) =>
+      showToast({ type, message, ...extra });
+  });
+
+  return (
+    <AlertContext.Provider
+      value={{ showAlert, showToast, removeAlert, removeToast, alerts }}
+    >
+      {children}
+
+      {/* ── Floating Toast Stack (top-right) ───────────────── */}
+      <div
+        aria-live="polite"
+        aria-atomic="false"
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          zIndex: 9999,
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          width: "360px",
+          maxWidth: "calc(100vw - 40px)",
+          pointerEvents: "none",
+        }}
+      >
+        {toasts.map((toast) => (
+          <div key={toast.id} style={{ pointerEvents: "auto" }}>
+            <Alert
+              type={toast.type}
+              message={toast.message}
+              title={toast.title}
+              duration={toast.duration}
+              dismissible={toast.dismissible}
+              icon={toast.icon}
+              onClose={() => removeToast(toast.id)}
+              style={{
+                boxShadow:
+                  "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </AlertContext.Provider>
+  );
+};
+
+/** Hook — use anywhere inside the app tree */
+export const useAlert = () => {
+  const ctx = useContext(AlertContext);
+  if (!ctx) throw new Error("useAlert must be used inside <AlertProvider>");
+  return ctx;
+};
 
 // ============================================================
 // NETWORK STATUS CONTEXT (FALLBACK)
@@ -53,7 +174,7 @@ try {
 }
 
 // ============================================================
-// LAZY LOADING WITH RETRY
+// LAZY LOADING WITH RETRY  +  Alert on failure
 // ============================================================
 const lazyWithRetry = (importFn, importPath, maxRetries = 3) =>
   lazy(() => {
@@ -221,13 +342,10 @@ const EditEventPage = lazyWithRetry(
   () => import("./pages/EditEventPage"),
   "EditEventPage",
 );
-
-// ── NEW: Admin Notifications Page ─────────────────────────────
 const AdminNotificationsPage = lazyWithRetry(
   () => import("./pages/AdminNotificationsPage"),
   "AdminNotificationsPage",
 );
-
 const NotFoundPage = lazyWithRetry(
   () => import("./pages/NotFoundPage"),
   "NotFoundPage",
@@ -239,6 +357,42 @@ const NotFoundPage = lazyWithRetry(
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => window.scrollTo(0, 0), [pathname]);
+  return null;
+};
+
+// ============================================================
+// NETWORK ALERT WATCHER
+// Watches online/offline transitions and fires toasts
+// ============================================================
+const NetworkAlertWatcher = () => {
+  const { isOnline, wasOffline } = useNetworkStatus();
+  const { showToast } = useAlert();
+  const prevOnline = useRef(isOnline);
+
+  useEffect(() => {
+    // Went offline
+    if (prevOnline.current && !isOnline) {
+      showToast({
+        type: "warning",
+        title: "You're offline",
+        message:
+          "Check your internet connection. Some features may be unavailable.",
+        duration: 0, // stays until manually dismissed
+        dismissible: true,
+      });
+    }
+    // Came back online after being offline
+    if (!prevOnline.current && isOnline && wasOffline) {
+      showToast({
+        type: "success",
+        title: "Back online",
+        message: "Your connection has been restored.",
+        duration: 4000,
+      });
+    }
+    prevOnline.current = isOnline;
+  }, [isOnline, wasOffline, showToast]);
+
   return null;
 };
 
@@ -259,6 +413,19 @@ const isUserAdmin = (user) => {
 const RequireAuth = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
+  const { showToast } = useAlert();
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      showToast({
+        type: "warning",
+        title: "Authentication required",
+        message: "Please sign in to access this page.",
+        duration: 4000,
+      });
+    }
+  }, [loading, isAuthenticated]); // eslint-disable-line
+
   if (loading) return <LoadingSpinner fullScreen />;
   if (!isAuthenticated)
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -267,6 +434,19 @@ const RequireAuth = ({ children }) => {
 
 const RequireAdmin = ({ children }) => {
   const { user, isAuthenticated, loading } = useAuth();
+  const { showToast } = useAlert();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated && !isUserAdmin(user)) {
+      showToast({
+        type: "error",
+        title: "Access denied",
+        message: "You do not have permission to view this page.",
+        duration: 5000,
+      });
+    }
+  }, [loading, isAuthenticated, user]); // eslint-disable-line
+
   if (loading) return <LoadingSpinner fullScreen />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (!isUserAdmin(user)) return <Navigate to="/dashboard" replace />;
@@ -287,16 +467,106 @@ const RequireGuest = ({ children }) => {
 };
 
 // ============================================================
-// ERROR FALLBACK
+// SUSPENSE FALLBACK WITH LAZY ERROR ALERT
+// ============================================================
+
+/**
+ * LazyErrorBoundary — wraps each Suspense to catch chunk-load failures
+ * and show an Alert rather than a blank screen.
+ */
+class LazyErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { failed: true, error };
+  }
+  render() {
+    if (this.state.failed) {
+      return (
+        <div
+          style={{ padding: "40px 24px", maxWidth: "560px", margin: "0 auto" }}
+        >
+          <Alert
+            type="error"
+            title="Failed to load page"
+            message={
+              this.state.error?.message?.includes("fetch")
+                ? "A network error prevented this page from loading. Please check your connection and try again."
+                : "This page could not be loaded. Try refreshing the browser."
+            }
+            dismissible={false}
+          />
+          <div style={{ marginTop: "12px", textAlign: "center" }}>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                fontFamily: "'Sora', system-ui, sans-serif",
+                fontSize: "13px",
+                fontWeight: "500",
+                padding: "9px 22px",
+                borderRadius: "10px",
+                border: "1px solid rgba(0,0,0,0.14)",
+                background: "#fff",
+                cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+            >
+              Reload page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// ============================================================
+// ERROR FALLBACK  (top-level ErrorBoundary)
 // ============================================================
 const ErrorFallback = ({ error, resetErrorBoundary }) => (
-  <div className="error-fallback">
-    <div className="error-fallback-content">
-      <h2 className="error-fallback-title">Something went wrong</h2>
-      <pre className="error-fallback-message">{error.message}</pre>
-      <button onClick={resetErrorBoundary} className="error-fallback-button">
-        Try again
-      </button>
+  <div
+    style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
+      background: "#f9fafb",
+    }}
+  >
+    <div style={{ width: "100%", maxWidth: "520px" }}>
+      <Alert
+        type="error"
+        title="Something went wrong"
+        message={
+          error?.message || "An unexpected error occurred. Please try again."
+        }
+        dismissible={false}
+      />
+      <div style={{ marginTop: "12px", textAlign: "right" }}>
+        <button
+          onClick={resetErrorBoundary}
+          style={{
+            fontFamily: "'Sora', system-ui, sans-serif",
+            fontSize: "13px",
+            fontWeight: "600",
+            padding: "10px 24px",
+            borderRadius: "10px",
+            border: "none",
+            background: "#e84040",
+            color: "#fff",
+            cursor: "pointer",
+            transition: "opacity 0.15s",
+          }}
+          onMouseEnter={(e) => (e.target.style.opacity = "0.85")}
+          onMouseLeave={(e) => (e.target.style.opacity = "1")}
+        >
+          Try again
+        </button>
+      </div>
     </div>
   </div>
 );
@@ -308,7 +578,6 @@ const AppContent = () => {
   const { isOnline } = useNetworkStatus();
   const location = useLocation();
 
-  // Get page name for responsive classes
   const getPageClass = () => {
     const path = location.pathname.replace("/", "") || "home";
     return `page-${path.replace(/\//g, "-")}`;
@@ -316,262 +585,271 @@ const AppContent = () => {
 
   return (
     <div className={`app-container ${getPageClass()}`}>
+      {/* Network watcher fires toasts on online/offline changes */}
+      <NetworkAlertWatcher />
+
+      {/* Legacy offline banner — keep for visual strip at top of page */}
       {!isOnline && <OfflineBanner className="offline-banner" />}
+
       <ScrollToTop />
 
-      <Routes>
-        {/* ── Public Routes (with MainLayout) ─────────────── */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/notices" element={<NoticesPage />} />
-          <Route path="/notices/:id" element={<NoticeDetailPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/events/:id" element={<EventDetailPage />} />
-        </Route>
+      <LazyErrorBoundary>
+        <Suspense fallback={<LoadingSpinner fullScreen message="Loading…" />}>
+          <Routes>
+            {/* ── Public Routes ────────────────────────────────── */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/notices" element={<NoticesPage />} />
+              <Route path="/notices/:id" element={<NoticeDetailPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/events/:id" element={<EventDetailPage />} />
+            </Route>
 
-        {/* ── Info Pages (with MainLayout) ─────────────────── */}
-        <Route element={<MainLayout />}>
-          <Route path="/help" element={<HelpCenterPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/privacy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms" element={<TermsOfServicePage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route
-            path="/help/getting-started"
-            element={<GettingStartedGuide />}
-          />
-          <Route path="/help/security-tips" element={<SecurityTipsPage />} />
-          <Route path="/help/event-guide" element={<EventGuidePage />} />
-          <Route
-            path="/help/notifications"
-            element={<NotificationsSetupPage />}
-          />
-          <Route path="/help/account-guide" element={<AccountGuidePage />} />
-          <Route
-            path="/help/troubleshooting"
-            element={<TroubleshootingPage />}
-          />
-        </Route>
+            {/* ── Info Pages ───────────────────────────────────── */}
+            <Route element={<MainLayout />}>
+              <Route path="/help" element={<HelpCenterPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route
+                path="/help/getting-started"
+                element={<GettingStartedGuide />}
+              />
+              <Route
+                path="/help/security-tips"
+                element={<SecurityTipsPage />}
+              />
+              <Route path="/help/event-guide" element={<EventGuidePage />} />
+              <Route
+                path="/help/notifications"
+                element={<NotificationsSetupPage />}
+              />
+              <Route
+                path="/help/account-guide"
+                element={<AccountGuidePage />}
+              />
+              <Route
+                path="/help/troubleshooting"
+                element={<TroubleshootingPage />}
+              />
+            </Route>
 
-        {/* ── Auth Routes (with AuthLayout) ────────────────── */}
-        <Route element={<AuthLayout />}>
-          <Route
-            path="/login"
-            element={
-              <RequireGuest>
-                <LoginForm />
-              </RequireGuest>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <RequireGuest>
-                <RegisterForm />
-              </RequireGuest>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <RequireGuest>
-                <ForgotPasswordPage />
-              </RequireGuest>
-            }
-          />
-          <Route
-            path="/reset-password/:token"
-            element={
-              <RequireGuest>
-                <ResetPasswordPage />
-              </RequireGuest>
-            }
-          />
-        </Route>
+            {/* ── Auth Routes ──────────────────────────────────── */}
+            <Route element={<AuthLayout />}>
+              <Route
+                path="/login"
+                element={
+                  <RequireGuest>
+                    <LoginForm />
+                  </RequireGuest>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <RequireGuest>
+                    <RegisterForm />
+                  </RequireGuest>
+                }
+              />
+              <Route
+                path="/forgot-password"
+                element={
+                  <RequireGuest>
+                    <ForgotPasswordPage />
+                  </RequireGuest>
+                }
+              />
+              <Route
+                path="/reset-password/:token"
+                element={
+                  <RequireGuest>
+                    <ResetPasswordPage />
+                  </RequireGuest>
+                }
+              />
+            </Route>
 
-        {/* ── Test Route ───────────────────────────────────── */}
-        <Route path="/test-login" element={<TestLogin />} />
+            {/* ── Test Route ───────────────────────────────────── */}
+            <Route path="/test-login" element={<TestLogin />} />
 
-        {/* ── ADMIN STANDALONE PORTAL ──────────────────────────
-            This route is intentionally outside ALL layouts.
-            It renders StandaloneAdminRegistration directly.
-            The component itself handles the secret key check.
-            URL: /admin/register-standalone?key=kaaf-super-admin-2024
-        ─────────────────────────────────────────────────────── */}
-        <Route
-          path="/admin/register-standalone"
-          element={<StandaloneAdminRegistration />}
-        />
+            {/* ── Admin Standalone Portal ──────────────────────── */}
+            <Route
+              path="/admin/register-standalone"
+              element={<StandaloneAdminRegistration />}
+            />
 
-        {/* ── Protected User Routes (with MainLayout) ──────── */}
-        <Route element={<MainLayout />}>
-          <Route
-            path="/dashboard"
-            element={
-              <RequireAuth>
-                <DashboardPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <RequireAuth>
-                <ProfilePage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <RequireAuth>
-                <SettingsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/notifications"
-            element={
-              <RequireAuth>
-                <NotificationsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/my-registrations"
-            element={
-              <RequireAuth>
-                <MyRegistrationsPage />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path="/events/:id/register"
-            element={
-              <RequireAuth>
-                <RegisterForEventPage />
-              </RequireAuth>
-            }
-          />
-        </Route>
+            {/* ── Protected User Routes ────────────────────────── */}
+            <Route element={<MainLayout />}>
+              <Route
+                path="/dashboard"
+                element={
+                  <RequireAuth>
+                    <DashboardPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <RequireAuth>
+                    <SettingsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/notifications"
+                element={
+                  <RequireAuth>
+                    <NotificationsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/my-registrations"
+                element={
+                  <RequireAuth>
+                    <MyRegistrationsPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/events/:id/register"
+                element={
+                  <RequireAuth>
+                    <RegisterForEventPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
 
-        {/* ── Admin Routes (with AdminLayout) ──────────────── */}
-        <Route element={<AdminLayout />}>
-          <Route
-            path="/admin"
-            element={<Navigate to="/admin/dashboard" replace />}
-          />
-          <Route
-            path="/admin/register"
-            element={
-              <RequireAdmin>
-                <AdminRegistrationPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <RequireAdmin>
-                <AdminDashboardPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <RequireAdmin>
-                <UserManagementPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/analytics"
-            element={
-              <RequireAdmin>
-                <AnalyticsPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/settings"
-            element={
-              <RequireAdmin>
-                <AdminSettingsPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/notices"
-            element={
-              <RequireAdmin>
-                <AdminNoticesPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/notices/create"
-            element={
-              <RequireAdmin>
-                <CreateNoticePage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/notices/edit/:id"
-            element={
-              <RequireAdmin>
-                <EditNoticePage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/events"
-            element={
-              <RequireAdmin>
-                <ManageEventsPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/events/create"
-            element={
-              <RequireAdmin>
-                <CreateEventPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/events/edit/:id"
-            element={
-              <RequireAdmin>
-                <EditEventPage />
-              </RequireAdmin>
-            }
-          />
-          <Route
-            path="/admin/events/:id/edit"
-            element={
-              <RequireAdmin>
-                <EditEventPage />
-              </RequireAdmin>
-            }
-          />
-          {/* NEW: Admin Notifications Route */}
-          <Route
-            path="/admin/notifications"
-            element={
-              <RequireAdmin>
-                <AdminNotificationsPage />
-              </RequireAdmin>
-            }
-          />
-        </Route>
+            {/* ── Admin Routes ─────────────────────────────────── */}
+            <Route element={<AdminLayout />}>
+              <Route
+                path="/admin"
+                element={<Navigate to="/admin/dashboard" replace />}
+              />
+              <Route
+                path="/admin/register"
+                element={
+                  <RequireAdmin>
+                    <AdminRegistrationPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <RequireAdmin>
+                    <AdminDashboardPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <RequireAdmin>
+                    <UserManagementPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/analytics"
+                element={
+                  <RequireAdmin>
+                    <AnalyticsPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/settings"
+                element={
+                  <RequireAdmin>
+                    <AdminSettingsPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/notices"
+                element={
+                  <RequireAdmin>
+                    <AdminNoticesPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/notices/create"
+                element={
+                  <RequireAdmin>
+                    <CreateNoticePage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/notices/edit/:id"
+                element={
+                  <RequireAdmin>
+                    <EditNoticePage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/events"
+                element={
+                  <RequireAdmin>
+                    <ManageEventsPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/events/create"
+                element={
+                  <RequireAdmin>
+                    <CreateEventPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/events/edit/:id"
+                element={
+                  <RequireAdmin>
+                    <EditEventPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/events/:id/edit"
+                element={
+                  <RequireAdmin>
+                    <EditEventPage />
+                  </RequireAdmin>
+                }
+              />
+              <Route
+                path="/admin/notifications"
+                element={
+                  <RequireAdmin>
+                    <AdminNotificationsPage />
+                  </RequireAdmin>
+                }
+              />
+            </Route>
 
-        {/* ── 404 ──────────────────────────────────────────── */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+            {/* ── 404 ─────────────────────────────────────────── */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+      </LazyErrorBoundary>
     </div>
   );
 };
@@ -595,39 +873,28 @@ function App() {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <NetworkStatusProvider>
-        <AuthProvider>
-          <SocketProvider>
-            <NotificationProvider>
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  duration: 4000,
-                  style: {
-                    background: "#363636",
-                    color: "#fff",
-                    borderRadius: "8px",
-                    padding: "12px 16px",
-                  },
-                  success: {
-                    duration: 3000,
-                    iconTheme: { primary: "#D4AF37", secondary: "#fff" },
-                  },
-                  error: {
-                    duration: 4000,
-                    iconTheme: { primary: "#f44336", secondary: "#fff" },
-                  },
-                }}
-              />
-              <Suspense
-                fallback={
-                  <LoadingSpinner fullScreen message="Loading application..." />
-                }
-              >
-                <AppContent />
-              </Suspense>
-            </NotificationProvider>
-          </SocketProvider>
-        </AuthProvider>
+        {/*
+          AlertProvider wraps everything so ANY component can call:
+            const { showToast, showAlert } = useAlert();
+            showToast.success("Saved!")
+            showToast.error("Something went wrong", { title: "Error" })
+            showAlert.warning("Unsaved changes detected.")
+        */}
+        <AlertProvider>
+          <AuthProvider>
+            <SocketProvider>
+              <NotificationProvider>
+                <Suspense
+                  fallback={
+                    <LoadingSpinner fullScreen message="Loading application…" />
+                  }
+                >
+                  <AppContent />
+                </Suspense>
+              </NotificationProvider>
+            </SocketProvider>
+          </AuthProvider>
+        </AlertProvider>
       </NetworkStatusProvider>
     </ErrorBoundary>
   );
